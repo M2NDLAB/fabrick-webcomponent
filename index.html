@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="it" style="background:#0a0d14">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -14,7 +14,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
   <!-- ============================================================
-       ⚠️  FABRICK SCRIPT – SANDBOX
+       FABRICK SCRIPT – SANDBOX
        Questo è lo script ufficiale Fabrick che registra i custom
        HTML elements (<fbk-card>, <fbk-apple-pay>, ecc.).
        Per produzione sostituire con:
@@ -49,10 +49,10 @@
     ============================================================= */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; background: #0a0d14; }
 
     body {
-      background: var(--bg);
+      background: #0a0d14;
       color: var(--text);
       font-family: 'Syne', sans-serif;
       line-height: 1.6;
@@ -278,7 +278,11 @@
       background: var(--accent-glow);
       border: 1px solid var(--accent);
       display: flex; align-items: center; justify-content: center;
-      font-size: 22px;
+      font-size: 12px;
+      font-family: 'DM Mono', monospace;
+      font-weight: 700;
+      letter-spacing: .04em;
+      color: var(--accent);
       flex-shrink: 0;
     }
 
@@ -348,7 +352,13 @@
       background: var(--border);
     }
 
-    .preview-slot { width: 100%; }
+    .preview-slot {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+    .preview-slot > * { width: 100%; }
     .slot-placeholder {
       display: flex;
       align-items: center;
@@ -531,7 +541,7 @@
         </svg>
         View on GitHub
       </a>
-      <!-- ⬇️  LINK DOCS FABRICK UFFICIALE -->
+      <!-- LINK DOCS FABRICK UFFICIALE -->
       <a href="https://docs.fabrick.com/docs/paymentHubAndOrchestra/ecommerce/integrationMethods/web_component/"
          class="btn btn-outline" target="_blank">
         Docs Fabrick ↗
@@ -547,7 +557,7 @@
   ============================================================ -->
   <section class="config-banner" id="config-section">
     <div style="flex:1;min-width:260px">
-      <h2>⚙️  CONFIGURAZIONE SANDBOX (TUA)</h2>
+      <h2>CONFIGURAZIONE SANDBOX (TUA)</h2>
       <p>
         Inserisci i valori ottenuti dalla tua chiamata a <code style="color:var(--accent)">payment/create</code>.
         Verranno applicati a tutti i componenti nella pagina.
@@ -577,13 +587,13 @@
        Ogni tab corrisponde a un web component Fabrick differente.
   ============================================================ -->
   <nav class="nav-tabs" role="tablist">
-    <button class="tab-btn active" onclick="showPanel('card',       this)" role="tab">💳 Solo Carte</button>
+    <button class="tab-btn active" onclick="showPanel('card',       this)" role="tab">Solo Carte</button>
     <button class="tab-btn"        onclick="showPanel('gpay',       this)" role="tab">Google Pay</button>
     <button class="tab-btn"        onclick="showPanel('apay',       this)" role="tab">Apple Pay</button>
     <button class="tab-btn"        onclick="showPanel('card-apay',  this)" role="tab">Carte + Apple Pay</button>
     <button class="tab-btn"        onclick="showPanel('card-gpay',  this)" role="tab">Carte + Google Pay</button>
     <button class="tab-btn"        onclick="showPanel('gpay-apay',  this)" role="tab">Google + Apple Pay</button>
-    <button class="tab-btn"        onclick="showPanel('full',       this)" role="tab">🔥 Tutto insieme</button>
+    <button class="tab-btn"        onclick="showPanel('full',       this)" role="tab">Tutto insieme</button>
   </nav>
 
   <!-- ============================================================
@@ -607,7 +617,7 @@
   <section class="demo-panel visible" id="panel-card">
     <br>
     <div class="panel-header">
-      <div class="panel-icon">💳</div>
+      <div class="panel-icon">CB</div>
       <div>
         <h2>Solo Carte</h2>
         <p>Il componente <code>&lt;fbk-card&gt;</code> gestisce l'inserimento dei dati carta
@@ -624,7 +634,7 @@
 
         <!-- Il componente verrà iniettato via JS solo dopo aver cliccato Applica -->
         <div id="slot-card" class="preview-slot">
-          <div class="slot-placeholder">⚠️ Inserisci le credenziali e clicca <strong>Applica</strong></div>
+          <div class="slot-placeholder">Inserisci le credenziali e clicca <strong>Applica</strong></div>
         </div>
 
       </div>
@@ -700,7 +710,7 @@ el<span class="t-punct">.</span><span class="t-fn">setAttribute</span><span clas
         <h3>LIVE PREVIEW</h3>
 
         <div id="slot-gpay" class="preview-slot">
-          <div class="slot-placeholder">⚠️ Inserisci le credenziali e clicca <strong>Applica</strong></div>
+          <div class="slot-placeholder">Inserisci le credenziali e clicca <strong>Applica</strong></div>
         </div>
 
       </div>
@@ -730,7 +740,7 @@ el<span class="t-punct">.</span><span class="t-fn">setAttribute</span><span clas
   <span class="t-attr">callBackObj</span><span class="t-punct">:</span> <span class="t-punct">(</span>e<span class="t-punct">) =&gt;</span> <span class="t-fn">myCallbackFunction</span><span class="t-punct">(</span>e<span class="t-punct">)</span>
 <span class="t-punct">};</span>
 
-<span class="t-comment">// ⚠️  Google Pay funziona solo su browser Chrome
+<span class="t-comment">// ! Google Pay funziona solo su browser Chrome
 //      e su device con un metodo di pagamento salvato</span>
 <span class="t-kw">const</span> el <span class="t-punct">=</span> document<span class="t-punct">.</span><span class="t-fn">getElementById</span><span class="t-punct">(</span><span class="t-str">"gpayElement"</span><span class="t-punct">);</span>
 el<span class="t-punct">.</span><span class="t-fn">setAttribute</span><span class="t-punct">(</span><span class="t-str">"payment-id"</span><span class="t-punct">,</span>    paymentID<span class="t-punct">);</span>
@@ -745,7 +755,7 @@ el<span class="t-punct">.</span><span class="t-fn">setAttribute</span><span clas
   <section class="demo-panel" id="panel-apay">
     <br>
     <div class="panel-header">
-      <div class="panel-icon">🍎</div>
+      <div class="panel-icon">AP</div>
       <div>
         <h2>Solo Apple Pay</h2>
         <p>Il componente <code>&lt;fbk-apple-pay&gt;</code> mostra solo il pulsante Apple Pay.
@@ -759,7 +769,7 @@ el<span class="t-punct">.</span><span class="t-fn">setAttribute</span><span clas
         <h3>LIVE PREVIEW</h3>
 
         <div id="slot-apay" class="preview-slot">
-          <div class="slot-placeholder">⚠️ Inserisci le credenziali e clicca <strong>Applica</strong></div>
+          <div class="slot-placeholder">Inserisci le credenziali e clicca <strong>Applica</strong></div>
         </div>
 
       </div>
@@ -783,7 +793,7 @@ el<span class="t-punct">.</span><span class="t-fn">setAttribute</span><span clas
   <span class="t-attr">button-type</span>=<span class="t-val">"buy"</span><span class="t-tag">&gt;
 &lt;/fbk-apple-pay&gt;</span>
 
-<span class="t-comment">// ⚠️  Apple Pay è visibile SOLO su:
+<span class="t-comment">// ! Apple Pay è visibile SOLO su:
 //      - Safari su macOS/iOS/iPadOS
 //      - Dispositivi con almeno una carta nel Wallet Apple
 //      Su altri browser il componente non verrà mostrato.</span>
@@ -808,7 +818,7 @@ el<span class="t-punct">.</span><span class="t-fn">setAttribute</span><span clas
   <section class="demo-panel" id="panel-card-apay">
     <br>
     <div class="panel-header">
-      <div class="panel-icon">💳🍎</div>
+      <div class="panel-icon">C+A</div>
       <div>
         <h2>Carte + Apple Pay</h2>
         <p>Usa <code>&lt;fbk-card-wallet&gt;</code> su Safari: mostrerà automaticamente il
@@ -822,7 +832,7 @@ el<span class="t-punct">.</span><span class="t-fn">setAttribute</span><span clas
         <h3>LIVE PREVIEW</h3>
 
         <div id="slot-card-apay" class="preview-slot">
-          <div class="slot-placeholder">⚠️ Inserisci le credenziali e clicca <strong>Applica</strong></div>
+          <div class="slot-placeholder">Inserisci le credenziali e clicca <strong>Applica</strong></div>
         </div>
 
       </div>
@@ -863,7 +873,7 @@ el<span class="t-punct">.</span><span class="t-fn">setAttribute</span><span clas
   <section class="demo-panel" id="panel-card-gpay">
     <br>
     <div class="panel-header">
-      <div class="panel-icon">💳G</div>
+      <div class="panel-icon">C+G</div>
       <div>
         <h2>Carte + Google Pay</h2>
         <p>Stesso componente <code>&lt;fbk-card-wallet&gt;</code>: su Chrome con Google Pay
@@ -877,7 +887,7 @@ el<span class="t-punct">.</span><span class="t-fn">setAttribute</span><span clas
         <h3>LIVE PREVIEW</h3>
 
         <div id="slot-card-gpay" class="preview-slot">
-          <div class="slot-placeholder">⚠️ Inserisci le credenziali e clicca <strong>Applica</strong></div>
+          <div class="slot-placeholder">Inserisci le credenziali e clicca <strong>Applica</strong></div>
         </div>
 
       </div>
@@ -920,7 +930,7 @@ el<span class="t-punct">.</span><span class="t-fn">setAttribute</span><span clas
   <section class="demo-panel" id="panel-gpay-apay">
     <br>
     <div class="panel-header">
-      <div class="panel-icon">G🍎</div>
+      <div class="panel-icon">G+A</div>
       <div>
         <h2>Solo Google Pay + Apple Pay</h2>
         <p>Non esiste un componente Fabrick per questa combo senza form carta.
@@ -935,7 +945,7 @@ el<span class="t-punct">.</span><span class="t-fn">setAttribute</span><span clas
         <h3>LIVE PREVIEW</h3>
 
         <div id="slot-combo" class="preview-slot">
-          <div class="slot-placeholder">⚠️ Inserisci le credenziali e clicca <strong>Applica</strong></div>
+          <div class="slot-placeholder">Inserisci le credenziali e clicca <strong>Applica</strong></div>
         </div>
       </div>
 
@@ -985,7 +995,7 @@ el<span class="t-punct">.</span><span class="t-fn">setAttribute</span><span clas
   <section class="demo-panel" id="panel-full">
     <br>
     <div class="panel-header">
-      <div class="panel-icon">🔥</div>
+      <div class="panel-icon">ALL</div>
       <div>
         <h2>Tutto insieme – Card Wallet</h2>
         <p><code>&lt;fbk-card-wallet&gt;</code> è il componente all-in-one che mostra
@@ -1000,7 +1010,7 @@ el<span class="t-punct">.</span><span class="t-fn">setAttribute</span><span clas
         <h3>LIVE PREVIEW</h3>
 
         <div id="slot-full" class="preview-slot">
-          <div class="slot-placeholder">⚠️ Inserisci le credenziali e clicca <strong>Applica</strong></div>
+          <div class="slot-placeholder">Inserisci le credenziali e clicca <strong>Applica</strong></div>
         </div>
 
       </div>
@@ -1014,9 +1024,9 @@ el<span class="t-punct">.</span><span class="t-fn">setAttribute</span><span clas
         </div>
         <pre><span class="t-comment">&lt;!-- fbk-card-wallet: componente all-in-one Fabrick
      Mostra automaticamente le wallet disponibili:
-     ✓ Apple Pay   → solo su Safari/iOS/macOS
-     ✓ Google Pay  → solo su Chrome con GPay attivo
-     ✓ Form carta  → sempre visibile come fallback
+     Apple Pay   → solo su Safari/iOS/macOS
+     Google Pay  → solo su Chrome con GPay attivo
+     Form carta  → sempre visibile come fallback
      
      optional-fields="true" aggiunge Nome e Cognome
      al form carta (utile per 3DS) --&gt;</span>
@@ -1210,7 +1220,7 @@ el<span class="t-punct">.</span><span class="t-fn">setAttribute</span><span clas
     // Validazione: tutti e 3 i campi sono obbligatori
     if (!SHOP_LOGIN || !PAYMENT_ID || !PAYMENT_TOKEN) {
       const btn = document.getElementById('apply-config');
-      btn.textContent = '⚠️ Compila tutti i campi';
+      btn.textContent = 'Compila tutti i campi';
       btn.style.background = '#c0392b';
       setTimeout(() => { btn.textContent = 'Applica ▶'; btn.style.background = ''; }, 2500);
       return;
@@ -1325,7 +1335,7 @@ el<span class="t-punct">.</span><span class="t-fn">setAttribute</span><span clas
 
     // Feedback visivo sul pulsante
     const btn = document.getElementById('apply-config');
-    btn.textContent = '✓ Applicato';
+    btn.textContent = 'Applicato';
     btn.style.background = 'var(--green)';
     setTimeout(() => { btn.textContent = 'Applica ▶'; btn.style.background = ''; }, 2000);
 
