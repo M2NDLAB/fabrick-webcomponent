@@ -331,6 +331,7 @@
       border: 1px solid var(--border);
       border-radius: var(--radius);
       padding: 28px;
+      overflow: hidden;
     }
 
     .component-box h3 {
@@ -821,8 +822,9 @@ el<span class="t-punct">.</span><span class="t-fn">setAttribute</span><span clas
       <div class="panel-icon">C+A</div>
       <div>
         <h2>Carte + Apple Pay</h2>
-        <p>Usa <code>&lt;fbk-card-wallet&gt;</code> su Safari: mostrerà automaticamente il
-           pulsante Apple Pay + il form carta. Google Pay non appare se il browser non lo supporta.</p>
+        <p>Usa <code>&lt;fbk-apple-pay&gt;</code> + <code>&lt;fbk-card&gt;</code> affiancati.
+           Il pulsante Apple Pay appare solo su Safari/iOS/macOS; su altri browser
+           rimane visibile solo il form carta.</p>
         <span class="tag">&lt;fbk-card-wallet&gt;</span>
       </div>
     </div>
@@ -844,25 +846,32 @@ el<span class="t-punct">.</span><span class="t-fn">setAttribute</span><span clas
           </div>
           <span>Carte + Apple Pay · snippet</span>
         </div>
-        <pre><span class="t-comment">&lt;!-- fbk-card-wallet su Safari mostra:
-     - pulsante Apple Pay (in alto)
-     - form di inserimento carta (in basso)
-     Google Pay non appare perché non supportato da Safari --&gt;</span>
-<span class="t-tag">&lt;fbk-card-wallet</span>
-  <span class="t-attr">id</span>=<span class="t-val">"cardWalletEl"</span>
-  <span class="t-attr">style</span>=<span class="t-val">"width:100%"</span>
-  <span class="t-attr">payment-id</span>=<span class="t-val">"{{ paymentID }}"</span>
-  <span class="t-attr">payment-token</span>=<span class="t-val">"{{ paymentToken }}"</span>
-  <span class="t-attr">layout</span>=<span class="t-val">"horizontal"</span>
-  <span class="t-attr">optional-fields</span>=<span class="t-val">"false"</span>
-  <span class="t-attr">apple-button-style</span>=<span class="t-val">"black"</span>
-  <span class="t-attr">apple-button-type</span>=<span class="t-val">"buy"</span>
-  <span class="t-attr">google-button-style</span>=<span class="t-val">"black"</span>
-  <span class="t-attr">google-button-type</span>=<span class="t-val">"buy"</span><span class="t-tag">&gt;
-&lt;/fbk-card-wallet&gt;</span>
+        <pre><span class="t-comment">&lt;!-- Carte + Apple Pay: due componenti separati.
+     fbk-apple-pay appare solo su Safari/iOS/macOS.
+     fbk-card è sempre visibile come fallback. --&gt;</span>
+<span class="t-tag">&lt;div</span> <span class="t-attr">style</span>=<span class="t-val">"display:flex;flex-direction:column;gap:12px"</span><span class="t-tag">&gt;</span>
 
-<span class="t-comment">// Il componente gestisce internamente la visibilità
-// delle wallet: mostra solo quelle disponibili sul device.</span></pre>
+  <span class="t-comment">&lt;!-- FABRICK: Apple Pay (visibile solo su Safari) --&gt;</span>
+  <span class="t-tag">&lt;fbk-apple-pay</span>
+    <span class="t-attr">id</span>=<span class="t-val">"apayEl"</span>
+    <span class="t-attr">style</span>=<span class="t-val">"width:100%"</span>
+    <span class="t-attr">payment-id</span>=<span class="t-val">"{{ paymentID }}"</span>
+    <span class="t-attr">payment-token</span>=<span class="t-val">"{{ paymentToken }}"</span>
+    <span class="t-attr">button-style</span>=<span class="t-val">"black"</span>
+    <span class="t-attr">button-type</span>=<span class="t-val">"buy"</span><span class="t-tag">&gt;
+  &lt;/fbk-apple-pay&gt;</span>
+
+  <span class="t-comment">&lt;!-- FABRICK: Form carta (sempre visibile) --&gt;</span>
+  <span class="t-tag">&lt;fbk-card</span>
+    <span class="t-attr">id</span>=<span class="t-val">"cardEl"</span>
+    <span class="t-attr">style</span>=<span class="t-val">"width:100%"</span>
+    <span class="t-attr">payment-id</span>=<span class="t-val">"{{ paymentID }}"</span>
+    <span class="t-attr">payment-token</span>=<span class="t-val">"{{ paymentToken }}"</span>
+    <span class="t-attr">layout</span>=<span class="t-val">"horizontal"</span>
+    <span class="t-attr">optional-fields</span>=<span class="t-val">"false"</span><span class="t-tag">&gt;
+  &lt;/fbk-card&gt;</span>
+
+<span class="t-tag">&lt;/div&gt;</span></pre>
       </div>
     </div>
   </section>
@@ -876,8 +885,9 @@ el<span class="t-punct">.</span><span class="t-fn">setAttribute</span><span clas
       <div class="panel-icon">C+G</div>
       <div>
         <h2>Carte + Google Pay</h2>
-        <p>Stesso componente <code>&lt;fbk-card-wallet&gt;</code>: su Chrome con Google Pay
-           configurato mostrerà il pulsante G.Pay sopra il form carta.</p>
+        <p>Usa <code>&lt;fbk-google-pay&gt;</code> + <code>&lt;fbk-card&gt;</code> affiancati.
+           Il pulsante Google Pay appare solo su Chrome con GPay configurato; su altri browser
+           rimane visibile solo il form carta.</p>
         <span class="tag">&lt;fbk-card-wallet&gt;</span>
       </div>
     </div>
@@ -899,24 +909,32 @@ el<span class="t-punct">.</span><span class="t-fn">setAttribute</span><span clas
           </div>
           <span>Carte + Google Pay · snippet</span>
         </div>
-        <pre><span class="t-comment">&lt;!-- Stessa integrazione, layout verticale + stile white
-     Su Chrome con GPay: Google Pay + form carta
-     Su Safari con Apple Pay: Apple Pay + form carta --&gt;</span>
-<span class="t-tag">&lt;fbk-card-wallet</span>
-  <span class="t-attr">id</span>=<span class="t-val">"cardWalletEl2"</span>
-  <span class="t-attr">style</span>=<span class="t-val">"width:100%"</span>
-  <span class="t-attr">payment-id</span>=<span class="t-val">"{{ paymentID }}"</span>
-  <span class="t-attr">payment-token</span>=<span class="t-val">"{{ paymentToken }}"</span>
-  <span class="t-attr">layout</span>=<span class="t-val">"vertical"</span>
-  <span class="t-attr">optional-fields</span>=<span class="t-val">"false"</span>
-  <span class="t-attr">apple-button-style</span>=<span class="t-val">"white-outline"</span>
-  <span class="t-attr">apple-button-type</span>=<span class="t-val">"pay"</span>
-  <span class="t-attr">google-button-style</span>=<span class="t-val">"white"</span>
-  <span class="t-attr">google-button-type</span>=<span class="t-val">"pay"</span><span class="t-tag">&gt;
-&lt;/fbk-card-wallet&gt;</span>
+        <pre><span class="t-comment">&lt;!-- Carte + Google Pay: due componenti separati.
+     fbk-google-pay appare solo su Chrome con GPay configurato.
+     fbk-card è sempre visibile come fallback. --&gt;</span>
+<span class="t-tag">&lt;div</span> <span class="t-attr">style</span>=<span class="t-val">"display:flex;flex-direction:column;gap:12px"</span><span class="t-tag">&gt;</span>
 
-<span class="t-comment">// layout "vertical" posiziona l'etichetta del campo
-// sopra il campo stesso anziché affiancata</span></pre>
+  <span class="t-comment">&lt;!-- FABRICK: Google Pay (visibile solo su Chrome + GPay) --&gt;</span>
+  <span class="t-tag">&lt;fbk-google-pay</span>
+    <span class="t-attr">id</span>=<span class="t-val">"gpayEl"</span>
+    <span class="t-attr">style</span>=<span class="t-val">"width:100%"</span>
+    <span class="t-attr">payment-id</span>=<span class="t-val">"{{ paymentID }}"</span>
+    <span class="t-attr">payment-token</span>=<span class="t-val">"{{ paymentToken }}"</span>
+    <span class="t-attr">button-style</span>=<span class="t-val">"black"</span>
+    <span class="t-attr">button-type</span>=<span class="t-val">"buy"</span><span class="t-tag">&gt;
+  &lt;/fbk-google-pay&gt;</span>
+
+  <span class="t-comment">&lt;!-- FABRICK: Form carta (sempre visibile) --&gt;</span>
+  <span class="t-tag">&lt;fbk-card</span>
+    <span class="t-attr">id</span>=<span class="t-val">"cardEl"</span>
+    <span class="t-attr">style</span>=<span class="t-val">"width:100%"</span>
+    <span class="t-attr">payment-id</span>=<span class="t-val">"{{ paymentID }}"</span>
+    <span class="t-attr">payment-token</span>=<span class="t-val">"{{ paymentToken }}"</span>
+    <span class="t-attr">layout</span>=<span class="t-val">"horizontal"</span>
+    <span class="t-attr">optional-fields</span>=<span class="t-val">"false"</span><span class="t-tag">&gt;
+  &lt;/fbk-card&gt;</span>
+
+<span class="t-tag">&lt;/div&gt;</span></pre>
       </div>
     </div>
   </section>
@@ -1266,31 +1284,41 @@ el<span class="t-punct">.</span><span class="t-fn">setAttribute</span><span clas
       },
       {
         id: 'slot-card-apay',
-        html: `<fbk-card-wallet
-          id="wc-card-apay" style="width:100%"
-          payment-id="${PAYMENT_ID}"
-          payment-token="${PAYMENT_TOKEN}"
-          layout="horizontal"
-          optional-fields="false"
-          apple-button-style="black"
-          apple-button-type="buy"
-          google-button-style="black"
-          google-button-type="buy">
-        </fbk-card-wallet>`
+        html: `<div style="display:flex;flex-direction:column;gap:12px;width:100%">
+          <fbk-apple-pay
+            id="wc-card-apay-wallet" style="width:100%"
+            payment-id="${PAYMENT_ID}"
+            payment-token="${PAYMENT_TOKEN}"
+            button-style="black"
+            button-type="buy">
+          </fbk-apple-pay>
+          <fbk-card
+            id="wc-card-apay-card" style="width:100%"
+            payment-id="${PAYMENT_ID}"
+            payment-token="${PAYMENT_TOKEN}"
+            layout="horizontal"
+            optional-fields="false">
+          </fbk-card>
+        </div>`
       },
       {
         id: 'slot-card-gpay',
-        html: `<fbk-card-wallet
-          id="wc-card-gpay" style="width:100%"
-          payment-id="${PAYMENT_ID}"
-          payment-token="${PAYMENT_TOKEN}"
-          layout="vertical"
-          optional-fields="false"
-          apple-button-style="white-outline"
-          apple-button-type="pay"
-          google-button-style="white"
-          google-button-type="pay">
-        </fbk-card-wallet>`
+        html: `<div style="display:flex;flex-direction:column;gap:12px;width:100%">
+          <fbk-google-pay
+            id="wc-card-gpay-wallet" style="width:100%"
+            payment-id="${PAYMENT_ID}"
+            payment-token="${PAYMENT_TOKEN}"
+            button-style="black"
+            button-type="buy">
+          </fbk-google-pay>
+          <fbk-card
+            id="wc-card-gpay-card" style="width:100%"
+            payment-id="${PAYMENT_ID}"
+            payment-token="${PAYMENT_TOKEN}"
+            layout="horizontal"
+            optional-fields="false">
+          </fbk-card>
+        </div>`
       },
       {
         id: 'slot-combo',
