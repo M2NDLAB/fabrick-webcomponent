@@ -348,6 +348,22 @@
       background: var(--border);
     }
 
+    .preview-slot { width: 100%; }
+    .slot-placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100px;
+      border: 1px dashed var(--border);
+      border-radius: 8px;
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+      padding: 20px;
+      gap: 8px;
+    }
+    .slot-placeholder strong { color: var(--accent); }
+
     /* contenitore codice sorgente */
     .code-box {
       background: var(--code-bg);
@@ -606,20 +622,10 @@
       <div class="component-box">
         <h3>LIVE PREVIEW</h3>
 
-        <!-- ⬇️  FABRICK WEB COMPONENT – fbk-card
-             payment-id    : ID permanente transazione   → dal backend
-             payment-token : token sessione temporaneo   → dal backend
-             layout        : horizontal | vertical
-             optional-fields: true | false (mostra nome/cognome)
-        -->
-        <fbk-card
-          id="wc-card"
-          style="width:100%"
-          payment-id=""
-          payment-token=""
-          layout="horizontal"
-          optional-fields="true">
-        </fbk-card>
+        <!-- Il componente verrà iniettato via JS solo dopo aver cliccato Applica -->
+        <div id="slot-card" class="preview-slot">
+          <div class="slot-placeholder">⚠️ Inserisci le credenziali e clicca <strong>Applica</strong></div>
+        </div>
 
       </div>
 
@@ -693,18 +699,9 @@ el<span class="t-punct">.</span><span class="t-fn">setAttribute</span><span clas
       <div class="component-box">
         <h3>LIVE PREVIEW</h3>
 
-        <!-- ⬇️  FABRICK WEB COMPONENT – fbk-google-pay
-             button-style : black | white
-             button-type  : plain | buy | pay
-        -->
-        <fbk-google-pay
-          id="wc-gpay"
-          style="width:100%"
-          payment-id=""
-          payment-token=""
-          button-style="black"
-          button-type="buy">
-        </fbk-google-pay>
+        <div id="slot-gpay" class="preview-slot">
+          <div class="slot-placeholder">⚠️ Inserisci le credenziali e clicca <strong>Applica</strong></div>
+        </div>
 
       </div>
 
@@ -761,18 +758,9 @@ el<span class="t-punct">.</span><span class="t-fn">setAttribute</span><span clas
       <div class="component-box">
         <h3>LIVE PREVIEW</h3>
 
-        <!-- ⬇️  FABRICK WEB COMPONENT – fbk-apple-pay
-             button-style : black | white | white-outline
-             button-type  : plain | buy | pay
-        -->
-        <fbk-apple-pay
-          id="wc-apay"
-          style="width:100%"
-          payment-id=""
-          payment-token=""
-          button-style="black"
-          button-type="buy">
-        </fbk-apple-pay>
+        <div id="slot-apay" class="preview-slot">
+          <div class="slot-placeholder">⚠️ Inserisci le credenziali e clicca <strong>Applica</strong></div>
+        </div>
 
       </div>
 
@@ -833,23 +821,9 @@ el<span class="t-punct">.</span><span class="t-fn">setAttribute</span><span clas
       <div class="component-box">
         <h3>LIVE PREVIEW</h3>
 
-        <!-- ⬇️  FABRICK WEB COMPONENT – fbk-card-wallet
-             Il componente mostra automaticamente le wallet disponibili
-             nel browser corrente. Su Safari: Apple Pay + form carta.
-             Su Chrome: Google Pay + form carta.
-        -->
-        <fbk-card-wallet
-          id="wc-card-apay"
-          style="width:100%"
-          payment-id=""
-          payment-token=""
-          layout="horizontal"
-          optional-fields="false"
-          apple-button-style="black"
-          apple-button-type="buy"
-          google-button-style="black"
-          google-button-type="buy">
-        </fbk-card-wallet>
+        <div id="slot-card-apay" class="preview-slot">
+          <div class="slot-placeholder">⚠️ Inserisci le credenziali e clicca <strong>Applica</strong></div>
+        </div>
 
       </div>
 
@@ -902,18 +876,9 @@ el<span class="t-punct">.</span><span class="t-fn">setAttribute</span><span clas
       <div class="component-box">
         <h3>LIVE PREVIEW</h3>
 
-        <fbk-card-wallet
-          id="wc-card-gpay"
-          style="width:100%"
-          payment-id=""
-          payment-token=""
-          layout="vertical"
-          optional-fields="false"
-          apple-button-style="white-outline"
-          apple-button-type="pay"
-          google-button-style="white"
-          google-button-type="pay">
-        </fbk-card-wallet>
+        <div id="slot-card-gpay" class="preview-slot">
+          <div class="slot-placeholder">⚠️ Inserisci le credenziali e clicca <strong>Applica</strong></div>
+        </div>
 
       </div>
 
@@ -969,29 +934,8 @@ el<span class="t-punct">.</span><span class="t-fn">setAttribute</span><span clas
       <div class="component-box">
         <h3>LIVE PREVIEW</h3>
 
-        <!-- ⬇️  Due componenti Fabrick affiancati con flexbox (TUO WRAPPER) -->
-        <div style="display:flex; flex-direction:column; gap:12px;">
-
-          <!-- Fabrick: Apple Pay -->
-          <fbk-apple-pay
-            id="wc-combo-apay"
-            style="width:100%"
-            payment-id=""
-            payment-token=""
-            button-style="black"
-            button-type="buy">
-          </fbk-apple-pay>
-
-          <!-- Fabrick: Google Pay -->
-          <fbk-google-pay
-            id="wc-combo-gpay"
-            style="width:100%"
-            payment-id=""
-            payment-token=""
-            button-style="black"
-            button-type="buy">
-          </fbk-google-pay>
-
+        <div id="slot-combo" class="preview-slot">
+          <div class="slot-placeholder">⚠️ Inserisci le credenziali e clicca <strong>Applica</strong></div>
         </div>
       </div>
 
@@ -1055,19 +999,9 @@ el<span class="t-punct">.</span><span class="t-fn">setAttribute</span><span clas
       <div class="component-box">
         <h3>LIVE PREVIEW</h3>
 
-        <!-- ⬇️  FABRICK – fbk-card-wallet con tutte le opzioni configurate -->
-        <fbk-card-wallet
-          id="wc-full"
-          style="width:100%"
-          payment-id=""
-          payment-token=""
-          layout="horizontal"
-          optional-fields="true"
-          apple-button-style="black"
-          apple-button-type="buy"
-          google-button-style="black"
-          google-button-type="buy">
-        </fbk-card-wallet>
+        <div id="slot-full" class="preview-slot">
+          <div class="slot-placeholder">⚠️ Inserisci le credenziali e clicca <strong>Applica</strong></div>
+        </div>
 
       </div>
 
@@ -1273,33 +1207,127 @@ el<span class="t-punct">.</span><span class="t-fn">setAttribute</span><span clas
     PAYMENT_ID    = document.getElementById('cfg-pid').value.trim();
     PAYMENT_TOKEN = document.getElementById('cfg-token').value.trim();
 
-    // Aggiorna la config globale Fabrick
+    // Validazione: tutti e 3 i campi sono obbligatori
+    if (!SHOP_LOGIN || !PAYMENT_ID || !PAYMENT_TOKEN) {
+      const btn = document.getElementById('apply-config');
+      btn.textContent = '⚠️ Compila tutti i campi';
+      btn.style.background = '#c0392b';
+      setTimeout(() => { btn.textContent = 'Applica ▶'; btn.style.background = ''; }, 2500);
+      return;
+    }
+
+    // Aggiorna la config globale Fabrick PRIMA di iniettare i componenti
     window['fbk-elements'] = {
       shop:        SHOP_LOGIN,
       callBackObj: (event) => myCallbackFunction(event)
     };
 
-    // Seleziona TUTTI i web component Fabrick nel DOM e aggiorna
-    // gli attributi payment-id e payment-token
-    const selectors = [
-      'fbk-card', 'fbk-google-pay', 'fbk-apple-pay', 'fbk-card-wallet'
+    // Definizione degli slot e del markup HTML da iniettare
+    const slots = [
+      {
+        id: 'slot-card',
+        html: `<fbk-card
+          id="wc-card" style="width:100%"
+          payment-id="${PAYMENT_ID}"
+          payment-token="${PAYMENT_TOKEN}"
+          layout="horizontal"
+          optional-fields="true">
+        </fbk-card>`
+      },
+      {
+        id: 'slot-gpay',
+        html: `<fbk-google-pay
+          id="wc-gpay" style="width:100%"
+          payment-id="${PAYMENT_ID}"
+          payment-token="${PAYMENT_TOKEN}"
+          button-style="black"
+          button-type="buy">
+        </fbk-google-pay>`
+      },
+      {
+        id: 'slot-apay',
+        html: `<fbk-apple-pay
+          id="wc-apay" style="width:100%"
+          payment-id="${PAYMENT_ID}"
+          payment-token="${PAYMENT_TOKEN}"
+          button-style="black"
+          button-type="buy">
+        </fbk-apple-pay>`
+      },
+      {
+        id: 'slot-card-apay',
+        html: `<fbk-card-wallet
+          id="wc-card-apay" style="width:100%"
+          payment-id="${PAYMENT_ID}"
+          payment-token="${PAYMENT_TOKEN}"
+          layout="horizontal"
+          optional-fields="false"
+          apple-button-style="black"
+          apple-button-type="buy"
+          google-button-style="black"
+          google-button-type="buy">
+        </fbk-card-wallet>`
+      },
+      {
+        id: 'slot-card-gpay',
+        html: `<fbk-card-wallet
+          id="wc-card-gpay" style="width:100%"
+          payment-id="${PAYMENT_ID}"
+          payment-token="${PAYMENT_TOKEN}"
+          layout="vertical"
+          optional-fields="false"
+          apple-button-style="white-outline"
+          apple-button-type="pay"
+          google-button-style="white"
+          google-button-type="pay">
+        </fbk-card-wallet>`
+      },
+      {
+        id: 'slot-combo',
+        html: `<div style="display:flex;flex-direction:column;gap:12px;">
+          <fbk-apple-pay
+            id="wc-combo-apay" style="width:100%"
+            payment-id="${PAYMENT_ID}"
+            payment-token="${PAYMENT_TOKEN}"
+            button-style="black"
+            button-type="buy">
+          </fbk-apple-pay>
+          <fbk-google-pay
+            id="wc-combo-gpay" style="width:100%"
+            payment-id="${PAYMENT_ID}"
+            payment-token="${PAYMENT_TOKEN}"
+            button-style="black"
+            button-type="buy">
+          </fbk-google-pay>
+        </div>`
+      },
+      {
+        id: 'slot-full',
+        html: `<fbk-card-wallet
+          id="wc-full" style="width:100%"
+          payment-id="${PAYMENT_ID}"
+          payment-token="${PAYMENT_TOKEN}"
+          layout="horizontal"
+          optional-fields="true"
+          apple-button-style="black"
+          apple-button-type="buy"
+          google-button-style="black"
+          google-button-type="buy">
+        </fbk-card-wallet>`
+      }
     ];
 
-    selectors.forEach(tag => {
-      document.querySelectorAll(tag).forEach(el => {
-        el.setAttribute('payment-id',    PAYMENT_ID);
-        el.setAttribute('payment-token', PAYMENT_TOKEN);
-      });
+    // Inietta ogni componente nel suo slot (sostituisce il placeholder)
+    slots.forEach(({ id, html }) => {
+      const slot = document.getElementById(id);
+      if (slot) slot.innerHTML = html;
     });
 
     // Feedback visivo sul pulsante
     const btn = document.getElementById('apply-config');
     btn.textContent = '✓ Applicato';
     btn.style.background = 'var(--green)';
-    setTimeout(() => {
-      btn.textContent = 'Applica ▶';
-      btn.style.background = '';
-    }, 2000);
+    setTimeout(() => { btn.textContent = 'Applica ▶'; btn.style.background = ''; }, 2000);
 
     console.log('[Demo] Config aggiornata →', { SHOP_LOGIN, PAYMENT_ID, PAYMENT_TOKEN });
   }
@@ -1325,8 +1353,7 @@ el<span class="t-punct">.</span><span class="t-fn">setAttribute</span><span clas
   //    Applica subito i valori di default ai componenti Fabrick.
   // ─────────────────────────────────────────────────────────────
   window.addEventListener('DOMContentLoaded', () => {
-    applyConfig();
-    // Mostra il primo pannello di default
+    // Mostra il primo pannello di default (senza inizializzare i componenti)
     document.getElementById('panel-card').classList.add('visible');
   });
 </script>
