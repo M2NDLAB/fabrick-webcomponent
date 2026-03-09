@@ -1,0 +1,1335 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fabrick Web Components – Demo</title>
+
+  <!-- ============================================================
+       FONT: Google Fonts – Syne (display) + DM Mono (codice)
+       Scelta estetica: look fintech moderno con accenti tecnici
+  ============================================================ -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <!-- ============================================================
+       ⚠️  FABRICK SCRIPT – SANDBOX
+       Questo è lo script ufficiale Fabrick che registra i custom
+       HTML elements (<fbk-card>, <fbk-apple-pay>, ecc.).
+       Per produzione sostituire con:
+       https://web.axerve.com/orchestra/checkout/assets/elements/fbk-elements.js
+  ============================================================ -->
+  <script src="https://sandbox-web.axerve.com/orchestra/checkout/assets/elements/fbk-elements.js"></script>
+
+  <style>
+    /* =============================================================
+       CSS CUSTOM PROPERTIES – palette e misure globali
+       Tutto ciò che riguarda i colori è qui: modificare solo queste
+       variabili per aggiornare l'intero tema.
+    ============================================================= */
+    :root {
+      --bg:          #0a0d14;       /* sfondo pagina principale */
+      --surface:     #111827;       /* sfondo card/pannelli */
+      --border:      #1f2a3c;       /* bordi sottili */
+      --accent:      #3b82f6;       /* blu Fabrick-like */
+      --accent-glow: rgba(59,130,246,.18);
+      --green:       #10b981;       /* stato OK */
+      --yellow:      #f59e0b;       /* avviso / badge */
+      --red:         #ef4444;       /* errore */
+      --text:        #e2e8f0;       /* testo principale */
+      --muted:       #64748b;       /* testo secondario */
+      --code-bg:     #0d1117;       /* sfondo blocchi codice */
+      --radius:      12px;
+      --radius-sm:   6px;
+    }
+
+    /* =============================================================
+       RESET & BASE
+    ============================================================= */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Syne', sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* pattern geometrico sullo sfondo – solo estetica */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 48px 48px;
+      opacity: .35;
+      pointer-events: none;
+    }
+
+    /* =============================================================
+       LAYOUT GLOBALE
+    ============================================================= */
+    .page-wrapper {
+      position: relative; z-index: 1;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+
+    /* =============================================================
+       HERO / HEADER
+    ============================================================= */
+    .hero {
+      padding: 72px 0 56px;
+      text-align: center;
+    }
+
+    .hero .badge {
+      display: inline-block;
+      background: var(--accent-glow);
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      border-radius: 99px;
+      font-size: 12px;
+      font-family: 'DM Mono', monospace;
+      letter-spacing: .08em;
+      padding: 4px 14px;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.6rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -.02em;
+      background: linear-gradient(135deg, #e2e8f0 30%, var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: 1rem;
+      max-width: 560px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* link al repo GitHub */
+    .hero-links {
+      margin-top: 28px;
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: var(--radius-sm);
+      font-family: 'DM Mono', monospace;
+      font-size: 13px;
+      cursor: pointer;
+      transition: opacity .2s, transform .15s;
+      text-decoration: none;
+    }
+    .btn:hover { opacity: .85; transform: translateY(-1px); }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+    }
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    /* =============================================================
+       CONFIGURAZIONE GLOBALE SANDBOX (TUTTA TUA)
+       Questa sezione mostra i parametri che devi impostare.
+    ============================================================= */
+    .config-banner {
+      background: linear-gradient(135deg, #1a2236, #111827);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--yellow);
+      border-radius: var(--radius);
+      padding: 24px 28px;
+      margin-bottom: 48px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      align-items: flex-start;
+    }
+
+    .config-banner h2 {
+      font-size: 14px;
+      color: var(--yellow);
+      font-family: 'DM Mono', monospace;
+      letter-spacing: .06em;
+      margin-bottom: 6px;
+    }
+
+    .config-banner p {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .config-fields {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .config-fields label {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 11px;
+      color: var(--muted);
+      font-family: 'DM Mono', monospace;
+      letter-spacing: .04em;
+    }
+
+    .config-fields input {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: var(--radius-sm);
+      padding: 8px 12px;
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      width: 260px;
+      transition: border-color .2s;
+    }
+    .config-fields input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    #apply-config {
+      align-self: flex-end;
+      margin-top: 4px;
+    }
+
+    /* =============================================================
+       NAVIGAZIONE A PILL (TAB ORIZZONTALI)
+    ============================================================= */
+    .nav-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 36px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .tab-btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      border-radius: 99px;
+      padding: 8px 18px;
+      font-size: 13px;
+      font-family: 'Syne', sans-serif;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .2s;
+      white-space: nowrap;
+    }
+    .tab-btn:hover { border-color: var(--accent); color: var(--text); }
+    .tab-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+      box-shadow: 0 0 20px var(--accent-glow);
+    }
+
+    /* =============================================================
+       PANNELLI DEI DEMO
+    ============================================================= */
+    .demo-panel { display: none; }
+    .demo-panel.visible { display: block; }
+
+    /* header di ogni pannello */
+    .panel-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+    }
+
+    .panel-icon {
+      width: 48px; height: 48px;
+      border-radius: var(--radius-sm);
+      background: var(--accent-glow);
+      border: 1px solid var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .panel-header h2 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      letter-spacing: -.01em;
+    }
+
+    .panel-header p {
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 4px;
+    }
+
+    /* badge tipo componente */
+    .tag {
+      display: inline-block;
+      background: var(--code-bg);
+      color: var(--accent);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      padding: 2px 8px;
+      margin-top: 6px;
+    }
+
+    /* =============================================================
+       COLONNE: widget a sinistra, codice a destra
+    ============================================================= */
+    .demo-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    @media (max-width: 760px) {
+      .demo-grid { grid-template-columns: 1fr; }
+    }
+
+    /* contenitore del web component Fabrick */
+    .component-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+    }
+
+    .component-box h3 {
+      font-size: 12px;
+      color: var(--muted);
+      font-family: 'DM Mono', monospace;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .component-box h3::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* contenitore codice sorgente */
+    .code-box {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .code-box-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .code-box-header .dots {
+      display: flex;
+      gap: 6px;
+    }
+    .code-box-header .dots span {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+    }
+    .dot-red   { background: #ef4444; }
+    .dot-yel   { background: #f59e0b; }
+    .dot-grn   { background: #10b981; }
+
+    pre {
+      padding: 16px;
+      overflow-x: auto;
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      line-height: 1.7;
+      color: #a5b4cb;
+    }
+
+    /* sintassi highlight minimale via classi CSS */
+    .t-comment { color: #4b5563; font-style: italic; }
+    .t-tag     { color: #60a5fa; }       /* tag HTML */
+    .t-attr    { color: #86efac; }       /* attributi */
+    .t-val     { color: #fde68a; }       /* valori stringa */
+    .t-kw      { color: #c084fc; }       /* keyword JS */
+    .t-fn      { color: #38bdf8; }       /* nome funzione */
+    .t-str     { color: #fde68a; }       /* stringa JS */
+    .t-punct   { color: #94a3b8; }       /* punteggiatura */
+
+    /* =============================================================
+       RESPONSE LOG – mostra il callback Fabrick in tempo reale
+    ============================================================= */
+    .response-log {
+      margin-top: 20px;
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .response-log-header {
+      padding: 10px 16px;
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* pallino "live" animato */
+    .live-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      animation: pulse 1.8s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: .3; }
+    }
+
+    #response-output {
+      padding: 14px 16px;
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      color: var(--muted);
+      min-height: 60px;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    /* colori status nel log */
+    .status-ok      { color: var(--green); }
+    .status-fail    { color: var(--red); }
+    .status-pending { color: var(--yellow); }
+
+    /* =============================================================
+       FOOTER
+    ============================================================= */
+    .footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 0 0;
+      margin-top: 80px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .footer a { color: var(--accent); text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+
+    /* =============================================================
+       ANIMAZIONI ENTRATA PANNELLI
+    ============================================================= */
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .demo-panel.visible { animation: fadeSlide .3s ease; }
+
+    /* =============================================================
+       RESPONSIVE FIXES
+    ============================================================= */
+    @media (max-width: 500px) {
+      .config-fields input { width: 100%; }
+      pre { font-size: 11px; }
+    }
+  </style>
+</head>
+
+<body>
+<div class="page-wrapper">
+
+  <!-- ============================================================
+       HERO
+  ============================================================ -->
+  <header class="hero">
+    <span class="badge">SANDBOX · Web Components Demo</span>
+    <h1>Fabrick Payment<br>Web Components</h1>
+    <p>
+      Tutte le modalità di integrazione Fabrick in un'unica pagina demo.
+      Ogni sezione mostra il componente live + il codice sorgente commentato.
+    </p>
+    <div class="hero-links">
+      <!-- ⬇️  TUO LINK – modifica con il tuo repo GitHub -->
+      <a href="https://github.com/M2NDLAB/fabrick-webcomponent" class="btn btn-primary" target="_blank">
+        <!-- icona GitHub inline SVG -->
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482
+          0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.342-3.369-1.342-.454-1.155-1.11-1.463-1.11-1.463
+          -.908-.62.069-.608.069-.608 1.003.07 1.531 1.031 1.531 1.031.892 1.53 2.341 1.088 2.91.832
+          .092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683
+          -.103-.253-.446-1.27.098-2.647 0 0 .84-.268 2.75 1.026A9.578 9.578 0 0112 6.836a9.59 9.59 0
+          012.504.337c1.909-1.294 2.747-1.026 2.747-1.026.546 1.377.202 2.394.1 2.647.64.699 1.028
+          1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012
+          2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/>
+        </svg>
+        View on GitHub
+      </a>
+      <!-- ⬇️  LINK DOCS FABRICK UFFICIALE -->
+      <a href="https://docs.fabrick.com/docs/paymentHubAndOrchestra/ecommerce/integrationMethods/web_component/"
+         class="btn btn-outline" target="_blank">
+        Docs Fabrick ↗
+      </a>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       CONFIGURAZIONE SANDBOX – SEZIONE TUA
+       Qui inserisci i tuoi valori di test ottenuti tramite
+       la REST API payment/create di Fabrick.
+       In produzione questi valori arrivano dal tuo backend.
+  ============================================================ -->
+  <section class="config-banner" id="config-section">
+    <div style="flex:1;min-width:260px">
+      <h2>⚙️  CONFIGURAZIONE SANDBOX (TUA)</h2>
+      <p>
+        Inserisci i valori ottenuti dalla tua chiamata a <code style="color:var(--accent)">payment/create</code>.
+        Verranno applicati a tutti i componenti nella pagina.
+      </p>
+      <div class="config-fields">
+        <label>
+          SHOP LOGIN
+          <input id="cfg-shop"  type="text" placeholder="es. GESPAY12345"              value="GESPAY12345" />
+        </label>
+        <label>
+          PAYMENT ID
+          <input id="cfg-pid"   type="text" placeholder="es. 12345678910"              value="12345678910" />
+        </label>
+        <label>
+          PAYMENT TOKEN
+          <input id="cfg-token" type="text" placeholder="es. 1234ea32-aaaa-bbbb-…"    value="1234ea321-aaaa-bbbb-cccc-752ca0b8cb5b" />
+        </label>
+        <button class="btn btn-primary" id="apply-config" onclick="applyConfig()">
+          Applica ▶
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       NAVIGAZIONE A TAB
+       Ogni tab corrisponde a un web component Fabrick differente.
+  ============================================================ -->
+  <nav class="nav-tabs" role="tablist">
+    <button class="tab-btn active" onclick="showPanel('card',       this)" role="tab">💳 Solo Carte</button>
+    <button class="tab-btn"        onclick="showPanel('gpay',       this)" role="tab">Google Pay</button>
+    <button class="tab-btn"        onclick="showPanel('apay',       this)" role="tab">Apple Pay</button>
+    <button class="tab-btn"        onclick="showPanel('card-apay',  this)" role="tab">Carte + Apple Pay</button>
+    <button class="tab-btn"        onclick="showPanel('card-gpay',  this)" role="tab">Carte + Google Pay</button>
+    <button class="tab-btn"        onclick="showPanel('gpay-apay',  this)" role="tab">Google + Apple Pay</button>
+    <button class="tab-btn"        onclick="showPanel('full',       this)" role="tab">🔥 Tutto insieme</button>
+  </nav>
+
+  <!-- ============================================================
+       RESPONSE LOG GLOBALE
+       Mostra in tempo reale il risultato del callback Fabrick.
+       Condiviso da tutti i pannelli.
+  ============================================================ -->
+  <div class="response-log">
+    <div class="response-log-header">
+      <span class="live-dot"></span>
+      <span>callBackObj – risposta Fabrick in tempo reale</span>
+    </div>
+    <div id="response-output">In attesa di una risposta dal Web Component…</div>
+  </div>
+
+  <!-- ===========================================================
+       ██████████████████████████████████████████████████████
+       PANNELLO 1 – fbk-card  (solo carte di credito/debito)
+       ██████████████████████████████████████████████████████
+  ============================================================ -->
+  <section class="demo-panel visible" id="panel-card">
+    <br>
+    <div class="panel-header">
+      <div class="panel-icon">💳</div>
+      <div>
+        <h2>Solo Carte</h2>
+        <p>Il componente <code>&lt;fbk-card&gt;</code> gestisce l'inserimento dei dati carta
+           (numero, scadenza, CVV) e opzionalmente nome/cognome acquirente.</p>
+        <span class="tag">&lt;fbk-card&gt;</span>
+      </div>
+    </div>
+
+    <div class="demo-grid">
+
+      <!-- lato sinistro: il web component Fabrick renderizzato live -->
+      <div class="component-box">
+        <h3>LIVE PREVIEW</h3>
+
+        <!-- ⬇️  FABRICK WEB COMPONENT – fbk-card
+             payment-id    : ID permanente transazione   → dal backend
+             payment-token : token sessione temporaneo   → dal backend
+             layout        : horizontal | vertical
+             optional-fields: true | false (mostra nome/cognome)
+        -->
+        <fbk-card
+          id="wc-card"
+          style="width:100%"
+          payment-id=""
+          payment-token=""
+          layout="horizontal"
+          optional-fields="true">
+        </fbk-card>
+
+      </div>
+
+      <!-- lato destro: codice sorgente commentato -->
+      <div class="code-box">
+        <div class="code-box-header">
+          <div class="dots">
+            <span class="dot-red"></span>
+            <span class="dot-yel"></span>
+            <span class="dot-grn"></span>
+          </div>
+          <span>fbk-card · snippet</span>
+        </div>
+        <pre><span class="t-comment">&lt;!-- 1. Includi lo script Fabrick nel &lt;head&gt; --&gt;</span>
+<span class="t-tag">&lt;script</span> <span class="t-attr">src</span>=<span class="t-val">"https://sandbox-web.axerve.com/
+  orchestra/checkout/assets/elements/
+  fbk-elements.js"</span><span class="t-tag">&gt;&lt;/script&gt;</span>
+
+<span class="t-comment">&lt;!-- 2. Inserisci il custom element nella pagina --&gt;</span>
+<span class="t-tag">&lt;fbk-card</span>
+  <span class="t-attr">id</span>=<span class="t-val">"cardElement"</span>
+  <span class="t-attr">style</span>=<span class="t-val">"width:100%"</span>
+  <span class="t-attr">payment-id</span>=<span class="t-val">"{{ paymentID }}"</span>
+  <span class="t-attr">payment-token</span>=<span class="t-val">"{{ paymentToken }}"</span>
+  <span class="t-attr">layout</span>=<span class="t-val">"horizontal"</span>
+  <span class="t-attr">optional-fields</span>=<span class="t-val">"true"</span><span class="t-tag">&gt;
+&lt;/fbk-card&gt;</span>
+
+<span class="t-comment">// 3. Configura shop e callback PRIMA di settare gli attributi</span>
+<span class="t-kw">window</span><span class="t-punct">[</span><span class="t-str">'fbk-elements'</span><span class="t-punct">]</span> <span class="t-punct">=</span> <span class="t-punct">{</span>
+  <span class="t-attr">shop</span><span class="t-punct">:</span> <span class="t-str">"GESPAY12345"</span><span class="t-punct">,</span>  <span class="t-comment">// ← tuo shopLogin</span>
+  <span class="t-attr">callBackObj</span><span class="t-punct">:</span> <span class="t-punct">(</span><span class="t-fn">event</span><span class="t-punct">) =&gt;</span> <span class="t-fn">myCallbackFunction</span><span class="t-punct">(</span><span class="t-fn">event</span><span class="t-punct">)</span>
+<span class="t-punct">};</span>
+
+<span class="t-comment">// 4. Funzione che riceve la risposta Fabrick al termine pagamento
+// response.payload.flowStatus → COMPLETED | FAILED | EXPIRED
+// response.payload.redirect   → oggetto con url e method</span>
+<span class="t-kw">function</span> <span class="t-fn">myCallbackFunction</span><span class="t-punct">(</span>response<span class="t-punct">) {</span>
+  <span class="t-kw">const</span> status <span class="t-punct">=</span> response<span class="t-punct">.</span>payload<span class="t-punct">.</span>flowStatus<span class="t-punct">;</span>
+  <span class="t-kw">if</span> <span class="t-punct">(</span>status <span class="t-punct">===</span> <span class="t-str">"COMPLETED"</span><span class="t-punct">) {</span>
+    <span class="t-comment">// redirect al tuo ordine/grazie</span>
+    <span class="t-kw">window</span><span class="t-punct">.</span>location<span class="t-punct">.</span>href <span class="t-punct">=</span>
+      response<span class="t-punct">.</span>payload<span class="t-punct">.</span>redirect<span class="t-punct">.</span>url<span class="t-punct">;</span>
+  <span class="t-punct">}</span>
+<span class="t-punct">}</span>
+
+<span class="t-comment">// 5. Imposta gli attributi dinamicamente (es. da backend)</span>
+<span class="t-kw">const</span> el <span class="t-punct">=</span> document<span class="t-punct">.</span><span class="t-fn">getElementById</span><span class="t-punct">(</span><span class="t-str">"cardElement"</span><span class="t-punct">);</span>
+el<span class="t-punct">.</span><span class="t-fn">setAttribute</span><span class="t-punct">(</span><span class="t-str">"payment-id"</span><span class="t-punct">,</span>    paymentID<span class="t-punct">);</span>
+el<span class="t-punct">.</span><span class="t-fn">setAttribute</span><span class="t-punct">(</span><span class="t-str">"payment-token"</span><span class="t-punct">,</span> paymentToken<span class="t-punct">);</span></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===========================================================
+       PANNELLO 2 – fbk-google-pay
+  ============================================================ -->
+  <section class="demo-panel" id="panel-gpay">
+    <br>
+    <div class="panel-header">
+      <div class="panel-icon">G</div>
+      <div>
+        <h2>Solo Google Pay</h2>
+        <p>Il componente <code>&lt;fbk-google-pay&gt;</code> mostra solo il pulsante Google Pay.
+           Richiede che il browser/device supporti le Google Pay API.</p>
+        <span class="tag">&lt;fbk-google-pay&gt;</span>
+      </div>
+    </div>
+
+    <div class="demo-grid">
+      <div class="component-box">
+        <h3>LIVE PREVIEW</h3>
+
+        <!-- ⬇️  FABRICK WEB COMPONENT – fbk-google-pay
+             button-style : black | white
+             button-type  : plain | buy | pay
+        -->
+        <fbk-google-pay
+          id="wc-gpay"
+          style="width:100%"
+          payment-id=""
+          payment-token=""
+          button-style="black"
+          button-type="buy">
+        </fbk-google-pay>
+
+      </div>
+
+      <div class="code-box">
+        <div class="code-box-header">
+          <div class="dots">
+            <span class="dot-red"></span><span class="dot-yel"></span><span class="dot-grn"></span>
+          </div>
+          <span>fbk-google-pay · snippet</span>
+        </div>
+        <pre><span class="t-comment">&lt;!-- Solo Google Pay
+     button-style: black | white
+     button-type : plain | buy | pay --&gt;</span>
+<span class="t-tag">&lt;fbk-google-pay</span>
+  <span class="t-attr">id</span>=<span class="t-val">"gpayElement"</span>
+  <span class="t-attr">style</span>=<span class="t-val">"width:100%"</span>
+  <span class="t-attr">payment-id</span>=<span class="t-val">"{{ paymentID }}"</span>
+  <span class="t-attr">payment-token</span>=<span class="t-val">"{{ paymentToken }}"</span>
+  <span class="t-attr">button-style</span>=<span class="t-val">"black"</span>
+  <span class="t-attr">button-type</span>=<span class="t-val">"buy"</span><span class="t-tag">&gt;
+&lt;/fbk-google-pay&gt;</span>
+
+<span class="t-comment">// Configurazione globale: identica per tutti i componenti</span>
+<span class="t-kw">window</span><span class="t-punct">[</span><span class="t-str">'fbk-elements'</span><span class="t-punct">]</span> <span class="t-punct">=</span> <span class="t-punct">{</span>
+  <span class="t-attr">shop</span><span class="t-punct">:</span> <span class="t-str">"GESPAY12345"</span><span class="t-punct">,</span>
+  <span class="t-attr">callBackObj</span><span class="t-punct">:</span> <span class="t-punct">(</span>e<span class="t-punct">) =&gt;</span> <span class="t-fn">myCallbackFunction</span><span class="t-punct">(</span>e<span class="t-punct">)</span>
+<span class="t-punct">};</span>
+
+<span class="t-comment">// ⚠️  Google Pay funziona solo su browser Chrome
+//      e su device con un metodo di pagamento salvato</span>
+<span class="t-kw">const</span> el <span class="t-punct">=</span> document<span class="t-punct">.</span><span class="t-fn">getElementById</span><span class="t-punct">(</span><span class="t-str">"gpayElement"</span><span class="t-punct">);</span>
+el<span class="t-punct">.</span><span class="t-fn">setAttribute</span><span class="t-punct">(</span><span class="t-str">"payment-id"</span><span class="t-punct">,</span>    paymentID<span class="t-punct">);</span>
+el<span class="t-punct">.</span><span class="t-fn">setAttribute</span><span class="t-punct">(</span><span class="t-str">"payment-token"</span><span class="t-punct">,</span> paymentToken<span class="t-punct">);</span></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===========================================================
+       PANNELLO 3 – fbk-apple-pay
+  ============================================================ -->
+  <section class="demo-panel" id="panel-apay">
+    <br>
+    <div class="panel-header">
+      <div class="panel-icon">🍎</div>
+      <div>
+        <h2>Solo Apple Pay</h2>
+        <p>Il componente <code>&lt;fbk-apple-pay&gt;</code> mostra solo il pulsante Apple Pay.
+           Visibile solo su Safari/dispositivi Apple con Wallet configurato.</p>
+        <span class="tag">&lt;fbk-apple-pay&gt;</span>
+      </div>
+    </div>
+
+    <div class="demo-grid">
+      <div class="component-box">
+        <h3>LIVE PREVIEW</h3>
+
+        <!-- ⬇️  FABRICK WEB COMPONENT – fbk-apple-pay
+             button-style : black | white | white-outline
+             button-type  : plain | buy | pay
+        -->
+        <fbk-apple-pay
+          id="wc-apay"
+          style="width:100%"
+          payment-id=""
+          payment-token=""
+          button-style="black"
+          button-type="buy">
+        </fbk-apple-pay>
+
+      </div>
+
+      <div class="code-box">
+        <div class="code-box-header">
+          <div class="dots">
+            <span class="dot-red"></span><span class="dot-yel"></span><span class="dot-grn"></span>
+          </div>
+          <span>fbk-apple-pay · snippet</span>
+        </div>
+        <pre><span class="t-comment">&lt;!-- Solo Apple Pay
+     button-style: black | white | white-outline
+     button-type : plain | buy | pay --&gt;</span>
+<span class="t-tag">&lt;fbk-apple-pay</span>
+  <span class="t-attr">id</span>=<span class="t-val">"apayElement"</span>
+  <span class="t-attr">style</span>=<span class="t-val">"width:100%"</span>
+  <span class="t-attr">payment-id</span>=<span class="t-val">"{{ paymentID }}"</span>
+  <span class="t-attr">payment-token</span>=<span class="t-val">"{{ paymentToken }}"</span>
+  <span class="t-attr">button-style</span>=<span class="t-val">"black"</span>
+  <span class="t-attr">button-type</span>=<span class="t-val">"buy"</span><span class="t-tag">&gt;
+&lt;/fbk-apple-pay&gt;</span>
+
+<span class="t-comment">// ⚠️  Apple Pay è visibile SOLO su:
+//      - Safari su macOS/iOS/iPadOS
+//      - Dispositivi con almeno una carta nel Wallet Apple
+//      Su altri browser il componente non verrà mostrato.</span>
+<span class="t-kw">window</span><span class="t-punct">[</span><span class="t-str">'fbk-elements'</span><span class="t-punct">]</span> <span class="t-punct">=</span> <span class="t-punct">{</span>
+  <span class="t-attr">shop</span><span class="t-punct">:</span> <span class="t-str">"GESPAY12345"</span><span class="t-punct">,</span>
+  <span class="t-attr">callBackObj</span><span class="t-punct">:</span> <span class="t-punct">(</span>e<span class="t-punct">) =&gt;</span> <span class="t-fn">myCallbackFunction</span><span class="t-punct">(</span>e<span class="t-punct">)</span>
+<span class="t-punct">};</span>
+
+<span class="t-kw">const</span> el <span class="t-punct">=</span> document<span class="t-punct">.</span><span class="t-fn">getElementById</span><span class="t-punct">(</span><span class="t-str">"apayElement"</span><span class="t-punct">);</span>
+el<span class="t-punct">.</span><span class="t-fn">setAttribute</span><span class="t-punct">(</span><span class="t-str">"payment-id"</span><span class="t-punct">,</span>    paymentID<span class="t-punct">);</span>
+el<span class="t-punct">.</span><span class="t-fn">setAttribute</span><span class="t-punct">(</span><span class="t-str">"payment-token"</span><span class="t-punct">,</span> paymentToken<span class="t-punct">);</span></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===========================================================
+       PANNELLO 4 – Carte + Apple Pay  (fbk-card-wallet, solo Apple)
+       Nota: fbk-card-wallet è il componente "all-in-one". Mostra
+       automaticamente le wallet disponibili sul device; su Safari
+       apparirà la sezione Apple Pay in cima al form carta.
+  ============================================================ -->
+  <section class="demo-panel" id="panel-card-apay">
+    <br>
+    <div class="panel-header">
+      <div class="panel-icon">💳🍎</div>
+      <div>
+        <h2>Carte + Apple Pay</h2>
+        <p>Usa <code>&lt;fbk-card-wallet&gt;</code> su Safari: mostrerà automaticamente il
+           pulsante Apple Pay + il form carta. Google Pay non appare se il browser non lo supporta.</p>
+        <span class="tag">&lt;fbk-card-wallet&gt;</span>
+      </div>
+    </div>
+
+    <div class="demo-grid">
+      <div class="component-box">
+        <h3>LIVE PREVIEW</h3>
+
+        <!-- ⬇️  FABRICK WEB COMPONENT – fbk-card-wallet
+             Il componente mostra automaticamente le wallet disponibili
+             nel browser corrente. Su Safari: Apple Pay + form carta.
+             Su Chrome: Google Pay + form carta.
+        -->
+        <fbk-card-wallet
+          id="wc-card-apay"
+          style="width:100%"
+          payment-id=""
+          payment-token=""
+          layout="horizontal"
+          optional-fields="false"
+          apple-button-style="black"
+          apple-button-type="buy"
+          google-button-style="black"
+          google-button-type="buy">
+        </fbk-card-wallet>
+
+      </div>
+
+      <div class="code-box">
+        <div class="code-box-header">
+          <div class="dots">
+            <span class="dot-red"></span><span class="dot-yel"></span><span class="dot-grn"></span>
+          </div>
+          <span>Carte + Apple Pay · snippet</span>
+        </div>
+        <pre><span class="t-comment">&lt;!-- fbk-card-wallet su Safari mostra:
+     - pulsante Apple Pay (in alto)
+     - form di inserimento carta (in basso)
+     Google Pay non appare perché non supportato da Safari --&gt;</span>
+<span class="t-tag">&lt;fbk-card-wallet</span>
+  <span class="t-attr">id</span>=<span class="t-val">"cardWalletEl"</span>
+  <span class="t-attr">style</span>=<span class="t-val">"width:100%"</span>
+  <span class="t-attr">payment-id</span>=<span class="t-val">"{{ paymentID }}"</span>
+  <span class="t-attr">payment-token</span>=<span class="t-val">"{{ paymentToken }}"</span>
+  <span class="t-attr">layout</span>=<span class="t-val">"horizontal"</span>
+  <span class="t-attr">optional-fields</span>=<span class="t-val">"false"</span>
+  <span class="t-attr">apple-button-style</span>=<span class="t-val">"black"</span>
+  <span class="t-attr">apple-button-type</span>=<span class="t-val">"buy"</span>
+  <span class="t-attr">google-button-style</span>=<span class="t-val">"black"</span>
+  <span class="t-attr">google-button-type</span>=<span class="t-val">"buy"</span><span class="t-tag">&gt;
+&lt;/fbk-card-wallet&gt;</span>
+
+<span class="t-comment">// Il componente gestisce internamente la visibilità
+// delle wallet: mostra solo quelle disponibili sul device.</span></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===========================================================
+       PANNELLO 5 – Carte + Google Pay  (fbk-card-wallet, solo GPay)
+  ============================================================ -->
+  <section class="demo-panel" id="panel-card-gpay">
+    <br>
+    <div class="panel-header">
+      <div class="panel-icon">💳G</div>
+      <div>
+        <h2>Carte + Google Pay</h2>
+        <p>Stesso componente <code>&lt;fbk-card-wallet&gt;</code>: su Chrome con Google Pay
+           configurato mostrerà il pulsante G.Pay sopra il form carta.</p>
+        <span class="tag">&lt;fbk-card-wallet&gt;</span>
+      </div>
+    </div>
+
+    <div class="demo-grid">
+      <div class="component-box">
+        <h3>LIVE PREVIEW</h3>
+
+        <fbk-card-wallet
+          id="wc-card-gpay"
+          style="width:100%"
+          payment-id=""
+          payment-token=""
+          layout="vertical"
+          optional-fields="false"
+          apple-button-style="white-outline"
+          apple-button-type="pay"
+          google-button-style="white"
+          google-button-type="pay">
+        </fbk-card-wallet>
+
+      </div>
+
+      <div class="code-box">
+        <div class="code-box-header">
+          <div class="dots">
+            <span class="dot-red"></span><span class="dot-yel"></span><span class="dot-grn"></span>
+          </div>
+          <span>Carte + Google Pay · snippet</span>
+        </div>
+        <pre><span class="t-comment">&lt;!-- Stessa integrazione, layout verticale + stile white
+     Su Chrome con GPay: Google Pay + form carta
+     Su Safari con Apple Pay: Apple Pay + form carta --&gt;</span>
+<span class="t-tag">&lt;fbk-card-wallet</span>
+  <span class="t-attr">id</span>=<span class="t-val">"cardWalletEl2"</span>
+  <span class="t-attr">style</span>=<span class="t-val">"width:100%"</span>
+  <span class="t-attr">payment-id</span>=<span class="t-val">"{{ paymentID }}"</span>
+  <span class="t-attr">payment-token</span>=<span class="t-val">"{{ paymentToken }}"</span>
+  <span class="t-attr">layout</span>=<span class="t-val">"vertical"</span>
+  <span class="t-attr">optional-fields</span>=<span class="t-val">"false"</span>
+  <span class="t-attr">apple-button-style</span>=<span class="t-val">"white-outline"</span>
+  <span class="t-attr">apple-button-type</span>=<span class="t-val">"pay"</span>
+  <span class="t-attr">google-button-style</span>=<span class="t-val">"white"</span>
+  <span class="t-attr">google-button-type</span>=<span class="t-val">"pay"</span><span class="t-tag">&gt;
+&lt;/fbk-card-wallet&gt;</span>
+
+<span class="t-comment">// layout "vertical" posiziona l'etichetta del campo
+// sopra il campo stesso anziché affiancata</span></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===========================================================
+       PANNELLO 6 – Solo Google Pay + Apple Pay (no form carta)
+       Non esiste un componente dedicato per questa combo.
+       La soluzione è affiancare fbk-google-pay e fbk-apple-pay
+       nella stessa pagina, in un contenitore flex.
+  ============================================================ -->
+  <section class="demo-panel" id="panel-gpay-apay">
+    <br>
+    <div class="panel-header">
+      <div class="panel-icon">G🍎</div>
+      <div>
+        <h2>Solo Google Pay + Apple Pay</h2>
+        <p>Non esiste un componente Fabrick per questa combo senza form carta.
+           Si affiancano i due componenti dedicati in un wrapper <code>&lt;div&gt;</code>.
+           Ciascuno apparirà solo se il browser lo supporta.</p>
+        <span class="tag">&lt;fbk-google-pay&gt; + &lt;fbk-apple-pay&gt;</span>
+      </div>
+    </div>
+
+    <div class="demo-grid">
+      <div class="component-box">
+        <h3>LIVE PREVIEW</h3>
+
+        <!-- ⬇️  Due componenti Fabrick affiancati con flexbox (TUO WRAPPER) -->
+        <div style="display:flex; flex-direction:column; gap:12px;">
+
+          <!-- Fabrick: Apple Pay -->
+          <fbk-apple-pay
+            id="wc-combo-apay"
+            style="width:100%"
+            payment-id=""
+            payment-token=""
+            button-style="black"
+            button-type="buy">
+          </fbk-apple-pay>
+
+          <!-- Fabrick: Google Pay -->
+          <fbk-google-pay
+            id="wc-combo-gpay"
+            style="width:100%"
+            payment-id=""
+            payment-token=""
+            button-style="black"
+            button-type="buy">
+          </fbk-google-pay>
+
+        </div>
+      </div>
+
+      <div class="code-box">
+        <div class="code-box-header">
+          <div class="dots">
+            <span class="dot-red"></span><span class="dot-yel"></span><span class="dot-grn"></span>
+          </div>
+          <span>GPay + Apple Pay · snippet</span>
+        </div>
+        <pre><span class="t-comment">&lt;!-- Wrapper TUO (non Fabrick): affianca i due pulsanti
+     Usa display:flex per layout responsivo --&gt;</span>
+<span class="t-tag">&lt;div</span> <span class="t-attr">style</span>=<span class="t-val">"display:flex;
+       flex-direction:column; gap:12px;"</span><span class="t-tag">&gt;</span>
+
+  <span class="t-comment">&lt;!-- FABRICK: Apple Pay --&gt;</span>
+  <span class="t-tag">&lt;fbk-apple-pay</span>
+    <span class="t-attr">id</span>=<span class="t-val">"apayEl"</span>
+    <span class="t-attr">style</span>=<span class="t-val">"width:100%"</span>
+    <span class="t-attr">payment-id</span>=<span class="t-val">"{{ paymentID }}"</span>
+    <span class="t-attr">payment-token</span>=<span class="t-val">"{{ paymentToken }}"</span>
+    <span class="t-attr">button-style</span>=<span class="t-val">"black"</span>
+    <span class="t-attr">button-type</span>=<span class="t-val">"buy"</span><span class="t-tag">&gt;
+  &lt;/fbk-apple-pay&gt;</span>
+
+  <span class="t-comment">&lt;!-- FABRICK: Google Pay --&gt;</span>
+  <span class="t-tag">&lt;fbk-google-pay</span>
+    <span class="t-attr">id</span>=<span class="t-val">"gpayEl"</span>
+    <span class="t-attr">style</span>=<span class="t-val">"width:100%"</span>
+    <span class="t-attr">payment-id</span>=<span class="t-val">"{{ paymentID }}"</span>
+    <span class="t-attr">payment-token</span>=<span class="t-val">"{{ paymentToken }}"</span>
+    <span class="t-attr">button-style</span>=<span class="t-val">"black"</span>
+    <span class="t-attr">button-type</span>=<span class="t-val">"buy"</span><span class="t-tag">&gt;
+  &lt;/fbk-google-pay&gt;</span>
+
+<span class="t-tag">&lt;/div&gt;</span>
+
+<span class="t-comment">// I due elementi condividono lo stesso
+// window['fbk-elements'] e lo stesso callBackObj</span></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===========================================================
+       PANNELLO 7 – fbk-card-wallet  (tutte le opzioni insieme)
+  ============================================================ -->
+  <section class="demo-panel" id="panel-full">
+    <br>
+    <div class="panel-header">
+      <div class="panel-icon">🔥</div>
+      <div>
+        <h2>Tutto insieme – Card Wallet</h2>
+        <p><code>&lt;fbk-card-wallet&gt;</code> è il componente all-in-one che mostra
+           Apple Pay, Google Pay e il form carta, adattandosi automaticamente
+           alle capacità del device e del browser.</p>
+        <span class="tag">&lt;fbk-card-wallet&gt;</span>
+      </div>
+    </div>
+
+    <div class="demo-grid">
+      <div class="component-box">
+        <h3>LIVE PREVIEW</h3>
+
+        <!-- ⬇️  FABRICK – fbk-card-wallet con tutte le opzioni configurate -->
+        <fbk-card-wallet
+          id="wc-full"
+          style="width:100%"
+          payment-id=""
+          payment-token=""
+          layout="horizontal"
+          optional-fields="true"
+          apple-button-style="black"
+          apple-button-type="buy"
+          google-button-style="black"
+          google-button-type="buy">
+        </fbk-card-wallet>
+
+      </div>
+
+      <div class="code-box">
+        <div class="code-box-header">
+          <div class="dots">
+            <span class="dot-red"></span><span class="dot-yel"></span><span class="dot-grn"></span>
+          </div>
+          <span>fbk-card-wallet · snippet completo</span>
+        </div>
+        <pre><span class="t-comment">&lt;!-- fbk-card-wallet: componente all-in-one Fabrick
+     Mostra automaticamente le wallet disponibili:
+     ✓ Apple Pay   → solo su Safari/iOS/macOS
+     ✓ Google Pay  → solo su Chrome con GPay attivo
+     ✓ Form carta  → sempre visibile come fallback
+     
+     optional-fields="true" aggiunge Nome e Cognome
+     al form carta (utile per 3DS) --&gt;</span>
+<span class="t-tag">&lt;fbk-card-wallet</span>
+  <span class="t-attr">id</span>=<span class="t-val">"fullWallet"</span>
+  <span class="t-attr">style</span>=<span class="t-val">"width:100%"</span>
+  <span class="t-attr">payment-id</span>=<span class="t-val">"{{ paymentID }}"</span>
+  <span class="t-attr">payment-token</span>=<span class="t-val">"{{ paymentToken }}"</span>
+  <span class="t-attr">layout</span>=<span class="t-val">"horizontal"</span>
+  <span class="t-attr">optional-fields</span>=<span class="t-val">"true"</span>
+  <span class="t-attr">apple-button-style</span>=<span class="t-val">"black"</span>
+  <span class="t-attr">apple-button-type</span>=<span class="t-val">"buy"</span>
+  <span class="t-attr">google-button-style</span>=<span class="t-val">"black"</span>
+  <span class="t-attr">google-button-type</span>=<span class="t-val">"buy"</span><span class="t-tag">&gt;
+&lt;/fbk-card-wallet&gt;</span>
+
+<span class="t-comment">// Configurazione globale condivisa (TUA)
+// Va eseguita PRIMA che i componenti siano montati</span>
+<span class="t-kw">window</span><span class="t-punct">[</span><span class="t-str">'fbk-elements'</span><span class="t-punct">]</span> <span class="t-punct">=</span> <span class="t-punct">{</span>
+  <span class="t-attr">shop</span><span class="t-punct">:</span> <span class="t-str">"GESPAY12345"</span><span class="t-punct">,</span>
+  <span class="t-attr">callBackObj</span><span class="t-punct">:</span> <span class="t-punct">(</span>e<span class="t-punct">) =&gt;</span> <span class="t-fn">myCallbackFunction</span><span class="t-punct">(</span>e<span class="t-punct">)</span>
+<span class="t-punct">};</span>
+
+<span class="t-comment">// Risposta Fabrick – struttura completa:
+// {
+//   error: { code, description },
+//   payload: {
+//     flowStatus: "COMPLETED" | "FAILED" |
+//                 "AUTHENTICATION_PENDING" | "EXPIRED",
+//     redirect: { method, url, data? }
+//   }
+// }
+// Dopo COMPLETED/FAILED → chiama payment/detail</span>
+<span class="t-kw">function</span> <span class="t-fn">myCallbackFunction</span><span class="t-punct">(</span>response<span class="t-punct">) {</span>
+  <span class="t-kw">const</span> <span class="t-punct">{</span> flowStatus<span class="t-punct">,</span> redirect <span class="t-punct">}</span>
+    <span class="t-punct">=</span> response<span class="t-punct">.</span>payload<span class="t-punct">;</span>
+
+  <span class="t-kw">if</span> <span class="t-punct">(</span>flowStatus <span class="t-punct">===</span> <span class="t-str">"COMPLETED"</span><span class="t-punct">) {</span>
+    <span class="t-comment">// redirect verso la pagina di conferma</span>
+    <span class="t-kw">window</span><span class="t-punct">.</span>location<span class="t-punct">.</span>href <span class="t-punct">=</span> redirect<span class="t-punct">.</span>url<span class="t-punct">;</span>
+
+  <span class="t-punct">}</span> <span class="t-kw">else if</span> <span class="t-punct">(</span>flowStatus <span class="t-punct">===</span> <span class="t-str">"FAILED"</span><span class="t-punct">) {</span>
+    <span class="t-comment">// mostra messaggio d'errore all'utente</span>
+    <span class="t-fn">showError</span><span class="t-punct">(</span>response<span class="t-punct">.</span>error<span class="t-punct">.</span>description<span class="t-punct">);</span>
+
+  <span class="t-punct">}</span> <span class="t-kw">else if</span> <span class="t-punct">(</span>flowStatus <span class="t-punct">===</span> <span class="t-str">"AUTHENTICATION_PENDING"</span><span class="t-punct">) {</span>
+    <span class="t-comment">// 3DS: esegui il redirect per completare l'auth</span>
+    <span class="t-kw">if</span> <span class="t-punct">(</span>redirect<span class="t-punct">.</span>method <span class="t-punct">===</span> <span class="t-str">"POST"</span><span class="t-punct">) {</span>
+      <span class="t-fn">submitPostForm</span><span class="t-punct">(</span>redirect<span class="t-punct">.</span>url<span class="t-punct">,</span> redirect<span class="t-punct">.</span>data<span class="t-punct">);</span>
+    <span class="t-punct">}</span> <span class="t-kw">else</span> <span class="t-punct">{</span>
+      <span class="t-kw">window</span><span class="t-punct">.</span>location<span class="t-punct">.</span>href <span class="t-punct">=</span> redirect<span class="t-punct">.</span>url<span class="t-punct">;</span>
+    <span class="t-punct">}</span>
+  <span class="t-punct">}</span>
+<span class="t-punct">}</span></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       FOOTER
+  ============================================================ -->
+  <footer class="footer">
+    <span>
+      Demo non ufficiale · Built with
+      <a href="https://docs.fabrick.com/docs/paymentHubAndOrchestra/ecommerce/integrationMethods/web_component/" target="_blank">Fabrick APIs</a>
+    </span>
+    <span style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted)">
+      <a href="https://github.com/M2NDLAB/fabrick-webcomponent" target="_blank">@M2ND</a>
+      &nbsp;·&nbsp; Sandbox environment
+    </span>
+  </footer>
+
+</div><!-- /page-wrapper -->
+
+
+<!-- ============================================================
+     JAVASCRIPT (TUO) – logica globale della demo
+     Questo blocco è interamente scritto da te, non da Fabrick.
+     Fabrick fornisce solo lo script fbk-elements.js caricato
+     nel <head> e i custom elements HTML.
+============================================================ -->
+<script>
+  // ─────────────────────────────────────────────────────────────
+  // 1. VARIABILI GLOBALI DI CONFIGURAZIONE (TUE)
+  //    In produzione questi valori arrivano dal backend dopo
+  //    la chiamata a payment/create.
+  // ─────────────────────────────────────────────────────────────
+  let SHOP_LOGIN    = document.getElementById('cfg-shop').value;
+  let PAYMENT_ID    = document.getElementById('cfg-pid').value;
+  let PAYMENT_TOKEN = document.getElementById('cfg-token').value;
+
+  // ─────────────────────────────────────────────────────────────
+  // 2. CONFIGURAZIONE GLOBALE FABRICK
+  //    window['fbk-elements'] viene letto dai Web Components
+  //    Fabrick al momento del mount. Deve essere impostato
+  //    PRIMA che i componenti vengano inizializzati.
+  // ─────────────────────────────────────────────────────────────
+  window['fbk-elements'] = {
+    shop:        SHOP_LOGIN,
+    callBackObj: (event) => myCallbackFunction(event)
+  };
+
+  // ─────────────────────────────────────────────────────────────
+  // 3. CALLBACK FABRICK (TUA)
+  //    Questa funzione viene chiamata da Fabrick al termine
+  //    del flusso di pagamento, qualunque sia il metodo usato.
+  //    Struttura response:
+  //    {
+  //      error:   { code, description },
+  //      payload: { flowStatus, redirect }
+  //    }
+  // ─────────────────────────────────────────────────────────────
+  function myCallbackFunction(response) {
+    const out  = document.getElementById('response-output');
+    const status = response?.payload?.flowStatus ?? 'UNKNOWN';
+
+    // Colora il log in base allo status
+    let cssClass = '';
+    if (status === 'COMPLETED')             cssClass = 'status-ok';
+    else if (status === 'FAILED')           cssClass = 'status-fail';
+    else if (status === 'EXPIRED')          cssClass = 'status-fail';
+    else if (status === 'AUTHENTICATION_PENDING') cssClass = 'status-pending';
+
+    out.innerHTML = `<span class="${cssClass}">[${status}]</span>\n`
+                  + JSON.stringify(response, null, 2);
+
+    // ── Gestione redirect post-pagamento (TUA) ──────────────
+    if (status === 'COMPLETED' || status === 'FAILED') {
+      // In produzione: redirect verso la tua pagina di esito
+      // window.location.href = response.payload.redirect.url;
+      console.log('Pagamento terminato. redirect:', response.payload.redirect);
+    }
+
+    if (status === 'AUTHENTICATION_PENDING') {
+      // 3DS: esegui il redirect per completare l'autenticazione
+      const { method, url, data } = response.payload.redirect;
+      if (method === 'POST') {
+        // helper per submit via form POST
+        submitPostRedirect(url, data);
+      } else {
+        window.location.href = url;
+      }
+    }
+  }
+
+  // ─────────────────────────────────────────────────────────────
+  // 4. HELPER – redirect POST (3DS / AUTHENTICATION_PENDING)
+  //    Crea dinamicamente un form HTML, lo popola con i parametri
+  //    e lo invia. È necessario per i redirect 3DS che usano POST.
+  //    Questa è logica TUA, non di Fabrick.
+  // ─────────────────────────────────────────────────────────────
+  function submitPostRedirect(url, data) {
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = url;
+    // aggiunge ogni coppia key/value come campo hidden
+    for (const [key, value] of Object.entries(data || {})) {
+      const input = document.createElement('input');
+      input.type  = 'hidden';
+      input.name  = key;
+      input.value = value;
+      form.appendChild(input);
+    }
+    document.body.appendChild(form);
+    form.submit();
+  }
+
+  // ─────────────────────────────────────────────────────────────
+  // 5. LISTENER ERRORI GLOBALI FABRICK
+  //    fbk-elements-error viene emesso dal componente Fabrick
+  //    in caso di problemi di caricamento o configurazione.
+  // ─────────────────────────────────────────────────────────────
+  window.addEventListener('fbk-elements-error', event => {
+    console.error('[Fabrick Error]', JSON.stringify(event.detail));
+    const out = document.getElementById('response-output');
+    out.innerHTML = `<span class="status-fail">[FABRICK ERROR]\n`
+                  + JSON.stringify(event.detail, null, 2) + `</span>`;
+  });
+
+  // ─────────────────────────────────────────────────────────────
+  // 6. FUNZIONE APPLICA CONFIG (TUA)
+  //    Legge i valori dagli input e aggiorna tutti i componenti
+  //    Fabrick presenti nella pagina.
+  // ─────────────────────────────────────────────────────────────
+  function applyConfig() {
+    // Legge i valori dall'UI
+    SHOP_LOGIN    = document.getElementById('cfg-shop').value.trim();
+    PAYMENT_ID    = document.getElementById('cfg-pid').value.trim();
+    PAYMENT_TOKEN = document.getElementById('cfg-token').value.trim();
+
+    // Aggiorna la config globale Fabrick
+    window['fbk-elements'] = {
+      shop:        SHOP_LOGIN,
+      callBackObj: (event) => myCallbackFunction(event)
+    };
+
+    // Seleziona TUTTI i web component Fabrick nel DOM e aggiorna
+    // gli attributi payment-id e payment-token
+    const selectors = [
+      'fbk-card', 'fbk-google-pay', 'fbk-apple-pay', 'fbk-card-wallet'
+    ];
+
+    selectors.forEach(tag => {
+      document.querySelectorAll(tag).forEach(el => {
+        el.setAttribute('payment-id',    PAYMENT_ID);
+        el.setAttribute('payment-token', PAYMENT_TOKEN);
+      });
+    });
+
+    // Feedback visivo sul pulsante
+    const btn = document.getElementById('apply-config');
+    btn.textContent = '✓ Applicato';
+    btn.style.background = 'var(--green)';
+    setTimeout(() => {
+      btn.textContent = 'Applica ▶';
+      btn.style.background = '';
+    }, 2000);
+
+    console.log('[Demo] Config aggiornata →', { SHOP_LOGIN, PAYMENT_ID, PAYMENT_TOKEN });
+  }
+
+  // ─────────────────────────────────────────────────────────────
+  // 7. NAVIGAZIONE A TAB (TUA)
+  //    Mostra/nasconde i pannelli demo. Nessuna relazione con
+  //    Fabrick: è logica di UI pura.
+  // ─────────────────────────────────────────────────────────────
+  function showPanel(id, btn) {
+    // Nasconde tutti i pannelli
+    document.querySelectorAll('.demo-panel').forEach(p => p.classList.remove('visible'));
+    // Rimuove "active" da tutti i tab
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+
+    // Mostra il pannello richiesto e attiva il tab
+    document.getElementById('panel-' + id)?.classList.add('visible');
+    btn.classList.add('active');
+  }
+
+  // ─────────────────────────────────────────────────────────────
+  // 8. INIZIALIZZAZIONE AL LOAD (TUA)
+  //    Applica subito i valori di default ai componenti Fabrick.
+  // ─────────────────────────────────────────────────────────────
+  window.addEventListener('DOMContentLoaded', () => {
+    applyConfig();
+    // Mostra il primo pannello di default
+    document.getElementById('panel-card').classList.add('visible');
+  });
+</script>
+
+</body>
+</html>
