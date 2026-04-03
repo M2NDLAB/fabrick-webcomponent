@@ -1,130 +1,144 @@
 <!DOCTYPE html>
-<html lang="it" style="background:#0a0d14">
+<html lang="it">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Fabrick Web Components – Demo</title>
 
-  <!-- ============================================================
-       FONT: Google Fonts – Syne (display) + DM Mono (codice)
-       Scelta estetica: look fintech moderno con accenti tecnici
-  ============================================================ -->
+  <!-- Outfit: UI display · JetBrains Mono: code -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet" />
 
-  <!-- ============================================================
-       FABRICK SCRIPT – SANDBOX
-       Questo è lo script ufficiale Fabrick che registra i custom
-       HTML elements (<fbk-card>, <fbk-apple-pay>, ecc.).
-       Per produzione sostituire con:
-       https://web.axerve.com/orchestra/checkout/assets/elements/fbk-elements.js
-  ============================================================ -->
+  <!--
+    FABRICK SCRIPT – SANDBOX
+    In produzione: https://web.axerve.com/orchestra/checkout/assets/elements/fbk-elements.js
+    NOTA: window['fbk-elements'] deve essere impostato PRIMA che i componenti siano
+    iniettati nel DOM. In questa demo succede in applyConfig() → poi innerHTML.
+  -->
   <script defer src="https://sandbox-web.axerve.com/orchestra/checkout/assets/elements/fbk-elements.js"></script>
 
   <style>
-    /* =============================================================
-       CSS CUSTOM PROPERTIES – palette e misure globali
-       Tutto ciò che riguarda i colori è qui: modificare solo queste
-       variabili per aggiornare l'intero tema.
-    ============================================================= */
+    /* ═══════════════════════════════════════════════════
+       DESIGN TOKENS – palette Fabrick-adjacent
+       Contrasto elevato: text #F1F5FF su bg #090E1C
+    ═══════════════════════════════════════════════════ */
     :root {
-      --bg:          #0a0d14;       /* sfondo pagina principale */
-      --surface:     #111827;       /* sfondo card/pannelli */
-      --border:      #1f2a3c;       /* bordi sottili */
-      --accent:      #3b82f6;       /* blu Fabrick-like */
-      --accent-glow: rgba(59,130,246,.18);
-      --green:       #10b981;       /* stato OK */
-      --yellow:      #f59e0b;       /* avviso / badge */
-      --red:         #ef4444;       /* errore */
-      --text:        #e2e8f0;       /* testo principale */
-      --muted:       #64748b;       /* testo secondario */
-      --code-bg:     #0d1117;       /* sfondo blocchi codice */
-      --radius:      12px;
-      --radius-sm:   6px;
+      --bg:           #090E1C;
+      --surface:      #101828;
+      --surface-2:    #162034;
+      --surface-3:    #1C2A42;
+      --border:       #1E2F4A;
+      --border-2:     #2A4070;
+      --accent:       #2563EB;
+      --accent-l:     #60A5FA;
+      --accent-glow:  rgba(37,99,235,.18);
+      --green:        #10B981;
+      --yellow:       #F59E0B;
+      --red:          #EF4444;
+      --text:         #F1F5FF;     /* near-white, alta leggibilità */
+      --text-2:       #C8D6F0;    /* secondary – ancora molto leggibile */
+      --muted:        #8FA3C8;    /* muted – visibile su scuro */
+      --code-bg:      #060C18;
+      --r:            14px;
+      --r-sm:         8px;
     }
 
-    /* =============================================================
-       RESET & BASE
-    ============================================================= */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    html { scroll-behavior: smooth; background: #0a0d14; }
+    html { scroll-behavior: smooth; }
 
     body {
-      background: #0a0d14 !important;
+      background: var(--bg);
       color: var(--text);
-      font-family: 'Syne', sans-serif;
+      font-family: 'Outfit', sans-serif;
       line-height: 1.6;
       min-height: 100vh;
     }
 
-    /* pattern geometrico sullo sfondo – solo estetica */
+    /* griglia di sfondo */
     body::before {
       content: '';
       position: fixed; inset: 0; z-index: 0;
       background-image:
-        linear-gradient(var(--border) 1px, transparent 1px),
-        linear-gradient(90deg, var(--border) 1px, transparent 1px);
-      background-size: 48px 48px;
-      opacity: .35;
+        linear-gradient(rgba(37,99,235,.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(37,99,235,.06) 1px, transparent 1px);
+      background-size: 52px 52px;
       pointer-events: none;
     }
 
-    /* =============================================================
-       LAYOUT GLOBALE
-    ============================================================= */
+    /* ambient glow in alto */
+    body::after {
+      content: '';
+      position: fixed;
+      top: -240px; left: 50%; transform: translateX(-50%);
+      width: 900px; height: 600px;
+      background: radial-gradient(ellipse, rgba(37,99,235,.12) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
     .page-wrapper {
       position: relative; z-index: 1;
       max-width: 1100px;
       margin: 0 auto;
-      padding: 0 24px 80px;
+      padding: 0 24px 100px;
     }
 
-    /* =============================================================
-       HERO / HEADER
-    ============================================================= */
+    /* ═══════════════════════════════════════════════════
+       HERO
+    ═══════════════════════════════════════════════════ */
     .hero {
-      padding: 72px 0 56px;
+      padding: 68px 0 52px;
       text-align: center;
     }
 
     .hero .badge {
-      display: inline-block;
-      background: var(--accent-glow);
-      color: var(--accent);
-      border: 1px solid var(--accent);
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(37,99,235,.12);
+      color: var(--accent-l);
+      border: 1px solid rgba(37,99,235,.35);
       border-radius: 99px;
-      font-size: 12px;
-      font-family: 'DM Mono', monospace;
-      letter-spacing: .08em;
-      padding: 4px 14px;
-      margin-bottom: 20px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: .1em;
+      padding: 5px 16px;
+      margin-bottom: 26px;
+    }
+
+    .badge-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+      animation: blink 1.8s infinite;
     }
 
     .hero h1 {
-      font-size: clamp(2rem, 5vw, 3.6rem);
+      font-size: clamp(2.2rem, 5.5vw, 3.8rem);
       font-weight: 800;
-      line-height: 1.1;
-      letter-spacing: -.02em;
-      background: linear-gradient(135deg, #e2e8f0 30%, var(--accent));
+      line-height: 1.06;
+      letter-spacing: -.03em;
+      color: var(--text);
+    }
+
+    .hero h1 .hl {
+      background: linear-gradient(135deg, #93C5FD 0%, #2563EB 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
 
     .hero p {
-      margin-top: 16px;
-      color: var(--muted);
-      font-size: 1rem;
-      max-width: 560px;
-      margin-left: auto;
-      margin-right: auto;
+      margin: 18px auto 0;
+      color: var(--text-2);
+      font-size: 1.05rem;
+      font-weight: 400;
+      max-width: 500px;
     }
 
-    /* link al repo GitHub */
     .hero-links {
-      margin-top: 28px;
+      margin-top: 32px;
       display: flex;
       gap: 12px;
       justify-content: center;
@@ -135,402 +149,562 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 10px 20px;
-      border-radius: var(--radius-sm);
-      font-family: 'DM Mono', monospace;
-      font-size: 13px;
+      padding: 11px 22px;
+      border-radius: var(--r-sm);
+      font-family: 'Outfit', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
       cursor: pointer;
-      transition: opacity .2s, transform .15s;
+      transition: all .2s;
       text-decoration: none;
+      border: none;
+      white-space: nowrap;
     }
-    .btn:hover { opacity: .85; transform: translateY(-1px); }
 
     .btn-primary {
       background: var(--accent);
       color: #fff;
-      border: none;
+      box-shadow: 0 4px 20px rgba(37,99,235,.35);
     }
+    .btn-primary:hover {
+      background: #1D4ED8;
+      box-shadow: 0 4px 28px rgba(37,99,235,.55);
+      transform: translateY(-1px);
+    }
+
     .btn-outline {
-      background: transparent;
-      color: #e2e8f0;
-      border: 1px solid rgba(255,255,255,0.4);
+      background: rgba(255,255,255,.08);
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,.22);
     }
     .btn-outline:hover {
-      border-color: var(--accent);
-      color: var(--accent);
+      background: rgba(255,255,255,.13);
+      border-color: var(--accent-l);
+      color: var(--accent-l);
+      transform: translateY(-1px);
     }
 
-    /* =============================================================
-       CONFIGURAZIONE GLOBALE SANDBOX
-       Questa sezione mostra i parametri che devi impostare.
-    ============================================================= */
-    .config-banner {
-      background: linear-gradient(135deg, #1a2236, #111827);
-      border: 1px solid var(--border);
-      border-left: 3px solid var(--yellow);
-      border-radius: var(--radius);
-      padding: 24px 28px;
-      margin-bottom: 48px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      align-items: flex-start;
-    }
+    /* ═══════════════════════════════════════════════════
+       TAB NAVIGATION (PRIMA della config)
+    ═══════════════════════════════════════════════════ */
+    .nav-section { margin-bottom: 28px; }
 
-    .config-banner h2 {
-      font-size: 14px;
-      color: var(--yellow);
-      font-family: 'DM Mono', monospace;
-      letter-spacing: .06em;
-      margin-bottom: 6px;
-    }
-
-    .config-banner p {
-      font-size: 13px;
+    .section-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: .12em;
       color: var(--muted);
-      margin-bottom: 12px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
     }
 
-    .config-fields {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-
-    .config-fields label {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      font-size: 11px;
-      color: var(--muted);
-      font-family: 'DM Mono', monospace;
-      letter-spacing: .04em;
-    }
-
-    .config-fields input {
-      background: var(--code-bg);
-      border: 1px solid var(--border);
-      color: var(--text);
-      border-radius: var(--radius-sm);
-      padding: 8px 12px;
-      font-family: 'DM Mono', monospace;
-      font-size: 12px;
-      width: 260px;
-      transition: border-color .2s;
-    }
-    .config-fields input:focus {
-      outline: none;
-      border-color: var(--accent);
-    }
-
-    .callback-toggle {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      justify-content: flex-end;
-      padding-bottom: 2px;
-    }
-    .callback-toggle span {
-      font-size: 11px;
-      color: var(--muted);
-      font-family: 'DM Mono', monospace;
-      letter-spacing: .04em;
-    }
-    .radio-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      cursor: pointer;
-      font-size: 12px;
-      color: var(--text);
-      font-family: 'DM Mono', monospace;
-    }
-    .radio-row input[type="radio"] {
-      width: 14px;
-      height: 14px;
-      min-width: 14px;
-      accent-color: var(--accent);
-      cursor: pointer;
-      padding: 0;
-    }
-
-    #apply-config {
-      align-self: flex-end;
-      margin-top: 4px;
-    }
-
-    /* =============================================================
-       NAVIGAZIONE A PILL (TAB ORIZZONTALI)
-    ============================================================= */
     .nav-tabs {
       display: flex;
-      gap: 8px;
+      gap: 5px;
       flex-wrap: wrap;
-      margin-bottom: 36px;
-      padding-bottom: 20px;
-      border-bottom: 1px solid var(--border);
+      padding: 6px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
     }
 
     .tab-btn {
-      background: var(--surface);
-      border: 1px solid var(--border);
+      background: transparent;
+      border: 1px solid transparent;
       color: var(--muted);
-      border-radius: 99px;
-      padding: 8px 18px;
+      border-radius: var(--r-sm);
+      padding: 9px 18px;
       font-size: 13px;
-      font-family: 'Syne', sans-serif;
+      font-family: 'Outfit', sans-serif;
       font-weight: 600;
       cursor: pointer;
       transition: all .2s;
       white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
-    .tab-btn:hover { border-color: var(--accent); color: var(--text); }
+    .tab-btn:hover { color: var(--text-2); background: var(--surface-2); }
     .tab-btn.active {
       background: var(--accent);
       border-color: var(--accent);
       color: #fff;
-      box-shadow: 0 0 20px var(--accent-glow);
+      box-shadow: 0 2px 14px rgba(37,99,235,.4);
     }
 
-    /* =============================================================
-       PANNELLI DEI DEMO
-    ============================================================= */
-    .demo-panel { display: none; }
-    .demo-panel.visible { display: block; }
+    .combo-badge {
+      display: inline-block;
+      font-size: 9px;
+      font-family: 'JetBrains Mono', monospace;
+      background: rgba(245,158,11,.2);
+      color: #F59E0B;
+      border: 1px solid rgba(245,158,11,.3);
+      border-radius: 3px;
+      padding: 1px 5px;
+    }
+    .tab-btn.active .combo-badge {
+      background: rgba(255,255,255,.2);
+      color: #fff;
+      border-color: rgba(255,255,255,.3);
+    }
 
-    /* header di ogni pannello */
+    /* ═══════════════════════════════════════════════════
+       CONFIG BANNER
+    ═══════════════════════════════════════════════════ */
+    .config-banner {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: var(--r);
+      padding: 22px 26px;
+      margin-bottom: 36px;
+    }
+
+    .config-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .config-head h2 {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: .1em;
+      color: var(--accent-l);
+      text-transform: uppercase;
+    }
+
+    .dual-notice {
+      display: none;
+      align-items: center;
+      gap: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      background: rgba(245,158,11,.1);
+      color: #F59E0B;
+      border: 1px solid rgba(245,158,11,.3);
+      border-radius: 4px;
+      padding: 3px 10px;
+    }
+    .dual-notice.show { display: inline-flex; }
+
+    /* single credentials row */
+    .creds-single {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      align-items: flex-end;
+    }
+
+    /* dual credentials block */
+    .creds-dual {
+      display: none;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .creds-dual.show { display: flex; }
+
+    .dual-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding: 16px 18px;
+      background: rgba(37,99,235,.05);
+      border: 1px solid var(--border);
+      border-radius: var(--r-sm);
+      position: relative;
+    }
+
+    .dual-row-label {
+      position: absolute;
+      top: -1px; left: 16px;
+      transform: translateY(-50%);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--accent-l);
+      background: var(--surface);
+      padding: 0 8px;
+      letter-spacing: .07em;
+    }
+
+    .cfg-field {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .cfg-field label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .cfg-field input {
+      background: var(--code-bg);
+      border: 1px solid var(--border-2);
+      color: var(--text);
+      border-radius: var(--r-sm);
+      padding: 9px 13px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      width: 234px;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .cfg-field input::placeholder { color: var(--muted); opacity: .6; }
+    .cfg-field input:focus {
+      outline: none;
+      border-color: var(--accent-l);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    .config-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: flex-start;
+      justify-content: flex-end;
+    }
+
+    /* Toggle switch */
+    .cb-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .cb-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .07em;
+    }
+
+    .sw {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .sw input { display: none; }
+
+    .sw-track {
+      width: 38px; height: 21px;
+      background: var(--border-2);
+      border-radius: 11px;
+      position: relative;
+      transition: background .2s;
+    }
+    .sw-track::after {
+      content: '';
+      position: absolute;
+      top: 3px; left: 3px;
+      width: 15px; height: 15px;
+      border-radius: 50%;
+      background: #fff;
+      transition: transform .2s;
+    }
+    .sw input:checked ~ .sw-track { background: var(--green); }
+    .sw input:checked ~ .sw-track::after { transform: translateX(17px); }
+
+    .sw-val {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-2);
+      min-width: 22px;
+    }
+
+    /* ═══════════════════════════════════════════════════
+       DEMO PANELS
+    ═══════════════════════════════════════════════════ */
+    .demo-panel { display: none; }
+    .demo-panel.visible { display: block; animation: fadeSlide .25s ease; }
+
     .panel-header {
       display: flex;
       align-items: flex-start;
       gap: 16px;
-      margin-bottom: 28px;
-      flex-wrap: wrap;
+      margin-bottom: 22px;
     }
 
     .panel-icon {
-      width: 48px; height: 48px;
-      border-radius: var(--radius-sm);
+      width: 44px; height: 44px;
+      border-radius: var(--r-sm);
       background: var(--accent-glow);
-      border: 1px solid var(--accent);
+      border: 1px solid rgba(37,99,235,.4);
       display: flex; align-items: center; justify-content: center;
-      font-size: 12px;
-      font-family: 'DM Mono', monospace;
-      font-weight: 700;
-      letter-spacing: .04em;
-      color: var(--accent);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--accent-l);
       flex-shrink: 0;
     }
 
     .panel-header h2 {
-      font-size: 1.4rem;
+      font-size: 1.35rem;
       font-weight: 700;
-      letter-spacing: -.01em;
+      letter-spacing: -.015em;
+      color: var(--text);
     }
 
     .panel-header p {
-      color: var(--muted);
+      color: var(--text-2);
       font-size: 14px;
       margin-top: 4px;
+      line-height: 1.5;
     }
 
-    /* badge tipo componente */
+    .panel-header p code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--accent-l);
+      background: var(--accent-glow);
+      padding: 1px 6px;
+      border-radius: 4px;
+    }
+
     .tag {
       display: inline-block;
       background: var(--code-bg);
-      color: var(--accent);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      font-family: 'DM Mono', monospace;
+      color: var(--accent-l);
+      border: 1px solid var(--border-2);
+      border-radius: var(--r-sm);
+      font-family: 'JetBrains Mono', monospace;
       font-size: 11px;
-      padding: 2px 8px;
+      padding: 2px 9px;
       margin-top: 6px;
     }
 
-    /* =============================================================
-       COLONNE: widget a sinistra, codice a destra
-    ============================================================= */
-    .demo-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px;
-      align-items: start;
-    }
-
-    @media (max-width: 760px) {
-      .demo-grid { grid-template-columns: 1fr; }
-    }
-
-    /* contenitore del web component Fabrick */
-    .component-box {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 28px;
-      overflow: hidden;
-    }
-
-    .component-box h3 {
-      font-size: 12px;
-      color: var(--muted);
-      font-family: 'DM Mono', monospace;
-      letter-spacing: .06em;
-      text-transform: uppercase;
-      margin-bottom: 20px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .component-box h3::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: var(--border);
-    }
-
-    .preview-slot {
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-    }
-    .preview-slot > * { width: 100%; }
-    .slot-placeholder {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100px;
-      border: 1px dashed var(--border);
-      border-radius: 8px;
-      color: var(--muted);
-      font-size: 13px;
-      text-align: center;
-      padding: 20px;
-      gap: 8px;
-    }
-    .slot-placeholder strong { color: var(--accent); }
-
-    /* =============================================================
-       BARRA OPZIONI – radio-pill per ogni pannello
-    ============================================================= */
+    /* ═══════════════════════════════════════════════════
+       OPTIONS BAR
+    ═══════════════════════════════════════════════════ */
     .opts-bar {
       display: flex;
       flex-wrap: wrap;
-      gap: 20px;
+      gap: 18px;
       margin-bottom: 18px;
-      padding: 14px 16px;
-      background: rgba(255,255,255,.03);
+      padding: 14px 18px;
+      background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
+      border-radius: var(--r-sm);
     }
-    .opts-group {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
+
+    .opts-group { display: flex; flex-direction: column; gap: 6px; }
+
     .opts-group-label {
-      font-family: 'DM Mono', monospace;
-      font-size: 10px;
-      letter-spacing: .08em;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      letter-spacing: .1em;
       text-transform: uppercase;
       color: var(--muted);
     }
-    .opts-pills {
-      display: flex;
-      gap: 4px;
-      flex-wrap: wrap;
-    }
+
+    .opts-pills { display: flex; gap: 4px; flex-wrap: wrap; }
+
     .opts-pills label {
       display: inline-flex;
       align-items: center;
-      padding: 4px 10px;
-      border-radius: 4px;
+      padding: 5px 12px;
+      border-radius: 5px;
       border: 1px solid var(--border);
-      font-family: 'DM Mono', monospace;
+      font-family: 'JetBrains Mono', monospace;
       font-size: 11px;
-      color: var(--muted);
+      color: var(--text-2);
       cursor: pointer;
       transition: all .15s;
       user-select: none;
     }
     .opts-pills input[type="radio"] { display: none; }
-    .opts-pills input[type="radio"]:checked + span {
-      /* handled via JS adding .active class to label */
-    }
     .opts-pills label.active {
       background: var(--accent-glow);
-      border-color: var(--accent);
-      color: var(--accent);
+      border-color: rgba(37,99,235,.5);
+      color: var(--accent-l);
     }
     .opts-pills label:hover:not(.active) {
-      border-color: rgba(255,255,255,.25);
+      border-color: var(--border-2);
       color: var(--text);
     }
 
-    /* contenitore codice sorgente */
-    .code-box {
-      background: var(--code-bg);
+    /* ═══════════════════════════════════════════════════
+       VIEWER BOX (Preview / Code flip)
+    ═══════════════════════════════════════════════════ */
+    .viewer-box {
+      background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: var(--radius);
+      border-radius: var(--r);
       overflow: hidden;
+      margin-bottom: 20px;
     }
 
-    .code-box-header {
+    .viewer-toolbar {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 12px 16px;
+      padding: 11px 16px;
       border-bottom: 1px solid var(--border);
-      font-family: 'DM Mono', monospace;
+      background: var(--surface-2);
+    }
+
+    .viewer-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'JetBrains Mono', monospace;
       font-size: 11px;
+      color: var(--muted);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .vl-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      transition: background .2s;
+    }
+
+    .viewer-box.show-code .vl-dot { background: var(--accent-l); }
+
+    .view-toggle {
+      display: flex;
+      gap: 2px;
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 3px;
+    }
+
+    .vtb {
+      padding: 5px 14px;
+      border-radius: 4px;
+      border: none;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      cursor: pointer;
+      transition: all .15s;
+      color: var(--muted);
+      background: transparent;
+    }
+    .vtb.active {
+      background: var(--surface);
+      color: var(--text);
+      box-shadow: 0 1px 4px rgba(0,0,0,.4);
+    }
+
+    /* faces */
+    .face-preview { padding: 28px; }
+    .face-code { display: none; }
+
+    .viewer-box.show-code .face-preview { display: none; }
+    .viewer-box.show-code .face-code { display: block; }
+
+    .preview-slot {
+      width: 100%;
+      min-height: 80px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+    .preview-slot > * { width: 100%; }
+
+    .slot-ph {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 120px;
+      border: 1.5px dashed var(--border-2);
+      border-radius: var(--r-sm);
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+      padding: 28px;
+      gap: 10px;
+      line-height: 1.5;
+    }
+    .slot-ph strong { color: var(--accent-l); font-weight: 600; }
+    .slot-ph svg { opacity: .35; }
+
+    /* code face header */
+    .code-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 11px 16px;
+      border-bottom: 1px solid var(--border);
+      background: var(--code-bg);
+    }
+
+    .dots { display: flex; gap: 6px; }
+    .dots span { width: 10px; height: 10px; border-radius: 50%; }
+    .dr { background: #EF4444; } .dy { background: #F59E0B; } .dg { background: #10B981; }
+
+    .code-head-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .code-lang {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
       color: var(--muted);
     }
 
-    .code-box-header .dots {
-      display: flex;
-      gap: 6px;
+    .copy-btn {
+      padding: 4px 11px;
+      border-radius: 4px;
+      border: 1px solid var(--border-2);
+      background: transparent;
+      color: var(--muted);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      cursor: pointer;
+      transition: all .15s;
     }
-    .code-box-header .dots span {
-      width: 10px; height: 10px;
-      border-radius: 50%;
-    }
-    .dot-red   { background: #ef4444; }
-    .dot-yel   { background: #f59e0b; }
-    .dot-grn   { background: #10b981; }
+    .copy-btn:hover { border-color: var(--accent-l); color: var(--accent-l); }
+    .copy-btn.copied { border-color: var(--green); color: var(--green); }
 
     pre {
-      padding: 16px;
+      background: var(--code-bg);
+      padding: 18px 20px;
       overflow-x: auto;
-      font-family: 'DM Mono', monospace;
+      font-family: 'JetBrains Mono', monospace;
       font-size: 12px;
-      line-height: 1.7;
-      color: #a5b4cb;
+      line-height: 1.8;
+      color: var(--text-2);
+      max-height: 500px;
+      overflow-y: auto;
     }
 
-    /* sintassi highlight minimale via classi CSS */
-    .t-comment { color: #4b5563; font-style: italic; }
-    .t-tag     { color: #60a5fa; }       /* tag HTML */
-    .t-attr    { color: #86efac; }       /* attributi */
-    .t-val     { color: #fde68a; }       /* valori stringa */
-    .t-kw      { color: #c084fc; }       /* keyword JS */
-    .t-fn      { color: #38bdf8; }       /* nome funzione */
-    .t-str     { color: #fde68a; }       /* stringa JS */
-    .t-punct   { color: #94a3b8; }       /* punteggiatura */
+    /* syntax highlight */
+    .t-comment { color: #3D5275; font-style: italic; }
+    .t-tag     { color: #60A5FA; }
+    .t-attr    { color: #86EFAC; }
+    .t-val     { color: #FDE68A; }
+    .t-kw      { color: #C084FC; }
+    .t-fn      { color: #38BDF8; }
+    .t-str     { color: #FDE68A; }
+    .t-punct   { color: #64748B; }
 
-    /* =============================================================
-       RESPONSE LOG – mostra il callback Fabrick in tempo reale
-    ============================================================= */
-    .response-log {
-      margin-top: 20px;
+    /* ═══════════════════════════════════════════════════
+       RESPONSE LOG (sotto il viewer)
+    ═══════════════════════════════════════════════════ */
+    .resp-log {
       background: var(--code-bg);
       border: 1px solid var(--border);
-      border-radius: var(--radius);
+      border-radius: var(--r);
       overflow: hidden;
+      margin-bottom: 8px;
     }
 
-    .response-log-header {
+    .resp-log-head {
       padding: 10px 16px;
-      font-family: 'DM Mono', monospace;
+      font-family: 'JetBrains Mono', monospace;
       font-size: 11px;
       color: var(--muted);
       border-bottom: 1px solid var(--border);
@@ -539,37 +713,42 @@
       gap: 8px;
     }
 
-    /* pallino "live" animato */
     .live-dot {
       width: 7px; height: 7px;
       border-radius: 50%;
       background: var(--green);
-      animation: pulse 1.8s infinite;
+      animation: blink 1.8s infinite;
+      flex-shrink: 0;
     }
 
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50%       { opacity: .3; }
+    .cb-badge {
+      margin-left: auto;
+      font-size: 10px;
+      padding: 2px 9px;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
     }
+    .cb-on  { background: rgba(16,185,129,.15); color: #10B981; border: 1px solid rgba(16,185,129,.3); }
+    .cb-off { background: rgba(239,68,68,.10);  color: #EF4444; border: 1px solid rgba(239,68,68,.25); }
 
-    #response-output {
-      padding: 14px 16px;
-      font-family: 'DM Mono', monospace;
+    .resp-out {
+      padding: 14px 18px;
+      font-family: 'JetBrains Mono', monospace;
       font-size: 12px;
       color: var(--muted);
-      min-height: 60px;
+      min-height: 58px;
       white-space: pre-wrap;
       word-break: break-all;
+      line-height: 1.65;
     }
 
-    /* colori status nel log */
-    .status-ok      { color: var(--green); }
-    .status-fail    { color: var(--red); }
-    .status-pending { color: var(--yellow); }
+    .s-ok      { color: var(--green); }
+    .s-fail    { color: var(--red); }
+    .s-pending { color: var(--yellow); }
 
-    /* =============================================================
+    /* ═══════════════════════════════════════════════════
        FOOTER
-    ============================================================= */
+    ═══════════════════════════════════════════════════ */
     .footer {
       border-top: 1px solid var(--border);
       padding: 32px 0 0;
@@ -582,25 +761,25 @@
       font-size: 13px;
       color: var(--muted);
     }
-
-    .footer a { color: var(--accent); text-decoration: none; }
+    .footer a { color: var(--accent-l); text-decoration: none; }
     .footer a:hover { text-decoration: underline; }
 
-    /* =============================================================
-       ANIMAZIONI ENTRATA PANNELLI
-    ============================================================= */
+    /* ═══════════════════════════════════════════════════
+       ANIMATIONS
+    ═══════════════════════════════════════════════════ */
     @keyframes fadeSlide {
-      from { opacity: 0; transform: translateY(12px); }
+      from { opacity: 0; transform: translateY(10px); }
       to   { opacity: 1; transform: translateY(0); }
     }
-    .demo-panel.visible { animation: fadeSlide .3s ease; }
+    @keyframes blink {
+      0%,100% { opacity: 1; }
+      50%      { opacity: .25; }
+    }
 
-    /* =============================================================
-       RESPONSIVE FIXES
-    ============================================================= */
-    @media (max-width: 500px) {
-      .config-fields input { width: 100%; }
+    @media (max-width: 600px) {
+      .cfg-field input { width: 100%; }
       pre { font-size: 11px; }
+      .tab-btn { padding: 7px 12px; font-size: 12px; }
     }
   </style>
 </head>
@@ -608,840 +787,694 @@
 <body>
 <div class="page-wrapper">
 
-  <!-- ============================================================
+  <!-- ═══════════════════════════════════════════════════
        HERO
-  ============================================================ -->
+  ═══════════════════════════════════════════════════ -->
   <header class="hero">
-    <span class="badge">SANDBOX · Web Components Demo</span>
-    <h1>Fabrick Payment<br>Web Components</h1>
+    <div class="badge">
+      <span class="badge-dot"></span>
+      SANDBOX · Web Components Demo
+    </div>
+    <h1>Fabrick Payment<br><span class="hl">Web Components</span></h1>
     <p>
       Tutte le modalità di integrazione Fabrick in un'unica pagina demo.
-      Ogni sezione mostra il componente live + il codice sorgente commentato.
+      Seleziona il componente, configura, e vedi il risultato live.
     </p>
     <div class="hero-links">
-      <!-- ⬇️  TUO LINK – modifica con il tuo repo GitHub -->
       <a href="https://github.com/M2NDLAB/fabrick-webcomponent" class="btn btn-primary" target="_blank">
-        <!-- icona GitHub inline SVG -->
         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482
-          0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.342-3.369-1.342-.454-1.155-1.11-1.463-1.11-1.463
-          -.908-.62.069-.608.069-.608 1.003.07 1.531 1.031 1.531 1.031.892 1.53 2.341 1.088 2.91.832
-          .092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683
-          -.103-.253-.446-1.27.098-2.647 0 0 .84-.268 2.75 1.026A9.578 9.578 0 0112 6.836a9.59 9.59 0
-          012.504.337c1.909-1.294 2.747-1.026 2.747-1.026.546 1.377.202 2.394.1 2.647.64.699 1.028
-          1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012
-          2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/>
+          <path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.342-3.369-1.342-.454-1.155-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.031 1.531 1.031.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.268 2.75 1.026A9.578 9.578 0 0112 6.836a9.59 9.59 0 012.504.337c1.909-1.294 2.747-1.026 2.747-1.026.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/>
         </svg>
         View on GitHub
       </a>
-      <!-- LINK DOCS FABRICK UFFICIALE -->
       <a href="https://docs.fabrick.com/docs/paymentHubAndOrchestra/ecommerce/integrationMethods/web_component/"
          class="btn btn-outline" target="_blank">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10,9 9,9 8,9"/></svg>
         Docs Fabrick ↗
       </a>
     </div>
   </header>
 
-  <!-- ============================================================
-       CONFIGURAZIONE SANDBOX
-       Qui inserisci i tuoi valori di test ottenuti tramite
-       la REST API payment/create di Fabrick.
-       In produzione questi valori arrivano dal tuo backend.
-  ============================================================ -->
-  <section class="config-banner" id="config-section">
-    <div style="flex:1;min-width:260px">
-      <h2>CONFIGURAZIONE SANDBOX</h2>
-      <p>
-        Inserisci i valori ottenuti dalla tua chiamata a <code style="color:var(--accent)">payment/create</code>.
-        Verranno applicati a tutti i componenti nella pagina.
-      </p>
-      <div class="config-fields">
-        <label>
-          SHOP LOGIN
-          <input id="cfg-shop"  type="text" placeholder="es. GESPAY12345"              value="GESPAY12345" />
-        </label>
-        <label>
-          PAYMENT ID
-          <input id="cfg-pid"   type="text" placeholder="es. 12345678910"              value="12345678910" />
-        </label>
-        <label>
-          PAYMENT TOKEN
-          <input id="cfg-token" type="text" placeholder="es. 1234ea32-aaaa-bbbb-…"    value="1234ea321-aaaa-bbbb-cccc-752ca0b8cb5b" />
-        </label>
-        <button class="btn btn-primary" id="apply-config" onclick="applyConfig()">
-          Applica ▶
-        </button>
-        <div class="callback-toggle">
-          <span>CALLBACK</span>
-          <label class="radio-row">
-            <input type="radio" name="cbMode" value="on" checked /> Abilitata
-          </label>
-          <label class="radio-row">
-            <input type="radio" name="cbMode" value="off" /> Disabilitata
+  <!-- ═══════════════════════════════════════════════════
+       1. SELEZIONE COMPONENTE (prima della config)
+  ═══════════════════════════════════════════════════ -->
+  <div class="nav-section">
+    <p class="section-label">① Seleziona componente</p>
+    <nav class="nav-tabs" role="tablist">
+      <button class="tab-btn active" onclick="showPanel('card',      this)" role="tab">Solo Carte</button>
+      <button class="tab-btn"        onclick="showPanel('gpay',      this)" role="tab">Google Pay</button>
+      <button class="tab-btn"        onclick="showPanel('apay',      this)" role="tab">Apple Pay</button>
+      <button class="tab-btn"        onclick="showPanel('card-apay', this)" role="tab">Carte + Apple Pay <span class="combo-badge">2× token</span></button>
+      <button class="tab-btn"        onclick="showPanel('card-gpay', this)" role="tab">Carte + Google Pay <span class="combo-badge">2× token</span></button>
+      <button class="tab-btn"        onclick="showPanel('gpay-apay', this)" role="tab">Google + Apple Pay <span class="combo-badge">2× token</span></button>
+      <button class="tab-btn"        onclick="showPanel('full',      this)" role="tab">Tutto insieme</button>
+    </nav>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       2. CONFIGURAZIONE SANDBOX
+       Sezione SINGOLA per i componenti Fabrick nativi.
+       Sezione DOPPIA (dual) per le combo custom.
+       La visibilità è gestita da showPanel().
+  ═══════════════════════════════════════════════════ -->
+  <section class="config-banner">
+    <div class="config-head">
+      <h2>② Configurazione Sandbox</h2>
+      <span class="dual-notice" id="dual-notice">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        Combo non-nativa: 2 sessioni separate → 2 token diversi
+      </span>
+    </div>
+
+    <!-- SINGLE CREDENTIALS -->
+    <div class="creds-single" id="creds-single">
+      <div class="cfg-field">
+        <label>Shop Login</label>
+        <input id="cfg-shop" type="text" placeholder="GESPAY12345" value="GESPAY12345">
+      </div>
+      <div class="cfg-field">
+        <label>Payment ID</label>
+        <input id="cfg-pid" type="text" placeholder="12345678910" value="12345678910">
+      </div>
+      <div class="cfg-field">
+        <label>Payment Token</label>
+        <input id="cfg-token" type="text" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" value="1234ea321-aaaa-bbbb-cccc-752ca0b8cb5b">
+      </div>
+      <div class="config-controls">
+        <div class="cb-row">
+          <span class="cb-label">Callback</span>
+          <label class="sw">
+            <input type="checkbox" id="cb-toggle" checked>
+            <div class="sw-track"></div>
+            <span class="sw-val" id="cb-val">ON</span>
           </label>
         </div>
+        <button class="btn btn-primary" id="apply-btn" onclick="applyConfig()">
+          Applica ▶
+        </button>
+      </div>
+    </div>
+
+    <!-- DUAL CREDENTIALS (combo panels) -->
+    <div class="creds-dual" id="creds-dual">
+      <div class="dual-row">
+        <span class="dual-row-label" id="dual-lbl-1">COMPONENTE 1</span>
+        <div class="cfg-field">
+          <label>Shop Login</label>
+          <input id="cfg-shop-d" type="text" placeholder="GESPAY12345" value="GESPAY12345">
+        </div>
+        <div class="cfg-field">
+          <label>Payment ID (1)</label>
+          <input id="cfg-pid-1" type="text" placeholder="paymentId sessione 1">
+        </div>
+        <div class="cfg-field">
+          <label>Payment Token (1)</label>
+          <input id="cfg-token-1" type="text" placeholder="token sessione 1">
+        </div>
+      </div>
+      <div class="dual-row">
+        <span class="dual-row-label" id="dual-lbl-2">COMPONENTE 2</span>
+        <div class="cfg-field">
+          <label>Payment ID (2)</label>
+          <input id="cfg-pid-2" type="text" placeholder="paymentId sessione 2">
+        </div>
+        <div class="cfg-field">
+          <label>Payment Token (2)</label>
+          <input id="cfg-token-2" type="text" placeholder="token sessione 2">
+        </div>
+      </div>
+      <div class="config-controls" style="flex-direction:row;align-items:center;gap:16px">
+        <div class="cb-row">
+          <span class="cb-label">Callback</span>
+          <label class="sw">
+            <input type="checkbox" id="cb-toggle-d" checked>
+            <div class="sw-track"></div>
+            <span class="sw-val" id="cb-val-d">ON</span>
+          </label>
+        </div>
+        <button class="btn btn-primary" id="apply-btn-d" onclick="applyConfig()">
+          Applica ▶
+        </button>
       </div>
     </div>
   </section>
 
-  <!-- ============================================================
-       NAVIGAZIONE A TAB
-       Ogni tab corrisponde a un web component Fabrick differente.
-  ============================================================ -->
-  <nav class="nav-tabs" role="tablist">
-    <button class="tab-btn active" onclick="showPanel('card',       this)" role="tab">Solo Carte</button>
-    <button class="tab-btn"        onclick="showPanel('gpay',       this)" role="tab">Google Pay</button>
-    <button class="tab-btn"        onclick="showPanel('apay',       this)" role="tab">Apple Pay</button>
-    <button class="tab-btn"        onclick="showPanel('card-apay',  this)" role="tab">Carte + Apple Pay</button>
-    <button class="tab-btn"        onclick="showPanel('card-gpay',  this)" role="tab">Carte + Google Pay</button>
-    <button class="tab-btn"        onclick="showPanel('gpay-apay',  this)" role="tab">Google + Apple Pay</button>
-    <button class="tab-btn"        onclick="showPanel('full',       this)" role="tab">Tutto insieme</button>
-  </nav>
-
-  <!-- ============================================================
-       RESPONSE LOG GLOBALE
-       Mostra in tempo reale il risultato del callback Fabrick.
-       Condiviso da tutti i pannelli.
-  ============================================================ -->
-  <div class="response-log">
-    <div class="response-log-header">
-      <span class="live-dot"></span>
-      <span>callBackObj – risposta Fabrick in tempo reale</span>
-      <span id="cb-status-badge" style="margin-left:auto;font-size:11px;font-family:'DM Mono',monospace;padding:2px 8px;border-radius:4px;background:rgba(16,185,129,.15);color:#10b981;border:1px solid rgba(16,185,129,.3)">callback ON</span>
-    </div>
-    <div id="response-output">In attesa di una risposta dal Web Component…</div>
-  </div>
-
-  <!-- ===========================================================
-       ██████████████████████████████████████████████████████
-       PANNELLO 1 – fbk-card  (solo carte di credito/debito)
-       ██████████████████████████████████████████████████████
-  ============================================================ -->
+  <!-- ═══════════════════════════════════════════════════
+       PANNELLO 1 – fbk-card
+  ═══════════════════════════════════════════════════ -->
   <section class="demo-panel visible" id="panel-card">
-    <br>
     <div class="panel-header">
       <div class="panel-icon">CB</div>
       <div>
         <h2>Solo Carte</h2>
-        <p>Il componente <code>&lt;fbk-card&gt;</code> gestisce l'inserimento dei dati carta
-           (numero, scadenza, CVV) e opzionalmente nome/cognome acquirente.</p>
+        <p>Il componente <code>&lt;fbk-card&gt;</code> gestisce numero carta, scadenza, CVV e opzionalmente nome/cognome.</p>
         <span class="tag">&lt;fbk-card&gt;</span>
       </div>
     </div>
 
-    <div class="demo-grid">
-
-      <!-- BARRA OPZIONI PANNELLO 1 -->
-      <div style="grid-column:1/-1">
-        <div class="opts-bar" id="opts-card">
-          <div class="opts-group">
-            <span class="opts-group-label">layout</span>
-            <div class="opts-pills">
-              <label class="active"><input type="radio" name="card-layout" value="horizontal" checked onchange="updateOpts('card')"><span>horizontal</span></label>
-              <label><input type="radio" name="card-layout" value="vertical" onchange="updateOpts('card')"><span>vertical</span></label>
-            </div>
-          </div>
-          <div class="opts-group">
-            <span class="opts-group-label">optional-fields</span>
-            <div class="opts-pills">
-              <label><input type="radio" name="card-optfields" value="false" checked onchange="updateOpts('card')"><span>false</span></label>
-              <label class="active"><input type="radio" name="card-optfields" value="true" onchange="updateOpts('card')"><span>true</span></label>
-            </div>
-          </div>
+    <div class="opts-bar" id="opts-card">
+      <div class="opts-group">
+        <span class="opts-group-label">layout</span>
+        <div class="opts-pills">
+          <label class="active"><input type="radio" name="card-layout" value="horizontal" checked onchange="updateOpts('card')"><span>horizontal</span></label>
+          <label><input type="radio" name="card-layout" value="vertical" onchange="updateOpts('card')"><span>vertical</span></label>
         </div>
       </div>
-
-      <!-- lato sinistro: il web component Fabrick renderizzato live -->
-      <div class="component-box">
-        <h3>LIVE PREVIEW</h3>
-
-        <!-- Il componente verrà iniettato via JS solo dopo aver cliccato Applica -->
-        <div id="slot-card" class="preview-slot">
-          <div class="slot-placeholder">Inserisci le credenziali e clicca <strong>Applica</strong></div>
+      <div class="opts-group">
+        <span class="opts-group-label">optional-fields</span>
+        <div class="opts-pills">
+          <label><input type="radio" name="card-optfields" value="false" onchange="updateOpts('card')"><span>false</span></label>
+          <label class="active"><input type="radio" name="card-optfields" value="true" checked onchange="updateOpts('card')"><span>true</span></label>
         </div>
-
       </div>
+    </div>
 
-      <!-- lato destro: codice sorgente commentato -->
-      <div class="code-box">
-        <div class="code-box-header">
-          <div class="dots">
-            <span class="dot-red"></span>
-            <span class="dot-yel"></span>
-            <span class="dot-grn"></span>
+    <div class="viewer-box" id="vbox-card">
+      <div class="viewer-toolbar">
+        <div class="viewer-label"><span class="vl-dot"></span>Live Preview</div>
+        <div class="view-toggle">
+          <button class="vtb active" onclick="setView('card','preview',this)">Preview</button>
+          <button class="vtb"        onclick="setView('card','code',this)">Code</button>
+        </div>
+      </div>
+      <div class="face-preview">
+        <div id="slot-card" class="preview-slot"><div class="slot-ph">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+          Inserisci le credenziali e clicca <strong>Applica</strong>
+        </div></div>
+      </div>
+      <div class="face-code">
+        <div class="code-head">
+          <div class="dots"><span class="dr"></span><span class="dy"></span><span class="dg"></span></div>
+          <div class="code-head-right">
+            <span class="code-lang">fbk-card · snippet</span>
+            <button class="copy-btn" onclick="copyCode('snip-card',this)">copy</button>
           </div>
-          <span>fbk-card · snippet</span>
         </div>
-        <pre id="snip-card"><span class="t-comment">&lt;!-- 1. Includi lo script Fabrick nel &lt;head&gt; --&gt;</span>
-<span class="t-tag">&lt;script</span> <span class="t-attr">src</span>=<span class="t-val">"https://sandbox-web.axerve.com/
-  orchestra/checkout/assets/elements/
-  fbk-elements.js"</span><span class="t-tag">&gt;&lt;/script&gt;</span>
-
-<span class="t-comment">&lt;!-- 2. Inserisci il custom element nella pagina --&gt;</span>
-<span class="t-tag">&lt;fbk-card</span>
-  <span class="t-attr">id</span>=<span class="t-val">"cardElement"</span>
-  <span class="t-attr">style</span>=<span class="t-val">"width:100%"</span>
-  <span class="t-attr">payment-id</span>=<span class="t-val">"{{ paymentID }}"</span>
-  <span class="t-attr">payment-token</span>=<span class="t-val">"{{ paymentToken }}"</span>
-  <span class="t-attr">layout</span>=<span class="t-val">"horizontal"</span>
-  <span class="t-attr">optional-fields</span>=<span class="t-val">"true"</span><span class="t-tag">&gt;
-&lt;/fbk-card&gt;</span>
-
-<span class="t-comment">// 3. Configura shop e callback PRIMA di settare gli attributi</span>
-<span class="t-kw">window</span><span class="t-punct">[</span><span class="t-str">'fbk-elements'</span><span class="t-punct">]</span> <span class="t-punct">=</span> <span class="t-punct">{</span>
-  <span class="t-attr">shop</span><span class="t-punct">:</span> <span class="t-str snippet-shop-login">"GESPAY12345"</span><span class="t-punct">,</span>  <span class="t-comment">// ← tuo shopLogin</span>
-  <span class="t-attr">callBackObj</span><span class="t-punct">:</span> <span class="t-punct">(</span><span class="t-fn">event</span><span class="t-punct">) =&gt;</span> <span class="t-fn">myCallbackFunction</span><span class="t-punct">(</span><span class="t-fn">event</span><span class="t-punct">)</span>
-<span class="t-punct">};</span>
-
-<span class="t-comment">// 4. Funzione che riceve la risposta Fabrick al termine pagamento
-// response.payload.flowStatus → COMPLETED | FAILED | EXPIRED
-// response.payload.redirect   → oggetto con url e method</span>
-<span class="t-kw">function</span> <span class="t-fn">myCallbackFunction</span><span class="t-punct">(</span>response<span class="t-punct">) {</span>
-  <span class="t-kw">const</span> status <span class="t-punct">=</span> response<span class="t-punct">.</span>payload<span class="t-punct">.</span>flowStatus<span class="t-punct">;</span>
-  <span class="t-kw">if</span> <span class="t-punct">(</span>status <span class="t-punct">===</span> <span class="t-str">"COMPLETED"</span><span class="t-punct">) {</span>
-    <span class="t-comment">// redirect al tuo ordine/grazie</span>
-    <span class="t-kw">window</span><span class="t-punct">.</span>location<span class="t-punct">.</span>href <span class="t-punct">=</span>
-      response<span class="t-punct">.</span>payload<span class="t-punct">.</span>redirect<span class="t-punct">.</span>url<span class="t-punct">;</span>
-  <span class="t-punct">}</span>
-<span class="t-punct">}</span>
-
-<span class="t-comment">// 5. Imposta gli attributi dinamicamente (es. da backend)</span>
-<span class="t-kw">const</span> el <span class="t-punct">=</span> document<span class="t-punct">.</span><span class="t-fn">getElementById</span><span class="t-punct">(</span><span class="t-str">"cardElement"</span><span class="t-punct">);</span>
-el<span class="t-punct">.</span><span class="t-fn">setAttribute</span><span class="t-punct">(</span><span class="t-str">"payment-id"</span><span class="t-punct">,</span>    paymentID<span class="t-punct">);</span>
-el<span class="t-punct">.</span><span class="t-fn">setAttribute</span><span class="t-punct">(</span><span class="t-str">"payment-token"</span><span class="t-punct">,</span> paymentToken<span class="t-punct">);</span></pre>
+        <pre id="snip-card"></pre>
       </div>
+    </div>
+
+    <div class="resp-log">
+      <div class="resp-log-head">
+        <span class="live-dot"></span>
+        <span>callBackObj – risposta in tempo reale</span>
+        <span class="cb-badge cb-on global-cb-badge">callback ON</span>
+      </div>
+      <div class="resp-out global-resp-out">In attesa di una risposta dal Web Component…</div>
     </div>
   </section>
 
-  <!-- ===========================================================
+  <!-- ═══════════════════════════════════════════════════
        PANNELLO 2 – fbk-google-pay
-  ============================================================ -->
+  ═══════════════════════════════════════════════════ -->
   <section class="demo-panel" id="panel-gpay">
-    <br>
     <div class="panel-header">
       <div class="panel-icon">G</div>
       <div>
         <h2>Solo Google Pay</h2>
-        <p>Il componente <code>&lt;fbk-google-pay&gt;</code> mostra solo il pulsante Google Pay.
-           Richiede che il browser/device supporti le Google Pay API.</p>
+        <p>Il componente <code>&lt;fbk-google-pay&gt;</code> mostra il pulsante Google Pay. Richiede Chrome con almeno una carta Google Pay salvata.</p>
         <span class="tag">&lt;fbk-google-pay&gt;</span>
       </div>
     </div>
 
-    <div class="demo-grid">
-
-      <!-- BARRA OPZIONI PANNELLO 2 -->
-      <div style="grid-column:1/-1">
-        <div class="opts-bar" id="opts-gpay">
-          <div class="opts-group">
-            <span class="opts-group-label">button-style</span>
-            <div class="opts-pills">
-              <label class="active"><input type="radio" name="gpay-style" value="black" checked onchange="updateOpts('gpay')"><span>black</span></label>
-              <label><input type="radio" name="gpay-style" value="white" onchange="updateOpts('gpay')"><span>white</span></label>
-            </div>
-          </div>
-          <div class="opts-group">
-            <span class="opts-group-label">button-type</span>
-            <div class="opts-pills">
-              <label><input type="radio" name="gpay-type" value="plain" onchange="updateOpts('gpay')"><span>plain</span></label>
-              <label class="active"><input type="radio" name="gpay-type" value="buy" checked onchange="updateOpts('gpay')"><span>buy</span></label>
-              <label><input type="radio" name="gpay-type" value="pay" onchange="updateOpts('gpay')"><span>pay</span></label>
-            </div>
-          </div>
+    <div class="opts-bar" id="opts-gpay">
+      <div class="opts-group">
+        <span class="opts-group-label">button-style</span>
+        <div class="opts-pills">
+          <label class="active"><input type="radio" name="gpay-style" value="black" checked onchange="updateOpts('gpay')"><span>black</span></label>
+          <label><input type="radio" name="gpay-style" value="white" onchange="updateOpts('gpay')"><span>white</span></label>
         </div>
       </div>
-
-      <div class="component-box">
-        <h3>LIVE PREVIEW</h3>
-
-        <div id="slot-gpay" class="preview-slot">
-          <div class="slot-placeholder">Inserisci le credenziali e clicca <strong>Applica</strong></div>
+      <div class="opts-group">
+        <span class="opts-group-label">button-type</span>
+        <div class="opts-pills">
+          <label><input type="radio" name="gpay-type" value="plain" onchange="updateOpts('gpay')"><span>plain</span></label>
+          <label class="active"><input type="radio" name="gpay-type" value="buy" checked onchange="updateOpts('gpay')"><span>buy</span></label>
+          <label><input type="radio" name="gpay-type" value="pay" onchange="updateOpts('gpay')"><span>pay</span></label>
         </div>
-
       </div>
+    </div>
 
-      <div class="code-box">
-        <div class="code-box-header">
-          <div class="dots">
-            <span class="dot-red"></span><span class="dot-yel"></span><span class="dot-grn"></span>
+    <div class="viewer-box" id="vbox-gpay">
+      <div class="viewer-toolbar">
+        <div class="viewer-label"><span class="vl-dot"></span>Live Preview</div>
+        <div class="view-toggle">
+          <button class="vtb active" onclick="setView('gpay','preview',this)">Preview</button>
+          <button class="vtb"        onclick="setView('gpay','code',this)">Code</button>
+        </div>
+      </div>
+      <div class="face-preview">
+        <div id="slot-gpay" class="preview-slot"><div class="slot-ph">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/></svg>
+          Inserisci le credenziali e clicca <strong>Applica</strong>
+        </div></div>
+      </div>
+      <div class="face-code">
+        <div class="code-head">
+          <div class="dots"><span class="dr"></span><span class="dy"></span><span class="dg"></span></div>
+          <div class="code-head-right">
+            <span class="code-lang">fbk-google-pay · snippet</span>
+            <button class="copy-btn" onclick="copyCode('snip-gpay',this)">copy</button>
           </div>
-          <span>fbk-google-pay · snippet</span>
         </div>
-        <pre id="snip-gpay"><span class="t-comment">&lt;!-- Solo Google Pay
-     button-style: black | white
-     button-type : plain | buy | pay --&gt;</span>
-<span class="t-tag">&lt;fbk-google-pay</span>
-  <span class="t-attr">id</span>=<span class="t-val">"gpayElement"</span>
-  <span class="t-attr">style</span>=<span class="t-val">"width:100%"</span>
-  <span class="t-attr">payment-id</span>=<span class="t-val">"{{ paymentID }}"</span>
-  <span class="t-attr">payment-token</span>=<span class="t-val">"{{ paymentToken }}"</span>
-  <span class="t-attr">button-style</span>=<span class="t-val">"black"</span>
-  <span class="t-attr">button-type</span>=<span class="t-val">"buy"</span><span class="t-tag">&gt;
-&lt;/fbk-google-pay&gt;</span>
-
-<span class="t-comment">// Configurazione globale: identica per tutti i componenti</span>
-<span class="t-kw">window</span><span class="t-punct">[</span><span class="t-str">'fbk-elements'</span><span class="t-punct">]</span> <span class="t-punct">=</span> <span class="t-punct">{</span>
-  <span class="t-attr">shop</span><span class="t-punct">:</span> <span class="t-str snippet-shop-login">"GESPAY12345"</span><span class="t-punct">,</span>
-  <span class="t-attr">callBackObj</span><span class="t-punct">:</span> <span class="t-punct">(</span>e<span class="t-punct">) =&gt;</span> <span class="t-fn">myCallbackFunction</span><span class="t-punct">(</span>e<span class="t-punct">)</span>
-<span class="t-punct">};</span>
-
-<span class="t-comment">// ! Google Pay funziona solo su browser Chrome
-//      e su device con un metodo di pagamento salvato</span>
-<span class="t-kw">const</span> el <span class="t-punct">=</span> document<span class="t-punct">.</span><span class="t-fn">getElementById</span><span class="t-punct">(</span><span class="t-str">"gpayElement"</span><span class="t-punct">);</span>
-el<span class="t-punct">.</span><span class="t-fn">setAttribute</span><span class="t-punct">(</span><span class="t-str">"payment-id"</span><span class="t-punct">,</span>    paymentID<span class="t-punct">);</span>
-el<span class="t-punct">.</span><span class="t-fn">setAttribute</span><span class="t-punct">(</span><span class="t-str">"payment-token"</span><span class="t-punct">,</span> paymentToken<span class="t-punct">);</span></pre>
+        <pre id="snip-gpay"></pre>
       </div>
+    </div>
+
+    <div class="resp-log">
+      <div class="resp-log-head">
+        <span class="live-dot"></span>
+        <span>callBackObj – risposta in tempo reale</span>
+        <span class="cb-badge cb-on global-cb-badge">callback ON</span>
+      </div>
+      <div class="resp-out global-resp-out">In attesa di una risposta dal Web Component…</div>
     </div>
   </section>
 
-  <!-- ===========================================================
+  <!-- ═══════════════════════════════════════════════════
        PANNELLO 3 – fbk-apple-pay
-  ============================================================ -->
+  ═══════════════════════════════════════════════════ -->
   <section class="demo-panel" id="panel-apay">
-    <br>
     <div class="panel-header">
       <div class="panel-icon">AP</div>
       <div>
         <h2>Solo Apple Pay</h2>
-        <p>Il componente <code>&lt;fbk-apple-pay&gt;</code> mostra solo il pulsante Apple Pay.
-           Visibile solo su Safari/dispositivi Apple con Wallet configurato.</p>
+        <p>Il componente <code>&lt;fbk-apple-pay&gt;</code> è visibile solo su Safari/iOS/macOS con Wallet Apple configurato.</p>
         <span class="tag">&lt;fbk-apple-pay&gt;</span>
       </div>
     </div>
 
-    <div class="demo-grid">
-
-      <!-- BARRA OPZIONI PANNELLO 3 -->
-      <div style="grid-column:1/-1">
-        <div class="opts-bar" id="opts-apay">
-          <div class="opts-group">
-            <span class="opts-group-label">button-style</span>
-            <div class="opts-pills">
-              <label class="active"><input type="radio" name="apay-style" value="black" checked onchange="updateOpts('apay')"><span>black</span></label>
-              <label><input type="radio" name="apay-style" value="white" onchange="updateOpts('apay')"><span>white</span></label>
-              <label><input type="radio" name="apay-style" value="white-outline" onchange="updateOpts('apay')"><span>white-outline</span></label>
-            </div>
-          </div>
-          <div class="opts-group">
-            <span class="opts-group-label">button-type</span>
-            <div class="opts-pills">
-              <label><input type="radio" name="apay-type" value="plain" onchange="updateOpts('apay')"><span>plain</span></label>
-              <label class="active"><input type="radio" name="apay-type" value="buy" checked onchange="updateOpts('apay')"><span>buy</span></label>
-              <label><input type="radio" name="apay-type" value="pay" onchange="updateOpts('apay')"><span>pay</span></label>
-            </div>
-          </div>
+    <div class="opts-bar" id="opts-apay">
+      <div class="opts-group">
+        <span class="opts-group-label">button-style</span>
+        <div class="opts-pills">
+          <label class="active"><input type="radio" name="apay-style" value="black" checked onchange="updateOpts('apay')"><span>black</span></label>
+          <label><input type="radio" name="apay-style" value="white" onchange="updateOpts('apay')"><span>white</span></label>
+          <label><input type="radio" name="apay-style" value="white-outline" onchange="updateOpts('apay')"><span>white-outline</span></label>
         </div>
       </div>
-
-      <div class="component-box">
-        <h3>LIVE PREVIEW</h3>
-
-        <div id="slot-apay" class="preview-slot">
-          <div class="slot-placeholder">Inserisci le credenziali e clicca <strong>Applica</strong></div>
+      <div class="opts-group">
+        <span class="opts-group-label">button-type</span>
+        <div class="opts-pills">
+          <label><input type="radio" name="apay-type" value="plain" onchange="updateOpts('apay')"><span>plain</span></label>
+          <label class="active"><input type="radio" name="apay-type" value="buy" checked onchange="updateOpts('apay')"><span>buy</span></label>
+          <label><input type="radio" name="apay-type" value="pay" onchange="updateOpts('apay')"><span>pay</span></label>
         </div>
-
       </div>
+    </div>
 
-      <div class="code-box">
-        <div class="code-box-header">
-          <div class="dots">
-            <span class="dot-red"></span><span class="dot-yel"></span><span class="dot-grn"></span>
+    <div class="viewer-box" id="vbox-apay">
+      <div class="viewer-toolbar">
+        <div class="viewer-label"><span class="vl-dot"></span>Live Preview</div>
+        <div class="view-toggle">
+          <button class="vtb active" onclick="setView('apay','preview',this)">Preview</button>
+          <button class="vtb"        onclick="setView('apay','code',this)">Code</button>
+        </div>
+      </div>
+      <div class="face-preview">
+        <div id="slot-apay" class="preview-slot"><div class="slot-ph">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2a10 10 0 100 20A10 10 0 0012 2z"/><path d="M12 8v4l3 3"/></svg>
+          Inserisci le credenziali e clicca <strong>Applica</strong>
+        </div></div>
+      </div>
+      <div class="face-code">
+        <div class="code-head">
+          <div class="dots"><span class="dr"></span><span class="dy"></span><span class="dg"></span></div>
+          <div class="code-head-right">
+            <span class="code-lang">fbk-apple-pay · snippet</span>
+            <button class="copy-btn" onclick="copyCode('snip-apay',this)">copy</button>
           </div>
-          <span>fbk-apple-pay · snippet</span>
         </div>
-        <pre id="snip-apay"><span class="t-comment">&lt;!-- Solo Apple Pay
-     button-style: black | white | white-outline
-     button-type : plain | buy | pay --&gt;</span>
-<span class="t-tag">&lt;fbk-apple-pay</span>
-  <span class="t-attr">id</span>=<span class="t-val">"apayElement"</span>
-  <span class="t-attr">style</span>=<span class="t-val">"width:100%"</span>
-  <span class="t-attr">payment-id</span>=<span class="t-val">"{{ paymentID }}"</span>
-  <span class="t-attr">payment-token</span>=<span class="t-val">"{{ paymentToken }}"</span>
-  <span class="t-attr">button-style</span>=<span class="t-val">"black"</span>
-  <span class="t-attr">button-type</span>=<span class="t-val">"buy"</span><span class="t-tag">&gt;
-&lt;/fbk-apple-pay&gt;</span>
-
-<span class="t-comment">// ! Apple Pay è visibile SOLO su:
-//      - Safari su macOS/iOS/iPadOS
-//      - Dispositivi con almeno una carta nel Wallet Apple
-//      Su altri browser il componente non verrà mostrato.</span>
-<span class="t-kw">window</span><span class="t-punct">[</span><span class="t-str">'fbk-elements'</span><span class="t-punct">]</span> <span class="t-punct">=</span> <span class="t-punct">{</span>
-  <span class="t-attr">shop</span><span class="t-punct">:</span> <span class="t-str snippet-shop-login">"GESPAY12345"</span><span class="t-punct">,</span>
-  <span class="t-attr">callBackObj</span><span class="t-punct">:</span> <span class="t-punct">(</span>e<span class="t-punct">) =&gt;</span> <span class="t-fn">myCallbackFunction</span><span class="t-punct">(</span>e<span class="t-punct">)</span>
-<span class="t-punct">};</span>
-
-<span class="t-kw">const</span> el <span class="t-punct">=</span> document<span class="t-punct">.</span><span class="t-fn">getElementById</span><span class="t-punct">(</span><span class="t-str">"apayElement"</span><span class="t-punct">);</span>
-el<span class="t-punct">.</span><span class="t-fn">setAttribute</span><span class="t-punct">(</span><span class="t-str">"payment-id"</span><span class="t-punct">,</span>    paymentID<span class="t-punct">);</span>
-el<span class="t-punct">.</span><span class="t-fn">setAttribute</span><span class="t-punct">(</span><span class="t-str">"payment-token"</span><span class="t-punct">,</span> paymentToken<span class="t-punct">);</span></pre>
+        <pre id="snip-apay"></pre>
       </div>
+    </div>
+
+    <div class="resp-log">
+      <div class="resp-log-head">
+        <span class="live-dot"></span>
+        <span>callBackObj – risposta in tempo reale</span>
+        <span class="cb-badge cb-on global-cb-badge">callback ON</span>
+      </div>
+      <div class="resp-out global-resp-out">In attesa di una risposta dal Web Component…</div>
     </div>
   </section>
 
-  <!-- ===========================================================
-       PANNELLO 4 – Carte + Apple Pay  (fbk-card-wallet, solo Apple)
-       Nota: fbk-card-wallet è il componente "all-in-one". Mostra
-       automaticamente le wallet disponibili sul device; su Safari
-       apparirà la sezione Apple Pay in cima al form carta.
-  ============================================================ -->
+  <!-- ═══════════════════════════════════════════════════
+       PANNELLO 4 – Carte + Apple Pay (COMBO – dual token)
+  ═══════════════════════════════════════════════════ -->
   <section class="demo-panel" id="panel-card-apay">
-    <br>
     <div class="panel-header">
       <div class="panel-icon">C+A</div>
       <div>
         <h2>Carte + Apple Pay</h2>
-        <p>Usa <code>&lt;fbk-apple-pay&gt;</code> + <code>&lt;fbk-card&gt;</code> affiancati.
-           Il pulsante Apple Pay appare solo su Safari/iOS/macOS; su altri browser
-           rimane visibile solo il form carta.</p>
-        <span class="tag">&lt;fbk-card-wallet&gt;</span>
+        <p><code>&lt;fbk-apple-pay&gt;</code> + <code>&lt;fbk-card&gt;</code> affiancati.<br>
+          ⚠ Sessioni separate → richiedono due payment token distinti.</p>
+        <span class="tag">combo custom · 2× token</span>
       </div>
     </div>
 
-    <div class="demo-grid">
-
-      <!-- BARRA OPZIONI PANNELLO 4 -->
-      <div style="grid-column:1/-1">
-        <div class="opts-bar" id="opts-card-apay">
-          <div class="opts-group">
-            <span class="opts-group-label">apple · button-style</span>
-            <div class="opts-pills">
-              <label class="active"><input type="radio" name="capay-astyle" value="black" checked onchange="updateOpts('card-apay')"><span>black</span></label>
-              <label><input type="radio" name="capay-astyle" value="white" onchange="updateOpts('card-apay')"><span>white</span></label>
-              <label><input type="radio" name="capay-astyle" value="white-outline" onchange="updateOpts('card-apay')"><span>white-outline</span></label>
-            </div>
-          </div>
-          <div class="opts-group">
-            <span class="opts-group-label">apple · button-type</span>
-            <div class="opts-pills">
-              <label><input type="radio" name="capay-atype" value="plain" onchange="updateOpts('card-apay')"><span>plain</span></label>
-              <label class="active"><input type="radio" name="capay-atype" value="buy" checked onchange="updateOpts('card-apay')"><span>buy</span></label>
-              <label><input type="radio" name="capay-atype" value="pay" onchange="updateOpts('card-apay')"><span>pay</span></label>
-            </div>
-          </div>
-          <div class="opts-group">
-            <span class="opts-group-label">card · layout</span>
-            <div class="opts-pills">
-              <label class="active"><input type="radio" name="capay-layout" value="horizontal" checked onchange="updateOpts('card-apay')"><span>horizontal</span></label>
-              <label><input type="radio" name="capay-layout" value="vertical" onchange="updateOpts('card-apay')"><span>vertical</span></label>
-            </div>
-          </div>
-          <div class="opts-group">
-            <span class="opts-group-label">card · optional-fields</span>
-            <div class="opts-pills">
-              <label class="active"><input type="radio" name="capay-optfields" value="false" checked onchange="updateOpts('card-apay')"><span>false</span></label>
-              <label><input type="radio" name="capay-optfields" value="true" onchange="updateOpts('card-apay')"><span>true</span></label>
-            </div>
-          </div>
+    <div class="opts-bar" id="opts-card-apay">
+      <div class="opts-group">
+        <span class="opts-group-label">apple · button-style</span>
+        <div class="opts-pills">
+          <label class="active"><input type="radio" name="capay-astyle" value="black" checked onchange="updateOpts('card-apay')"><span>black</span></label>
+          <label><input type="radio" name="capay-astyle" value="white" onchange="updateOpts('card-apay')"><span>white</span></label>
+          <label><input type="radio" name="capay-astyle" value="white-outline" onchange="updateOpts('card-apay')"><span>white-outline</span></label>
         </div>
       </div>
-
-      <div class="component-box">
-        <h3>LIVE PREVIEW</h3>
-
-        <div id="slot-card-apay" class="preview-slot">
-          <div class="slot-placeholder">Inserisci le credenziali e clicca <strong>Applica</strong></div>
+      <div class="opts-group">
+        <span class="opts-group-label">apple · button-type</span>
+        <div class="opts-pills">
+          <label><input type="radio" name="capay-atype" value="plain" onchange="updateOpts('card-apay')"><span>plain</span></label>
+          <label class="active"><input type="radio" name="capay-atype" value="buy" checked onchange="updateOpts('card-apay')"><span>buy</span></label>
+          <label><input type="radio" name="capay-atype" value="pay" onchange="updateOpts('card-apay')"><span>pay</span></label>
         </div>
-
       </div>
+      <div class="opts-group">
+        <span class="opts-group-label">card · layout</span>
+        <div class="opts-pills">
+          <label class="active"><input type="radio" name="capay-layout" value="horizontal" checked onchange="updateOpts('card-apay')"><span>horizontal</span></label>
+          <label><input type="radio" name="capay-layout" value="vertical" onchange="updateOpts('card-apay')"><span>vertical</span></label>
+        </div>
+      </div>
+      <div class="opts-group">
+        <span class="opts-group-label">card · optional-fields</span>
+        <div class="opts-pills">
+          <label class="active"><input type="radio" name="capay-optfields" value="false" checked onchange="updateOpts('card-apay')"><span>false</span></label>
+          <label><input type="radio" name="capay-optfields" value="true" onchange="updateOpts('card-apay')"><span>true</span></label>
+        </div>
+      </div>
+    </div>
 
-      <div class="code-box">
-        <div class="code-box-header">
-          <div class="dots">
-            <span class="dot-red"></span><span class="dot-yel"></span><span class="dot-grn"></span>
+    <div class="viewer-box" id="vbox-card-apay">
+      <div class="viewer-toolbar">
+        <div class="viewer-label"><span class="vl-dot"></span>Live Preview</div>
+        <div class="view-toggle">
+          <button class="vtb active" onclick="setView('card-apay','preview',this)">Preview</button>
+          <button class="vtb"        onclick="setView('card-apay','code',this)">Code</button>
+        </div>
+      </div>
+      <div class="face-preview">
+        <div id="slot-card-apay" class="preview-slot"><div class="slot-ph">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+          Inserisci le credenziali (2 token) e clicca <strong>Applica</strong>
+        </div></div>
+      </div>
+      <div class="face-code">
+        <div class="code-head">
+          <div class="dots"><span class="dr"></span><span class="dy"></span><span class="dg"></span></div>
+          <div class="code-head-right">
+            <span class="code-lang">Carte + Apple Pay · snippet</span>
+            <button class="copy-btn" onclick="copyCode('snip-card-apay',this)">copy</button>
           </div>
-          <span>Carte + Apple Pay · snippet</span>
         </div>
-        <pre id="snip-card-apay"><span class="t-comment">&lt;!-- Carte + Apple Pay: due componenti separati.
-     fbk-apple-pay appare solo su Safari/iOS/macOS.
-     fbk-card è sempre visibile come fallback. --&gt;</span>
-<span class="t-tag">&lt;div</span> <span class="t-attr">style</span>=<span class="t-val">"display:flex;flex-direction:column;gap:12px"</span><span class="t-tag">&gt;</span>
-
-  <span class="t-comment">&lt;!-- FABRICK: Apple Pay (visibile solo su Safari) --&gt;</span>
-  <span class="t-tag">&lt;fbk-apple-pay</span>
-    <span class="t-attr">id</span>=<span class="t-val">"apayEl"</span>
-    <span class="t-attr">style</span>=<span class="t-val">"width:100%"</span>
-    <span class="t-attr">payment-id</span>=<span class="t-val">"{{ paymentID }}"</span>
-    <span class="t-attr">payment-token</span>=<span class="t-val">"{{ paymentToken }}"</span>
-    <span class="t-attr">button-style</span>=<span class="t-val">"black"</span>
-    <span class="t-attr">button-type</span>=<span class="t-val">"buy"</span><span class="t-tag">&gt;
-  &lt;/fbk-apple-pay&gt;</span>
-
-  <span class="t-comment">&lt;!-- FABRICK: Form carta (sempre visibile) --&gt;</span>
-  <span class="t-tag">&lt;fbk-card</span>
-    <span class="t-attr">id</span>=<span class="t-val">"cardEl"</span>
-    <span class="t-attr">style</span>=<span class="t-val">"width:100%"</span>
-    <span class="t-attr">payment-id</span>=<span class="t-val">"{{ paymentID }}"</span>
-    <span class="t-attr">payment-token</span>=<span class="t-val">"{{ paymentToken }}"</span>
-    <span class="t-attr">layout</span>=<span class="t-val">"horizontal"</span>
-    <span class="t-attr">optional-fields</span>=<span class="t-val">"false"</span><span class="t-tag">&gt;
-  &lt;/fbk-card&gt;</span>
-
-<span class="t-tag">&lt;/div&gt;</span></pre>
+        <pre id="snip-card-apay"></pre>
       </div>
+    </div>
+
+    <div class="resp-log">
+      <div class="resp-log-head">
+        <span class="live-dot"></span>
+        <span>callBackObj – risposta in tempo reale</span>
+        <span class="cb-badge cb-on global-cb-badge">callback ON</span>
+      </div>
+      <div class="resp-out global-resp-out">In attesa di una risposta dal Web Component…</div>
     </div>
   </section>
 
-  <!-- ===========================================================
-       PANNELLO 5 – Carte + Google Pay  (fbk-card-wallet, solo GPay)
-  ============================================================ -->
+  <!-- ═══════════════════════════════════════════════════
+       PANNELLO 5 – Carte + Google Pay (COMBO – dual token)
+  ═══════════════════════════════════════════════════ -->
   <section class="demo-panel" id="panel-card-gpay">
-    <br>
     <div class="panel-header">
       <div class="panel-icon">C+G</div>
       <div>
         <h2>Carte + Google Pay</h2>
-        <p>Usa <code>&lt;fbk-google-pay&gt;</code> + <code>&lt;fbk-card&gt;</code> affiancati.
-           Il pulsante Google Pay appare solo su Chrome con GPay configurato; su altri browser
-           rimane visibile solo il form carta.</p>
-        <span class="tag">&lt;fbk-card-wallet&gt;</span>
+        <p><code>&lt;fbk-google-pay&gt;</code> + <code>&lt;fbk-card&gt;</code> affiancati.<br>
+          ⚠ Sessioni separate → richiedono due payment token distinti.</p>
+        <span class="tag">combo custom · 2× token</span>
       </div>
     </div>
 
-    <div class="demo-grid">
-
-      <!-- BARRA OPZIONI PANNELLO 5 -->
-      <div style="grid-column:1/-1">
-        <div class="opts-bar" id="opts-card-gpay">
-          <div class="opts-group">
-            <span class="opts-group-label">google · button-style</span>
-            <div class="opts-pills">
-              <label class="active"><input type="radio" name="cgpay-gstyle" value="black" checked onchange="updateOpts('card-gpay')"><span>black</span></label>
-              <label><input type="radio" name="cgpay-gstyle" value="white" onchange="updateOpts('card-gpay')"><span>white</span></label>
-            </div>
-          </div>
-          <div class="opts-group">
-            <span class="opts-group-label">google · button-type</span>
-            <div class="opts-pills">
-              <label><input type="radio" name="cgpay-gtype" value="plain" onchange="updateOpts('card-gpay')"><span>plain</span></label>
-              <label class="active"><input type="radio" name="cgpay-gtype" value="buy" checked onchange="updateOpts('card-gpay')"><span>buy</span></label>
-              <label><input type="radio" name="cgpay-gtype" value="pay" onchange="updateOpts('card-gpay')"><span>pay</span></label>
-            </div>
-          </div>
-          <div class="opts-group">
-            <span class="opts-group-label">card · layout</span>
-            <div class="opts-pills">
-              <label class="active"><input type="radio" name="cgpay-layout" value="horizontal" checked onchange="updateOpts('card-gpay')"><span>horizontal</span></label>
-              <label><input type="radio" name="cgpay-layout" value="vertical" onchange="updateOpts('card-gpay')"><span>vertical</span></label>
-            </div>
-          </div>
-          <div class="opts-group">
-            <span class="opts-group-label">card · optional-fields</span>
-            <div class="opts-pills">
-              <label class="active"><input type="radio" name="cgpay-optfields" value="false" checked onchange="updateOpts('card-gpay')"><span>false</span></label>
-              <label><input type="radio" name="cgpay-optfields" value="true" onchange="updateOpts('card-gpay')"><span>true</span></label>
-            </div>
-          </div>
+    <div class="opts-bar" id="opts-card-gpay">
+      <div class="opts-group">
+        <span class="opts-group-label">google · button-style</span>
+        <div class="opts-pills">
+          <label class="active"><input type="radio" name="cgpay-gstyle" value="black" checked onchange="updateOpts('card-gpay')"><span>black</span></label>
+          <label><input type="radio" name="cgpay-gstyle" value="white" onchange="updateOpts('card-gpay')"><span>white</span></label>
         </div>
       </div>
-
-      <div class="component-box">
-        <h3>LIVE PREVIEW</h3>
-
-        <div id="slot-card-gpay" class="preview-slot">
-          <div class="slot-placeholder">Inserisci le credenziali e clicca <strong>Applica</strong></div>
+      <div class="opts-group">
+        <span class="opts-group-label">google · button-type</span>
+        <div class="opts-pills">
+          <label><input type="radio" name="cgpay-gtype" value="plain" onchange="updateOpts('card-gpay')"><span>plain</span></label>
+          <label class="active"><input type="radio" name="cgpay-gtype" value="buy" checked onchange="updateOpts('card-gpay')"><span>buy</span></label>
+          <label><input type="radio" name="cgpay-gtype" value="pay" onchange="updateOpts('card-gpay')"><span>pay</span></label>
         </div>
-
       </div>
+      <div class="opts-group">
+        <span class="opts-group-label">card · layout</span>
+        <div class="opts-pills">
+          <label class="active"><input type="radio" name="cgpay-layout" value="horizontal" checked onchange="updateOpts('card-gpay')"><span>horizontal</span></label>
+          <label><input type="radio" name="cgpay-layout" value="vertical" onchange="updateOpts('card-gpay')"><span>vertical</span></label>
+        </div>
+      </div>
+      <div class="opts-group">
+        <span class="opts-group-label">card · optional-fields</span>
+        <div class="opts-pills">
+          <label class="active"><input type="radio" name="cgpay-optfields" value="false" checked onchange="updateOpts('card-gpay')"><span>false</span></label>
+          <label><input type="radio" name="cgpay-optfields" value="true" onchange="updateOpts('card-gpay')"><span>true</span></label>
+        </div>
+      </div>
+    </div>
 
-      <div class="code-box">
-        <div class="code-box-header">
-          <div class="dots">
-            <span class="dot-red"></span><span class="dot-yel"></span><span class="dot-grn"></span>
+    <div class="viewer-box" id="vbox-card-gpay">
+      <div class="viewer-toolbar">
+        <div class="viewer-label"><span class="vl-dot"></span>Live Preview</div>
+        <div class="view-toggle">
+          <button class="vtb active" onclick="setView('card-gpay','preview',this)">Preview</button>
+          <button class="vtb"        onclick="setView('card-gpay','code',this)">Code</button>
+        </div>
+      </div>
+      <div class="face-preview">
+        <div id="slot-card-gpay" class="preview-slot"><div class="slot-ph">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+          Inserisci le credenziali (2 token) e clicca <strong>Applica</strong>
+        </div></div>
+      </div>
+      <div class="face-code">
+        <div class="code-head">
+          <div class="dots"><span class="dr"></span><span class="dy"></span><span class="dg"></span></div>
+          <div class="code-head-right">
+            <span class="code-lang">Carte + Google Pay · snippet</span>
+            <button class="copy-btn" onclick="copyCode('snip-card-gpay',this)">copy</button>
           </div>
-          <span>Carte + Google Pay · snippet</span>
         </div>
-        <pre id="snip-card-gpay"><span class="t-comment">&lt;!-- Carte + Google Pay: due componenti separati.
-     fbk-google-pay appare solo su Chrome con GPay configurato.
-     fbk-card è sempre visibile come fallback. --&gt;</span>
-<span class="t-tag">&lt;div</span> <span class="t-attr">style</span>=<span class="t-val">"display:flex;flex-direction:column;gap:12px"</span><span class="t-tag">&gt;</span>
-
-  <span class="t-comment">&lt;!-- FABRICK: Google Pay (visibile solo su Chrome + GPay) --&gt;</span>
-  <span class="t-tag">&lt;fbk-google-pay</span>
-    <span class="t-attr">id</span>=<span class="t-val">"gpayEl"</span>
-    <span class="t-attr">style</span>=<span class="t-val">"width:100%"</span>
-    <span class="t-attr">payment-id</span>=<span class="t-val">"{{ paymentID }}"</span>
-    <span class="t-attr">payment-token</span>=<span class="t-val">"{{ paymentToken }}"</span>
-    <span class="t-attr">button-style</span>=<span class="t-val">"black"</span>
-    <span class="t-attr">button-type</span>=<span class="t-val">"buy"</span><span class="t-tag">&gt;
-  &lt;/fbk-google-pay&gt;</span>
-
-  <span class="t-comment">&lt;!-- FABRICK: Form carta (sempre visibile) --&gt;</span>
-  <span class="t-tag">&lt;fbk-card</span>
-    <span class="t-attr">id</span>=<span class="t-val">"cardEl"</span>
-    <span class="t-attr">style</span>=<span class="t-val">"width:100%"</span>
-    <span class="t-attr">payment-id</span>=<span class="t-val">"{{ paymentID }}"</span>
-    <span class="t-attr">payment-token</span>=<span class="t-val">"{{ paymentToken }}"</span>
-    <span class="t-attr">layout</span>=<span class="t-val">"horizontal"</span>
-    <span class="t-attr">optional-fields</span>=<span class="t-val">"false"</span><span class="t-tag">&gt;
-  &lt;/fbk-card&gt;</span>
-
-<span class="t-tag">&lt;/div&gt;</span></pre>
+        <pre id="snip-card-gpay"></pre>
       </div>
+    </div>
+
+    <div class="resp-log">
+      <div class="resp-log-head">
+        <span class="live-dot"></span>
+        <span>callBackObj – risposta in tempo reale</span>
+        <span class="cb-badge cb-on global-cb-badge">callback ON</span>
+      </div>
+      <div class="resp-out global-resp-out">In attesa di una risposta dal Web Component…</div>
     </div>
   </section>
 
-  <!-- ===========================================================
-       PANNELLO 6 – Solo Google Pay + Apple Pay (no form carta)
-       Non esiste un componente dedicato per questa combo.
-       La soluzione è affiancare fbk-google-pay e fbk-apple-pay
-       nella stessa pagina, in un contenitore flex.
-  ============================================================ -->
+  <!-- ═══════════════════════════════════════════════════
+       PANNELLO 6 – Google Pay + Apple Pay (COMBO – dual token)
+  ═══════════════════════════════════════════════════ -->
   <section class="demo-panel" id="panel-gpay-apay">
-    <br>
     <div class="panel-header">
       <div class="panel-icon">G+A</div>
       <div>
-        <h2>Solo Google Pay + Apple Pay</h2>
-        <p>Non esiste un componente Fabrick per questa combo senza form carta.
-           Si affiancano i due componenti dedicati in un wrapper <code>&lt;div&gt;</code>.
-           Ciascuno apparirà solo se il browser lo supporta.</p>
-        <span class="tag">&lt;fbk-google-pay&gt; + &lt;fbk-apple-pay&gt;</span>
+        <h2>Google Pay + Apple Pay</h2>
+        <p><code>&lt;fbk-apple-pay&gt;</code> + <code>&lt;fbk-google-pay&gt;</code> affiancati.<br>
+          ⚠ Sessioni separate → richiedono due payment token distinti.</p>
+        <span class="tag">combo custom · 2× token</span>
       </div>
     </div>
 
-    <div class="demo-grid">
-
-      <!-- BARRA OPZIONI PANNELLO 6 -->
-      <div style="grid-column:1/-1">
-        <div class="opts-bar" id="opts-combo">
-          <div class="opts-group">
-            <span class="opts-group-label">apple · button-style</span>
-            <div class="opts-pills">
-              <label class="active"><input type="radio" name="combo-astyle" value="black" checked onchange="updateOpts('combo')"><span>black</span></label>
-              <label><input type="radio" name="combo-astyle" value="white" onchange="updateOpts('combo')"><span>white</span></label>
-              <label><input type="radio" name="combo-astyle" value="white-outline" onchange="updateOpts('combo')"><span>white-outline</span></label>
-            </div>
-          </div>
-          <div class="opts-group">
-            <span class="opts-group-label">apple · button-type</span>
-            <div class="opts-pills">
-              <label><input type="radio" name="combo-atype" value="plain" onchange="updateOpts('combo')"><span>plain</span></label>
-              <label class="active"><input type="radio" name="combo-atype" value="buy" checked onchange="updateOpts('combo')"><span>buy</span></label>
-              <label><input type="radio" name="combo-atype" value="pay" onchange="updateOpts('combo')"><span>pay</span></label>
-            </div>
-          </div>
-          <div class="opts-group">
-            <span class="opts-group-label">google · button-style</span>
-            <div class="opts-pills">
-              <label class="active"><input type="radio" name="combo-gstyle" value="black" checked onchange="updateOpts('combo')"><span>black</span></label>
-              <label><input type="radio" name="combo-gstyle" value="white" onchange="updateOpts('combo')"><span>white</span></label>
-            </div>
-          </div>
-          <div class="opts-group">
-            <span class="opts-group-label">google · button-type</span>
-            <div class="opts-pills">
-              <label><input type="radio" name="combo-gtype" value="plain" onchange="updateOpts('combo')"><span>plain</span></label>
-              <label class="active"><input type="radio" name="combo-gtype" value="buy" checked onchange="updateOpts('combo')"><span>buy</span></label>
-              <label><input type="radio" name="combo-gtype" value="pay" onchange="updateOpts('combo')"><span>pay</span></label>
-            </div>
-          </div>
+    <div class="opts-bar" id="opts-gpay-apay">
+      <div class="opts-group">
+        <span class="opts-group-label">apple · button-style</span>
+        <div class="opts-pills">
+          <label class="active"><input type="radio" name="combo-astyle" value="black" checked onchange="updateOpts('gpay-apay')"><span>black</span></label>
+          <label><input type="radio" name="combo-astyle" value="white" onchange="updateOpts('gpay-apay')"><span>white</span></label>
+          <label><input type="radio" name="combo-astyle" value="white-outline" onchange="updateOpts('gpay-apay')"><span>white-outline</span></label>
         </div>
       </div>
-
-      <div class="component-box">
-        <h3>LIVE PREVIEW</h3>
-
-        <div id="slot-combo" class="preview-slot">
-          <div class="slot-placeholder">Inserisci le credenziali e clicca <strong>Applica</strong></div>
+      <div class="opts-group">
+        <span class="opts-group-label">apple · button-type</span>
+        <div class="opts-pills">
+          <label><input type="radio" name="combo-atype" value="plain" onchange="updateOpts('gpay-apay')"><span>plain</span></label>
+          <label class="active"><input type="radio" name="combo-atype" value="buy" checked onchange="updateOpts('gpay-apay')"><span>buy</span></label>
+          <label><input type="radio" name="combo-atype" value="pay" onchange="updateOpts('gpay-apay')"><span>pay</span></label>
         </div>
       </div>
+      <div class="opts-group">
+        <span class="opts-group-label">google · button-style</span>
+        <div class="opts-pills">
+          <label class="active"><input type="radio" name="combo-gstyle" value="black" checked onchange="updateOpts('gpay-apay')"><span>black</span></label>
+          <label><input type="radio" name="combo-gstyle" value="white" onchange="updateOpts('gpay-apay')"><span>white</span></label>
+        </div>
+      </div>
+      <div class="opts-group">
+        <span class="opts-group-label">google · button-type</span>
+        <div class="opts-pills">
+          <label><input type="radio" name="combo-gtype" value="plain" onchange="updateOpts('gpay-apay')"><span>plain</span></label>
+          <label class="active"><input type="radio" name="combo-gtype" value="buy" checked onchange="updateOpts('gpay-apay')"><span>buy</span></label>
+          <label><input type="radio" name="combo-gtype" value="pay" onchange="updateOpts('gpay-apay')"><span>pay</span></label>
+        </div>
+      </div>
+    </div>
 
-      <div class="code-box">
-        <div class="code-box-header">
-          <div class="dots">
-            <span class="dot-red"></span><span class="dot-yel"></span><span class="dot-grn"></span>
+    <div class="viewer-box" id="vbox-gpay-apay">
+      <div class="viewer-toolbar">
+        <div class="viewer-label"><span class="vl-dot"></span>Live Preview</div>
+        <div class="view-toggle">
+          <button class="vtb active" onclick="setView('gpay-apay','preview',this)">Preview</button>
+          <button class="vtb"        onclick="setView('gpay-apay','code',this)">Code</button>
+        </div>
+      </div>
+      <div class="face-preview">
+        <div id="slot-gpay-apay" class="preview-slot"><div class="slot-ph">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/></svg>
+          Inserisci le credenziali (2 token) e clicca <strong>Applica</strong>
+        </div></div>
+      </div>
+      <div class="face-code">
+        <div class="code-head">
+          <div class="dots"><span class="dr"></span><span class="dy"></span><span class="dg"></span></div>
+          <div class="code-head-right">
+            <span class="code-lang">Google + Apple Pay · snippet</span>
+            <button class="copy-btn" onclick="copyCode('snip-gpay-apay',this)">copy</button>
           </div>
-          <span>GPay + Apple Pay · snippet</span>
         </div>
-        <pre id="snip-combo"><span class="t-comment">&lt;!-- Wrapper TUO (non Fabrick): affianca i due pulsanti
-     Usa display:flex per layout responsivo --&gt;</span>
-<span class="t-tag">&lt;div</span> <span class="t-attr">style</span>=<span class="t-val">"display:flex;
-       flex-direction:column; gap:12px;"</span><span class="t-tag">&gt;</span>
-
-  <span class="t-comment">&lt;!-- FABRICK: Apple Pay --&gt;</span>
-  <span class="t-tag">&lt;fbk-apple-pay</span>
-    <span class="t-attr">id</span>=<span class="t-val">"apayEl"</span>
-    <span class="t-attr">style</span>=<span class="t-val">"width:100%"</span>
-    <span class="t-attr">payment-id</span>=<span class="t-val">"{{ paymentID }}"</span>
-    <span class="t-attr">payment-token</span>=<span class="t-val">"{{ paymentToken }}"</span>
-    <span class="t-attr">button-style</span>=<span class="t-val">"black"</span>
-    <span class="t-attr">button-type</span>=<span class="t-val">"buy"</span><span class="t-tag">&gt;
-  &lt;/fbk-apple-pay&gt;</span>
-
-  <span class="t-comment">&lt;!-- FABRICK: Google Pay --&gt;</span>
-  <span class="t-tag">&lt;fbk-google-pay</span>
-    <span class="t-attr">id</span>=<span class="t-val">"gpayEl"</span>
-    <span class="t-attr">style</span>=<span class="t-val">"width:100%"</span>
-    <span class="t-attr">payment-id</span>=<span class="t-val">"{{ paymentID }}"</span>
-    <span class="t-attr">payment-token</span>=<span class="t-val">"{{ paymentToken }}"</span>
-    <span class="t-attr">button-style</span>=<span class="t-val">"black"</span>
-    <span class="t-attr">button-type</span>=<span class="t-val">"buy"</span><span class="t-tag">&gt;
-  &lt;/fbk-google-pay&gt;</span>
-
-<span class="t-tag">&lt;/div&gt;</span>
-
-<span class="t-comment">// I due elementi condividono lo stesso
-// window['fbk-elements'] e lo stesso callBackObj</span></pre>
+        <pre id="snip-gpay-apay"></pre>
       </div>
+    </div>
+
+    <div class="resp-log">
+      <div class="resp-log-head">
+        <span class="live-dot"></span>
+        <span>callBackObj – risposta in tempo reale</span>
+        <span class="cb-badge cb-on global-cb-badge">callback ON</span>
+      </div>
+      <div class="resp-out global-resp-out">In attesa di una risposta dal Web Component…</div>
     </div>
   </section>
 
-  <!-- ===========================================================
-       PANNELLO 7 – fbk-card-wallet  (tutte le opzioni insieme)
-  ============================================================ -->
+  <!-- ═══════════════════════════════════════════════════
+       PANNELLO 7 – fbk-card-wallet (ALL-IN-ONE nativo)
+  ═══════════════════════════════════════════════════ -->
   <section class="demo-panel" id="panel-full">
-    <br>
     <div class="panel-header">
       <div class="panel-icon">ALL</div>
       <div>
         <h2>Tutto insieme – Card Wallet</h2>
-        <p><code>&lt;fbk-card-wallet&gt;</code> è il componente all-in-one che mostra
-           Apple Pay, Google Pay e il form carta, adattandosi automaticamente
-           alle capacità del device e del browser.</p>
+        <p><code>&lt;fbk-card-wallet&gt;</code> è il componente all-in-one nativo: adatta automaticamente Apple Pay, Google Pay e form carta alle capacità del browser.</p>
         <span class="tag">&lt;fbk-card-wallet&gt;</span>
       </div>
     </div>
 
-    <div class="demo-grid">
-
-      <!-- BARRA OPZIONI PANNELLO 7 -->
-      <div style="grid-column:1/-1">
-        <div class="opts-bar" id="opts-full">
-          <div class="opts-group">
-            <span class="opts-group-label">layout</span>
-            <div class="opts-pills">
-              <label class="active"><input type="radio" name="full-layout" value="horizontal" checked onchange="updateOpts('full')"><span>horizontal</span></label>
-              <label><input type="radio" name="full-layout" value="vertical" onchange="updateOpts('full')"><span>vertical</span></label>
-            </div>
-          </div>
-          <div class="opts-group">
-            <span class="opts-group-label">optional-fields</span>
-            <div class="opts-pills">
-              <label><input type="radio" name="full-optfields" value="false" onchange="updateOpts('full')"><span>false</span></label>
-              <label class="active"><input type="radio" name="full-optfields" value="true" checked onchange="updateOpts('full')"><span>true</span></label>
-            </div>
-          </div>
-          <div class="opts-group">
-            <span class="opts-group-label">apple · button-style</span>
-            <div class="opts-pills">
-              <label class="active"><input type="radio" name="full-astyle" value="black" checked onchange="updateOpts('full')"><span>black</span></label>
-              <label><input type="radio" name="full-astyle" value="white" onchange="updateOpts('full')"><span>white</span></label>
-              <label><input type="radio" name="full-astyle" value="white-outline" onchange="updateOpts('full')"><span>white-outline</span></label>
-            </div>
-          </div>
-          <div class="opts-group">
-            <span class="opts-group-label">apple · button-type</span>
-            <div class="opts-pills">
-              <label><input type="radio" name="full-atype" value="plain" onchange="updateOpts('full')"><span>plain</span></label>
-              <label class="active"><input type="radio" name="full-atype" value="buy" checked onchange="updateOpts('full')"><span>buy</span></label>
-              <label><input type="radio" name="full-atype" value="pay" onchange="updateOpts('full')"><span>pay</span></label>
-            </div>
-          </div>
-          <div class="opts-group">
-            <span class="opts-group-label">google · button-style</span>
-            <div class="opts-pills">
-              <label class="active"><input type="radio" name="full-gstyle" value="black" checked onchange="updateOpts('full')"><span>black</span></label>
-              <label><input type="radio" name="full-gstyle" value="white" onchange="updateOpts('full')"><span>white</span></label>
-            </div>
-          </div>
-          <div class="opts-group">
-            <span class="opts-group-label">google · button-type</span>
-            <div class="opts-pills">
-              <label><input type="radio" name="full-gtype" value="plain" onchange="updateOpts('full')"><span>plain</span></label>
-              <label class="active"><input type="radio" name="full-gtype" value="buy" checked onchange="updateOpts('full')"><span>buy</span></label>
-              <label><input type="radio" name="full-gtype" value="pay" onchange="updateOpts('full')"><span>pay</span></label>
-            </div>
-          </div>
+    <div class="opts-bar" id="opts-full">
+      <div class="opts-group">
+        <span class="opts-group-label">layout</span>
+        <div class="opts-pills">
+          <label class="active"><input type="radio" name="full-layout" value="horizontal" checked onchange="updateOpts('full')"><span>horizontal</span></label>
+          <label><input type="radio" name="full-layout" value="vertical" onchange="updateOpts('full')"><span>vertical</span></label>
         </div>
       </div>
-
-      <div class="component-box">
-        <h3>LIVE PREVIEW</h3>
-
-        <div id="slot-full" class="preview-slot">
-          <div class="slot-placeholder">Inserisci le credenziali e clicca <strong>Applica</strong></div>
+      <div class="opts-group">
+        <span class="opts-group-label">optional-fields</span>
+        <div class="opts-pills">
+          <label><input type="radio" name="full-optfields" value="false" onchange="updateOpts('full')"><span>false</span></label>
+          <label class="active"><input type="radio" name="full-optfields" value="true" checked onchange="updateOpts('full')"><span>true</span></label>
         </div>
-
       </div>
+      <div class="opts-group">
+        <span class="opts-group-label">apple · button-style</span>
+        <div class="opts-pills">
+          <label class="active"><input type="radio" name="full-astyle" value="black" checked onchange="updateOpts('full')"><span>black</span></label>
+          <label><input type="radio" name="full-astyle" value="white" onchange="updateOpts('full')"><span>white</span></label>
+          <label><input type="radio" name="full-astyle" value="white-outline" onchange="updateOpts('full')"><span>white-outline</span></label>
+        </div>
+      </div>
+      <div class="opts-group">
+        <span class="opts-group-label">apple · button-type</span>
+        <div class="opts-pills">
+          <label><input type="radio" name="full-atype" value="plain" onchange="updateOpts('full')"><span>plain</span></label>
+          <label class="active"><input type="radio" name="full-atype" value="buy" checked onchange="updateOpts('full')"><span>buy</span></label>
+          <label><input type="radio" name="full-atype" value="pay" onchange="updateOpts('full')"><span>pay</span></label>
+        </div>
+      </div>
+      <div class="opts-group">
+        <span class="opts-group-label">google · button-style</span>
+        <div class="opts-pills">
+          <label class="active"><input type="radio" name="full-gstyle" value="black" checked onchange="updateOpts('full')"><span>black</span></label>
+          <label><input type="radio" name="full-gstyle" value="white" onchange="updateOpts('full')"><span>white</span></label>
+        </div>
+      </div>
+      <div class="opts-group">
+        <span class="opts-group-label">google · button-type</span>
+        <div class="opts-pills">
+          <label><input type="radio" name="full-gtype" value="plain" onchange="updateOpts('full')"><span>plain</span></label>
+          <label class="active"><input type="radio" name="full-gtype" value="buy" checked onchange="updateOpts('full')"><span>buy</span></label>
+          <label><input type="radio" name="full-gtype" value="pay" onchange="updateOpts('full')"><span>pay</span></label>
+        </div>
+      </div>
+    </div>
 
-      <div class="code-box">
-        <div class="code-box-header">
-          <div class="dots">
-            <span class="dot-red"></span><span class="dot-yel"></span><span class="dot-grn"></span>
+    <div class="viewer-box" id="vbox-full">
+      <div class="viewer-toolbar">
+        <div class="viewer-label"><span class="vl-dot"></span>Live Preview</div>
+        <div class="view-toggle">
+          <button class="vtb active" onclick="setView('full','preview',this)">Preview</button>
+          <button class="vtb"        onclick="setView('full','code',this)">Code</button>
+        </div>
+      </div>
+      <div class="face-preview">
+        <div id="slot-full" class="preview-slot"><div class="slot-ph">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+          Inserisci le credenziali e clicca <strong>Applica</strong>
+        </div></div>
+      </div>
+      <div class="face-code">
+        <div class="code-head">
+          <div class="dots"><span class="dr"></span><span class="dy"></span><span class="dg"></span></div>
+          <div class="code-head-right">
+            <span class="code-lang">fbk-card-wallet · snippet completo</span>
+            <button class="copy-btn" onclick="copyCode('snip-full',this)">copy</button>
           </div>
-          <span>fbk-card-wallet · snippet completo</span>
         </div>
-        <pre id="snip-full"><span class="t-comment">&lt;!-- fbk-card-wallet: componente all-in-one Fabrick
-     Mostra automaticamente le wallet disponibili:
-     Apple Pay   → solo su Safari/iOS/macOS
-     Google Pay  → solo su Chrome con GPay attivo
-     Form carta  → sempre visibile come fallback
-     
-     optional-fields="true" aggiunge Nome e Cognome
-     al form carta (utile per 3DS) --&gt;</span>
-<span class="t-tag">&lt;fbk-card-wallet</span>
-  <span class="t-attr">id</span>=<span class="t-val">"fullWallet"</span>
-  <span class="t-attr">style</span>=<span class="t-val">"width:100%"</span>
-  <span class="t-attr">payment-id</span>=<span class="t-val">"{{ paymentID }}"</span>
-  <span class="t-attr">payment-token</span>=<span class="t-val">"{{ paymentToken }}"</span>
-  <span class="t-attr">layout</span>=<span class="t-val">"horizontal"</span>
-  <span class="t-attr">optional-fields</span>=<span class="t-val">"true"</span>
-  <span class="t-attr">apple-button-style</span>=<span class="t-val">"black"</span>
-  <span class="t-attr">apple-button-type</span>=<span class="t-val">"buy"</span>
-  <span class="t-attr">google-button-style</span>=<span class="t-val">"black"</span>
-  <span class="t-attr">google-button-type</span>=<span class="t-val">"buy"</span><span class="t-tag">&gt;
-&lt;/fbk-card-wallet&gt;</span>
-
-<span class="t-comment">// Configurazione globale condivisa (TUA)
-// Va eseguita PRIMA che i componenti siano montati</span>
-<span class="t-kw">window</span><span class="t-punct">[</span><span class="t-str">'fbk-elements'</span><span class="t-punct">]</span> <span class="t-punct">=</span> <span class="t-punct">{</span>
-  <span class="t-attr">shop</span><span class="t-punct">:</span> <span class="t-str snippet-shop-login">"GESPAY12345"</span><span class="t-punct">,</span>
-  <span class="t-attr">callBackObj</span><span class="t-punct">:</span> <span class="t-punct">(</span>e<span class="t-punct">) =&gt;</span> <span class="t-fn">myCallbackFunction</span><span class="t-punct">(</span>e<span class="t-punct">)</span>
-<span class="t-punct">};</span>
-
-<span class="t-comment">// Risposta Fabrick – struttura completa:
-// {
-//   error: { code, description },
-//   payload: {
-//     flowStatus: "COMPLETED" | "FAILED" |
-//                 "AUTHENTICATION_PENDING" | "EXPIRED",
-//     redirect: { method, url, data? }
-//   }
-// }
-// Dopo COMPLETED/FAILED → chiama payment/detail</span>
-<span class="t-kw">function</span> <span class="t-fn">myCallbackFunction</span><span class="t-punct">(</span>response<span class="t-punct">) {</span>
-  <span class="t-kw">const</span> <span class="t-punct">{</span> flowStatus<span class="t-punct">,</span> redirect <span class="t-punct">}</span>
-    <span class="t-punct">=</span> response<span class="t-punct">.</span>payload<span class="t-punct">;</span>
-
-  <span class="t-kw">if</span> <span class="t-punct">(</span>flowStatus <span class="t-punct">===</span> <span class="t-str">"COMPLETED"</span><span class="t-punct">) {</span>
-    <span class="t-comment">// redirect verso la pagina di conferma</span>
-    <span class="t-kw">window</span><span class="t-punct">.</span>location<span class="t-punct">.</span>href <span class="t-punct">=</span> redirect<span class="t-punct">.</span>url<span class="t-punct">;</span>
-
-  <span class="t-punct">}</span> <span class="t-kw">else if</span> <span class="t-punct">(</span>flowStatus <span class="t-punct">===</span> <span class="t-str">"FAILED"</span><span class="t-punct">) {</span>
-    <span class="t-comment">// mostra messaggio d'errore all'utente</span>
-    <span class="t-fn">showError</span><span class="t-punct">(</span>response<span class="t-punct">.</span>error<span class="t-punct">.</span>description<span class="t-punct">);</span>
-
-  <span class="t-punct">}</span> <span class="t-kw">else if</span> <span class="t-punct">(</span>flowStatus <span class="t-punct">===</span> <span class="t-str">"AUTHENTICATION_PENDING"</span><span class="t-punct">) {</span>
-    <span class="t-comment">// 3DS: esegui il redirect per completare l'auth</span>
-    <span class="t-kw">if</span> <span class="t-punct">(</span>redirect<span class="t-punct">.</span>method <span class="t-punct">===</span> <span class="t-str">"POST"</span><span class="t-punct">) {</span>
-      <span class="t-fn">submitPostForm</span><span class="t-punct">(</span>redirect<span class="t-punct">.</span>url<span class="t-punct">,</span> redirect<span class="t-punct">.</span>data<span class="t-punct">);</span>
-    <span class="t-punct">}</span> <span class="t-kw">else</span> <span class="t-punct">{</span>
-      <span class="t-kw">window</span><span class="t-punct">.</span>location<span class="t-punct">.</span>href <span class="t-punct">=</span> redirect<span class="t-punct">.</span>url<span class="t-punct">;</span>
-    <span class="t-punct">}</span>
-  <span class="t-punct">}</span>
-<span class="t-punct">}</span></pre>
+        <pre id="snip-full"></pre>
       </div>
+    </div>
+
+    <div class="resp-log">
+      <div class="resp-log-head">
+        <span class="live-dot"></span>
+        <span>callBackObj – risposta in tempo reale</span>
+        <span class="cb-badge cb-on global-cb-badge">callback ON</span>
+      </div>
+      <div class="resp-out global-resp-out">In attesa di una risposta dal Web Component…</div>
     </div>
   </section>
 
-  <!-- ============================================================
+  <!-- ═══════════════════════════════════════════════════
        FOOTER
-  ============================================================ -->
+  ═══════════════════════════════════════════════════ -->
   <footer class="footer">
     <span>
       Demo non ufficiale · Built with
       <a href="https://docs.fabrick.com/docs/paymentHubAndOrchestra/ecommerce/integrationMethods/web_component/" target="_blank">Fabrick APIs</a>
     </span>
-    <span style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted)">
+    <span style="font-family:'JetBrains Mono',monospace;font-size:11px">
       <a href="https://github.com/M2NDLAB/fabrick-webcomponent" target="_blank">@M2ND</a>
       &nbsp;·&nbsp; Sandbox environment
     </span>
@@ -1450,76 +1483,108 @@ el<span class="t-punct">.</span><span class="t-fn">setAttribute</span><span clas
 </div><!-- /page-wrapper -->
 
 
-<!-- ============================================================
-     JAVASCRIPT (TUO) – logica globale della demo
-     Questo blocco è interamente scritto da te, non da Fabrick.
-     Fabrick fornisce solo lo script fbk-elements.js caricato
-     nel <head> e i custom elements HTML.
-============================================================ -->
+<!-- ═══════════════════════════════════════════════════════════
+     JAVASCRIPT
+     Logica interamente TUA. Fabrick fornisce solo fbk-elements.js.
+═══════════════════════════════════════════════════════════ -->
 <script>
-  // ─────────────────────────────────────────────────────────────
-  // 1. VARIABILI GLOBALI DI CONFIGURAZIONE (TUE)
-  //    In produzione questi valori arrivano dal backend dopo
-  //    la chiamata a payment/create.
-  // ─────────────────────────────────────────────────────────────
-  let SHOP_LOGIN    = document.getElementById('cfg-shop').value;
-  let PAYMENT_ID    = document.getElementById('cfg-pid').value;
-  let PAYMENT_TOKEN = document.getElementById('cfg-token').value;
+  // ─────────────────────────────────────────────────────
+  // STATO GLOBALE
+  // ─────────────────────────────────────────────────────
+  let CURRENT_PANEL = 'card';
 
-  // Aggiorna lo snippet shop in tempo reale mentre si digita
-  document.getElementById('cfg-shop').addEventListener('input', (e) => {
-    const val = e.target.value.trim() || 'GESPAY12345';
-    document.querySelectorAll('.snippet-shop-login').forEach(el => {
-      el.textContent = `"${val}"`;
+  // combo panels: richiedono credenziali doppie
+  const COMBO_PANELS = new Set(['card-apay', 'card-gpay', 'gpay-apay']);
+
+  // credenziali single
+  let SHOP_LOGIN    = '';
+  let PAYMENT_ID    = '';
+  let PAYMENT_TOKEN = '';
+
+  // credenziali dual (combo)
+  let PAYMENT_ID_1    = '';
+  let PAYMENT_TOKEN_1 = '';
+  let PAYMENT_ID_2    = '';
+  let PAYMENT_TOKEN_2 = '';
+
+  // ─────────────────────────────────────────────────────
+  // HELPERS – lettura radio
+  // ─────────────────────────────────────────────────────
+  function r(name) {
+    const el = document.querySelector(`input[name="${name}"]:checked`);
+    return el ? el.value : '';
+  }
+
+  function isCombo() { return COMBO_PANELS.has(CURRENT_PANEL); }
+
+  function cbEnabled() {
+    const tog = isCombo()
+      ? document.getElementById('cb-toggle-d')
+      : document.getElementById('cb-toggle');
+    return tog ? tog.checked : true;
+  }
+
+  // ─────────────────────────────────────────────────────
+  // TOGGLE SWITCH – aggiorna etichetta ON/OFF
+  // ─────────────────────────────────────────────────────
+  ['cb-toggle', 'cb-toggle-d'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener('change', () => {
+      const valId = id === 'cb-toggle' ? 'cb-val' : 'cb-val-d';
+      document.getElementById(valId).textContent = el.checked ? 'ON' : 'OFF';
+      updateCbBadges();
     });
   });
 
-  // ─────────────────────────────────────────────────────────────
-  // 2. CONFIGURAZIONE GLOBALE FABRICK
-  //    window['fbk-elements'] viene letto dai Web Components
-  //    Fabrick al momento del mount. Deve essere impostato
-  //    PRIMA che i componenti vengano inizializzati.
-  // ─────────────────────────────────────────────────────────────
-  window['fbk-elements'] = {
-    shop:        SHOP_LOGIN,
-    callBackObj: (event) => myCallbackFunction(event)
-  };
+  function updateCbBadges() {
+    const on = cbEnabled();
+    document.querySelectorAll('.global-cb-badge').forEach(b => {
+      b.textContent = on ? 'callback ON' : 'callback OFF';
+      b.className = 'cb-badge global-cb-badge ' + (on ? 'cb-on' : 'cb-off');
+    });
+  }
 
-  // ─────────────────────────────────────────────────────────────
-  // 3. CALLBACK FABRICK (TUA)
-  //    Questa funzione viene chiamata da Fabrick al termine
-  //    del flusso di pagamento, qualunque sia il metodo usato.
-  //    Struttura response:
-  //    {
-  //      error:   { code, description },
-  //      payload: { flowStatus, redirect }
-  //    }
-  // ─────────────────────────────────────────────────────────────
+  // ─────────────────────────────────────────────────────
+  // CONFIGURAZIONE FABRICK (TUA)
+  // window['fbk-elements'] deve essere settato PRIMA
+  // che i componenti vengano iniettati nel DOM.
+  //
+  // NOTA SULLA CALLBACK:
+  // Quando callBackObj è presente → Fabrick chiama quella
+  // funzione al termine del pagamento (nessun redirect auto).
+  // Quando callBackObj è assente → Fabrick esegue il redirect
+  // verso l'URL configurato sul portale Fabrick.
+  // ─────────────────────────────────────────────────────
+  function buildFbkConfig(cbOn) {
+    return cbOn
+      ? { shop: SHOP_LOGIN, callBackObj: (e) => myCallbackFunction(e) }
+      : { shop: SHOP_LOGIN };
+  }
+
+  // Config iniziale (verrà sovrascritta in applyConfig)
+  window['fbk-elements'] = { shop: 'GESPAY12345' };
+
+  // ─────────────────────────────────────────────────────
+  // CALLBACK FABRICK (TUA)
+  // Chiamata da Fabrick al termine del flusso pagamento.
+  // response.payload.flowStatus:
+  //   COMPLETED | FAILED | AUTHENTICATION_PENDING | EXPIRED
+  // ─────────────────────────────────────────────────────
   function myCallbackFunction(response) {
-    const out  = document.getElementById('response-output');
     const status = response?.payload?.flowStatus ?? 'UNKNOWN';
     const err    = response?.error;
     const redir  = response?.payload?.redirect;
 
-    // ── Log strutturato in console (stile lightbox) ─────────────
-    console.log('[Fabrick WC] ================================');
-    console.log('[Fabrick WC] Callback ricevuta');
-    console.log('[Fabrick WC] flowStatus :', status);
-    console.log('[Fabrick WC] error.code :', err?.code ?? 'nessuno');
-    console.log('[Fabrick WC] error.desc :', err?.description ?? 'nessuna');
-    console.log('[Fabrick WC] redirect   :', redir ?? 'nessuno');
-    console.log('[Fabrick WC] response completo:', JSON.stringify(response, null, 2));
-    console.log('[Fabrick WC] ================================');
+    console.log('[Fabrick WC] flowStatus:', status);
+    console.log('[Fabrick WC] response:', JSON.stringify(response, null, 2));
 
-    // ── Colora il log in base allo status ───────────────────────
-    let cssClass = 'status-pending';
-    let statusLabel = status;
-    if (status === 'COMPLETED')              { cssClass = 'status-ok';      statusLabel = 'COMPLETED'; }
-    else if (status === 'FAILED')            { cssClass = 'status-fail';    statusLabel = 'FAILED'; }
-    else if (status === 'EXPIRED')           { cssClass = 'status-fail';    statusLabel = 'EXPIRED'; }
-    else if (status === 'AUTHENTICATION_PENDING') { cssClass = 'status-pending'; statusLabel = 'AUTHENTICATION_PENDING'; }
+    let cssClass = 's-pending';
+    if      (status === 'COMPLETED')             cssClass = 's-ok';
+    else if (status === 'FAILED')                cssClass = 's-fail';
+    else if (status === 'EXPIRED')               cssClass = 's-fail';
+    else if (status === 'AUTHENTICATION_PENDING') cssClass = 's-pending';
 
-    // ── Riga di header nello status panel ───────────────────────
     const errLine  = err?.code
       ? `\nerror.code        : ${err.code}\nerror.description : ${err.description ?? '—'}`
       : '\nerror             : nessuno';
@@ -1527,469 +1592,532 @@ el<span class="t-punct">.</span><span class="t-fn">setAttribute</span><span clas
       ? `\nredirect.method   : ${redir.method ?? '—'}\nredirect.url      : ${redir.url ?? '—'}`
       : '\nredirect          : nessuno';
 
-    out.innerHTML =
-      `<span class="${cssClass}">[${statusLabel}]</span>${errLine}${redirLine}\n\n`
-      + `— response completo ——————————————————————\n`
+    const html =
+      `<span class="${cssClass}">[${status}]</span>${errLine}${redirLine}\n\n`
+      + `— response completo ─────────────────────────\n`
       + JSON.stringify(response, null, 2);
 
-    // ── Gestione redirect post-pagamento ────────────────────────
+    // Aggiorna tutti i log (solo quello del pannello attivo è visibile)
+    document.querySelectorAll('.global-resp-out').forEach(el => el.innerHTML = html);
+
+    // redirect post-pagamento
     if ((status === 'COMPLETED' || status === 'FAILED') && redir?.url) {
-      console.log('[Fabrick WC] Pagamento terminato. redirect:', redir);
       // In produzione: window.location.href = redir.url;
+      console.log('[Fabrick WC] redirect:', redir.url);
     }
 
     if (status === 'AUTHENTICATION_PENDING' && redir) {
-      const { method, url, data } = redir;
-      if (method === 'POST') {
-        submitPostRedirect(url, data);
-      } else {
-        window.location.href = url;
-      }
+      redir.method === 'POST'
+        ? submitPostRedirect(redir.url, redir.data)
+        : (window.location.href = redir.url);
     }
   }
 
-  // ─────────────────────────────────────────────────────────────
-  // 4. HELPER – redirect POST (3DS / AUTHENTICATION_PENDING)
-  //    Crea dinamicamente un form HTML, lo popola con i parametri
-  //    e lo invia. È necessario per i redirect 3DS che usano POST.
-  //    Questa è logica TUA, non di Fabrick.
-  // ─────────────────────────────────────────────────────────────
+  // helper redirect POST (3DS)
   function submitPostRedirect(url, data) {
     const form = document.createElement('form');
     form.method = 'POST';
     form.action = url;
-    // aggiunge ogni coppia key/value come campo hidden
-    for (const [key, value] of Object.entries(data || {})) {
-      const input = document.createElement('input');
-      input.type  = 'hidden';
-      input.name  = key;
-      input.value = value;
-      form.appendChild(input);
+    for (const [k, v] of Object.entries(data || {})) {
+      const inp = document.createElement('input');
+      inp.type = 'hidden'; inp.name = k; inp.value = v;
+      form.appendChild(inp);
     }
     document.body.appendChild(form);
     form.submit();
   }
 
-  // ─────────────────────────────────────────────────────────────
-  // 5. LISTENER ERRORI GLOBALI FABRICK
-  //    fbk-elements-error viene emesso dal componente Fabrick
-  //    in caso di problemi di caricamento o configurazione.
-  // ─────────────────────────────────────────────────────────────
-  window.addEventListener('fbk-elements-error', event => {
-    console.error('[Fabrick Error]', JSON.stringify(event.detail));
-    const out = document.getElementById('response-output');
-    out.innerHTML = `<span class="status-fail">[FABRICK ERROR]\n`
-                  + JSON.stringify(event.detail, null, 2) + `</span>`;
+  // listener errori globali Fabrick
+  window.addEventListener('fbk-elements-error', e => {
+    const html = `<span class="s-fail">[FABRICK ERROR]\n${JSON.stringify(e.detail, null, 2)}</span>`;
+    document.querySelectorAll('.global-resp-out').forEach(el => el.innerHTML = html);
+    console.error('[Fabrick Error]', e.detail);
   });
 
-  // ─────────────────────────────────────────────────────────────
-  // 6. FUNZIONE APPLICA CONFIG (TUA)
-  //    Legge i valori dagli input e aggiorna tutti i componenti
-  //    Fabrick presenti nella pagina.
-  // ─────────────────────────────────────────────────────────────
-  function applyConfig() {
-    // Legge i valori dall'UI
-    SHOP_LOGIN    = document.getElementById('cfg-shop').value.trim();
-    PAYMENT_ID    = document.getElementById('cfg-pid').value.trim();
-    PAYMENT_TOKEN = document.getElementById('cfg-token').value.trim();
+  // ─────────────────────────────────────────────────────
+  // NAVIGAZIONE TAB
+  // ─────────────────────────────────────────────────────
+  function showPanel(id, btn) {
+    CURRENT_PANEL = id;
 
-    // Validazione: tutti e 3 i campi sono obbligatori
-    if (!SHOP_LOGIN || !PAYMENT_ID || !PAYMENT_TOKEN) {
-      const btn = document.getElementById('apply-config');
-      btn.textContent = 'Compila tutti i campi';
-      btn.style.background = '#c0392b';
-      setTimeout(() => { btn.textContent = 'Applica ▶'; btn.style.background = ''; }, 2500);
-      return;
-    }
+    // pannelli
+    document.querySelectorAll('.demo-panel').forEach(p => p.classList.remove('visible'));
+    document.getElementById('panel-' + id)?.classList.add('visible');
 
-    // Aggiorna tutti gli snippet di codice con il valore reale dello shop
-    document.querySelectorAll('.snippet-shop-login').forEach(el => {
-      el.textContent = `"${SHOP_LOGIN}"`;
-    });
+    // tab attivo
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
 
-    // Legge la scelta callback dal radio
-    const cbEnabled = document.querySelector('input[name="cbMode"]:checked').value === 'on';
+    // config section: single vs dual
+    const combo = COMBO_PANELS.has(id);
+    document.getElementById('creds-single').style.display = combo ? 'none' : '';
+    document.getElementById('creds-dual').classList.toggle('show', combo);
+    document.getElementById('dual-notice').classList.toggle('show', combo);
 
-    // Aggiorna la config globale Fabrick PRIMA di iniettare i componenti
-    window['fbk-elements'] = cbEnabled
-      ? { shop: SHOP_LOGIN, callBackObj: (event) => myCallbackFunction(event) }
-      : { shop: SHOP_LOGIN };
+    // aggiorna etichette dual in base al pannello
+    if (combo) updateDualLabels(id);
 
-    // ── Builder HTML per ogni slot (leggono le radio options) ──
-    const SLOT_BUILDERS = {
-      'slot-card': () =>
-        `<fbk-card id="wc-card" style="width:100%"
-          payment-id="${PAYMENT_ID}" payment-token="${PAYMENT_TOKEN}"
-          layout="${r('card-layout')||'horizontal'}"
-          optional-fields="${r('card-optfields')||'true'}">
-        </fbk-card>`,
-
-      'slot-gpay': () =>
-        `<fbk-google-pay id="wc-gpay" style="width:100%"
-          payment-id="${PAYMENT_ID}" payment-token="${PAYMENT_TOKEN}"
-          button-style="${r('gpay-style')||'black'}"
-          button-type="${r('gpay-type')||'buy'}">
-        </fbk-google-pay>`,
-
-      'slot-apay': () =>
-        `<fbk-apple-pay id="wc-apay" style="width:100%"
-          payment-id="${PAYMENT_ID}" payment-token="${PAYMENT_TOKEN}"
-          button-style="${r('apay-style')||'black'}"
-          button-type="${r('apay-type')||'buy'}">
-        </fbk-apple-pay>`,
-
-      'slot-card-apay': () =>
-        `<div style="display:flex;flex-direction:column;gap:12px;width:100%">
-          <fbk-apple-pay id="wc-card-apay-wallet" style="width:100%"
-            payment-id="${PAYMENT_ID}" payment-token="${PAYMENT_TOKEN}"
-            button-style="${r('capay-astyle')||'black'}"
-            button-type="${r('capay-atype')||'buy'}">
-          </fbk-apple-pay>
-          <fbk-card id="wc-card-apay-card" style="width:100%"
-            payment-id="${PAYMENT_ID}" payment-token="${PAYMENT_TOKEN}"
-            layout="${r('capay-layout')||'horizontal'}"
-            optional-fields="${r('capay-optfields')||'false'}">
-          </fbk-card>
-        </div>`,
-
-      'slot-card-gpay': () =>
-        `<div style="display:flex;flex-direction:column;gap:12px;width:100%">
-          <fbk-google-pay id="wc-card-gpay-wallet" style="width:100%"
-            payment-id="${PAYMENT_ID}" payment-token="${PAYMENT_TOKEN}"
-            button-style="${r('cgpay-gstyle')||'black'}"
-            button-type="${r('cgpay-gtype')||'buy'}">
-          </fbk-google-pay>
-          <fbk-card id="wc-card-gpay-card" style="width:100%"
-            payment-id="${PAYMENT_ID}" payment-token="${PAYMENT_TOKEN}"
-            layout="${r('cgpay-layout')||'horizontal'}"
-            optional-fields="${r('cgpay-optfields')||'false'}">
-          </fbk-card>
-        </div>`,
-
-      'slot-combo': () =>
-        `<div style="display:flex;flex-direction:column;gap:12px;width:100%">
-          <fbk-apple-pay id="wc-combo-apay" style="width:100%"
-            payment-id="${PAYMENT_ID}" payment-token="${PAYMENT_TOKEN}"
-            button-style="${r('combo-astyle')||'black'}"
-            button-type="${r('combo-atype')||'buy'}">
-          </fbk-apple-pay>
-          <fbk-google-pay id="wc-combo-gpay" style="width:100%"
-            payment-id="${PAYMENT_ID}" payment-token="${PAYMENT_TOKEN}"
-            button-style="${r('combo-gstyle')||'black'}"
-            button-type="${r('combo-gtype')||'buy'}">
-          </fbk-google-pay>
-        </div>`,
-
-      'slot-full': () =>
-        `<fbk-card-wallet id="wc-full" style="width:100%"
-          payment-id="${PAYMENT_ID}" payment-token="${PAYMENT_TOKEN}"
-          layout="${r('full-layout')||'horizontal'}"
-          optional-fields="${r('full-optfields')||'true'}"
-          apple-button-style="${r('full-astyle')||'black'}"
-          apple-button-type="${r('full-atype')||'buy'}"
-          google-button-style="${r('full-gstyle')||'black'}"
-          google-button-type="${r('full-gtype')||'buy'}">
-        </fbk-card-wallet>`
-    };
-
-    // Inietta ogni componente nel suo slot (sostituisce il placeholder)
-    Object.entries(SLOT_BUILDERS).forEach(([id, builder]) => {
-      const slot = document.getElementById(id);
-      if (slot) slot.innerHTML = builder();
-    });
-
-    // Espone i builder globalmente per updateOpts (re-iniezione live al cambio opzione)
-    window.__slotBuilders = SLOT_BUILDERS;
-
-    // Feedback visivo sul pulsante
-    const btn = document.getElementById('apply-config');
-    btn.textContent = 'Applicato';
-    btn.style.background = 'var(--green)';
-    setTimeout(() => { btn.textContent = 'Applica ▶'; btn.style.background = ''; }, 2000);
-
-    console.log('[Demo] Config aggiornata →', { SHOP_LOGIN, PAYMENT_ID, PAYMENT_TOKEN });
+    // snippet aggiornati
+    updateOpts(id);
   }
 
-  // ─────────────────────────────────────────────────────────────
-  // 7. NAVIGAZIONE A TAB (TUA)
-  //    Mostra/nasconde i pannelli demo. Nessuna relazione con
-  //    Fabrick: è logica di UI pura.
-  // ─────────────────────────────────────────────────────────────
-  function showPanel(id, btn) {
-    // Nasconde tutti i pannelli
-    document.querySelectorAll('.demo-panel').forEach(p => p.classList.remove('visible'));
-    // Rimuove "active" da tutti i tab
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  function updateDualLabels(panel) {
+    const labels = {
+      'card-apay': ['fbk-apple-pay (token 1)', 'fbk-card (token 2)'],
+      'card-gpay': ['fbk-google-pay (token 1)', 'fbk-card (token 2)'],
+      'gpay-apay': ['fbk-apple-pay (token 1)', 'fbk-google-pay (token 2)'],
+    };
+    const [l1, l2] = labels[panel] || ['COMPONENTE 1', 'COMPONENTE 2'];
+    document.getElementById('dual-lbl-1').textContent = l1;
+    document.getElementById('dual-lbl-2').textContent = l2;
+  }
 
-    // Mostra il pannello richiesto e attiva il tab
-    document.getElementById('panel-' + id)?.classList.add('visible');
+  // ─────────────────────────────────────────────────────
+  // VIEW TOGGLE – Preview / Code
+  // ─────────────────────────────────────────────────────
+  function setView(panel, view, btn) {
+    const box = document.getElementById('vbox-' + panel);
+    if (!box) return;
+    box.classList.toggle('show-code', view === 'code');
+    box.querySelectorAll('.vtb').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
   }
 
-  // ─────────────────────────────────────────────────────────────
-  // 8. INIZIALIZZAZIONE AL LOAD (TUA)
-  //    Applica subito i valori di default ai componenti Fabrick.
-  // ─────────────────────────────────────────────────────────────
-  // ─────────────────────────────────────────────────────────────
-  // OPTS HELPERS – legge i valori correnti dai radio di ogni panel
-  // ─────────────────────────────────────────────────────────────
-  function r(name) {
-    const el = document.querySelector(`input[name="${name}"]:checked`);
-    return el ? el.value : '';
+  // ─────────────────────────────────────────────────────
+  // COPY CODE
+  // ─────────────────────────────────────────────────────
+  function copyCode(preId, btn) {
+    const pre = document.getElementById(preId);
+    if (!pre) return;
+    const text = pre.innerText || pre.textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = 'copied ✓';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'copy'; btn.classList.remove('copied'); }, 2000);
+    });
   }
 
-  // Sintassi highlighting minima per generare snippet aggiornati
-  function hl(tag, attrs, closing) {
-    const a = attrs.map(([k,v]) =>
-      `\n  <span class="t-attr">${k}</span>=<span class="t-val">"${v}"</span>`
-    ).join('');
-    return `<span class="t-tag">&lt;${tag}</span>${a}<span class="t-tag">&gt;\n&lt;/${closing || tag}&gt;</span>`;
-  }
-  function hlComment(txt) { return `<span class="t-comment">${txt}</span>`; }
-  function hlKw(txt)      { return `<span class="t-kw">${txt}</span>`; }
-  function hlStr(txt)     { return `<span class="t-str">${txt}</span>`; }
-  function hlAttr(k,v)    { return `<span class="t-attr">${k}</span>: <span class="t-str">${v}</span>`; }
-  function shopVal()      { return document.getElementById('cfg-shop').value.trim() || 'GESPAY12345'; }
+  // ─────────────────────────────────────────────────────
+  // APPLY CONFIG
+  // ─────────────────────────────────────────────────────
+  function applyConfig() {
+    const combo = isCombo();
 
-  // Genera snippet fbk-card
-  function snippetCard() {
-    const layout = r('card-layout') || 'horizontal';
-    const opt    = r('card-optfields') || 'true';
-    return [
-      hlComment('&lt;!-- fbk-card: form inserimento carta --&gt;'),
-      hl('fbk-card', [
-        ['id','cardElement'],['style','width:100%'],
-        ['payment-id','{{ paymentID }}'],['payment-token','{{ paymentToken }}'],
-        ['layout', layout],['optional-fields', opt]
-      ]),
-      '',
-      hlComment('// Configurazione globale'),
-      `${hlKw('window')}[${hlStr("'fbk-elements'")}] = {\n  ${hlAttr('shop', `"${shopVal()}"`+`</span>`+`,`+`<span class="t-comment"> // ← tuo shopLogin`)}\n  ${hlAttr('callBackObj', '(e) => myCallbackFunction(e)')}\n};`
-    ].join('\n');
-  }
+    if (combo) {
+      SHOP_LOGIN    = document.getElementById('cfg-shop-d').value.trim();
+      PAYMENT_ID_1  = document.getElementById('cfg-pid-1').value.trim();
+      PAYMENT_TOKEN_1 = document.getElementById('cfg-token-1').value.trim();
+      PAYMENT_ID_2  = document.getElementById('cfg-pid-2').value.trim();
+      PAYMENT_TOKEN_2 = document.getElementById('cfg-token-2').value.trim();
 
-  // Genera snippet fbk-google-pay
-  function snippetGpay() {
-    const style = r('gpay-style') || 'black';
-    const type  = r('gpay-type')  || 'buy';
-    return [
-      hlComment(`&lt;!-- fbk-google-pay\n     button-style: black | white\n     button-type : plain | buy | pay --&gt;`),
-      hl('fbk-google-pay', [
-        ['id','gpayElement'],['style','width:100%'],
-        ['payment-id','{{ paymentID }}'],['payment-token','{{ paymentToken }}'],
-        ['button-style', style],['button-type', type]
-      ]),
-      '',
-      `${hlKw('window')}[${hlStr("'fbk-elements'")}] = {\n  ${hlAttr('shop', `"${shopVal()}"`)},\n  ${hlAttr('callBackObj', '(e) => myCallbackFunction(e)')}\n};`
-    ].join('\n');
-  }
+      if (!SHOP_LOGIN || !PAYMENT_ID_1 || !PAYMENT_TOKEN_1 || !PAYMENT_ID_2 || !PAYMENT_TOKEN_2) {
+        flashError(document.getElementById('apply-btn-d'), 'Compila tutti i campi (2 token)');
+        return;
+      }
+    } else {
+      SHOP_LOGIN    = document.getElementById('cfg-shop').value.trim();
+      PAYMENT_ID    = document.getElementById('cfg-pid').value.trim();
+      PAYMENT_TOKEN = document.getElementById('cfg-token').value.trim();
 
-  // Genera snippet fbk-apple-pay
-  function snippetApay() {
-    const style = r('apay-style') || 'black';
-    const type  = r('apay-type')  || 'buy';
-    return [
-      hlComment(`&lt;!-- fbk-apple-pay\n     button-style: black | white | white-outline\n     button-type : plain | buy | pay --&gt;`),
-      hl('fbk-apple-pay', [
-        ['id','apayElement'],['style','width:100%'],
-        ['payment-id','{{ paymentID }}'],['payment-token','{{ paymentToken }}'],
-        ['button-style', style],['button-type', type]
-      ]),
-      '',
-      `${hlKw('window')}[${hlStr("'fbk-elements'")}] = {\n  ${hlAttr('shop', `"${shopVal()}"`)},\n  ${hlAttr('callBackObj', '(e) => myCallbackFunction(e)')}\n};`
-    ].join('\n');
+      if (!SHOP_LOGIN || !PAYMENT_ID || !PAYMENT_TOKEN) {
+        flashError(document.getElementById('apply-btn'), 'Compila tutti i campi');
+        return;
+      }
+    }
+
+    // Setta window['fbk-elements'] PRIMA di iniettare i componenti nel DOM
+    window['fbk-elements'] = buildFbkConfig(cbEnabled());
+
+    // Inietta i componenti
+    injectComponents();
+    updateCbBadges();
+
+    // feedback visivo
+    const btnId = combo ? 'apply-btn-d' : 'apply-btn';
+    const btn   = document.getElementById(btnId);
+    const orig  = btn.textContent;
+    btn.textContent = '✓ Applicato';
+    btn.style.background = 'var(--green)';
+    setTimeout(() => { btn.textContent = orig; btn.style.background = ''; }, 2000);
+
+    console.log('[Demo] Config applicata →', { SHOP_LOGIN, CURRENT_PANEL });
   }
 
-  // Genera snippet Carte + Apple Pay
-  function snippetCardApay() {
-    const astyle  = r('capay-astyle')    || 'black';
-    const atype   = r('capay-atype')     || 'buy';
-    const layout  = r('capay-layout')    || 'horizontal';
-    const opt     = r('capay-optfields') || 'false';
-    return [
-      hlComment('&lt;!-- Carte + Apple Pay: fbk-apple-pay + fbk-card --&gt;'),
-      `<span class="t-tag">&lt;div</span> <span class="t-attr">style</span>=<span class="t-val">"display:flex;flex-direction:column;gap:12px"</span><span class="t-tag">&gt;</span>`,
-      '',
-      `  `+hlComment('&lt;!-- Apple Pay (solo Safari/iOS/macOS) --&gt;'),
-      `  `+hl('fbk-apple-pay', [
-        ['id','apayEl'],['style','width:100%'],
-        ['payment-id','{{ paymentID }}'],['payment-token','{{ paymentToken }}'],
-        ['button-style', astyle],['button-type', atype]
-      ]).replace(/\n/g,'\n  '),
-      '',
-      `  `+hlComment('&lt;!-- Form carta (sempre visibile) --&gt;'),
-      `  `+hl('fbk-card', [
-        ['id','cardEl'],['style','width:100%'],
-        ['payment-id','{{ paymentID }}'],['payment-token','{{ paymentToken }}'],
-        ['layout', layout],['optional-fields', opt]
-      ]).replace(/\n/g,'\n  '),
-      '',
-      `<span class="t-tag">&lt;/div&gt;</span>`
-    ].join('\n');
+  function flashError(btn, msg) {
+    if (!btn) return;
+    const orig = btn.textContent;
+    btn.textContent = msg;
+    btn.style.background = 'var(--red)';
+    setTimeout(() => { btn.textContent = orig; btn.style.background = ''; }, 2500);
   }
 
-  // Genera snippet Carte + Google Pay
-  function snippetCardGpay() {
-    const gstyle  = r('cgpay-gstyle')    || 'black';
-    const gtype   = r('cgpay-gtype')     || 'buy';
-    const layout  = r('cgpay-layout')    || 'horizontal';
-    const opt     = r('cgpay-optfields') || 'false';
-    return [
-      hlComment('&lt;!-- Carte + Google Pay: fbk-google-pay + fbk-card --&gt;'),
-      `<span class="t-tag">&lt;div</span> <span class="t-attr">style</span>=<span class="t-val">"display:flex;flex-direction:column;gap:12px"</span><span class="t-tag">&gt;</span>`,
-      '',
-      `  `+hlComment('&lt;!-- Google Pay (solo Chrome con GPay) --&gt;'),
-      `  `+hl('fbk-google-pay', [
-        ['id','gpayEl'],['style','width:100%'],
-        ['payment-id','{{ paymentID }}'],['payment-token','{{ paymentToken }}'],
-        ['button-style', gstyle],['button-type', gtype]
-      ]).replace(/\n/g,'\n  '),
-      '',
-      `  `+hlComment('&lt;!-- Form carta (sempre visibile) --&gt;'),
-      `  `+hl('fbk-card', [
-        ['id','cardEl'],['style','width:100%'],
-        ['payment-id','{{ paymentID }}'],['payment-token','{{ paymentToken }}'],
-        ['layout', layout],['optional-fields', opt]
-      ]).replace(/\n/g,'\n  '),
-      '',
-      `<span class="t-tag">&lt;/div&gt;</span>`
-    ].join('\n');
-  }
+  // ─────────────────────────────────────────────────────
+  // SLOT BUILDERS – HTML dei web component Fabrick
+  // Le combo usano PAYMENT_ID_1/2 e PAYMENT_TOKEN_1/2.
+  // ─────────────────────────────────────────────────────
+  const SLOT_BUILDERS = {
+    'slot-card': () =>
+      `<fbk-card id="wc-card" style="width:100%"
+        payment-id="${PAYMENT_ID}" payment-token="${PAYMENT_TOKEN}"
+        layout="${r('card-layout')||'horizontal'}"
+        optional-fields="${r('card-optfields')||'true'}">
+      </fbk-card>`,
 
-  // Genera snippet Google + Apple Pay combo
-  function snippetCombo() {
-    const astyle = r('combo-astyle') || 'black';
-    const atype  = r('combo-atype')  || 'buy';
-    const gstyle = r('combo-gstyle') || 'black';
-    const gtype  = r('combo-gtype')  || 'buy';
-    return [
-      hlComment('&lt;!-- Google Pay + Apple Pay affiancati --&gt;'),
-      `<span class="t-tag">&lt;div</span> <span class="t-attr">style</span>=<span class="t-val">"display:flex;flex-direction:column;gap:12px"</span><span class="t-tag">&gt;</span>`,
-      '',
-      `  `+hlComment('&lt;!-- Apple Pay --&gt;'),
-      `  `+hl('fbk-apple-pay', [
-        ['id','apayEl'],['style','width:100%'],
-        ['payment-id','{{ paymentID }}'],['payment-token','{{ paymentToken }}'],
-        ['button-style', astyle],['button-type', atype]
-      ]).replace(/\n/g,'\n  '),
-      '',
-      `  `+hlComment('&lt;!-- Google Pay --&gt;'),
-      `  `+hl('fbk-google-pay', [
-        ['id','gpayEl'],['style','width:100%'],
-        ['payment-id','{{ paymentID }}'],['payment-token','{{ paymentToken }}'],
-        ['button-style', gstyle],['button-type', gtype]
-      ]).replace(/\n/g,'\n  '),
-      '',
-      `<span class="t-tag">&lt;/div&gt;</span>`
-    ].join('\n');
-  }
+    'slot-gpay': () =>
+      `<fbk-google-pay id="wc-gpay" style="width:100%"
+        payment-id="${PAYMENT_ID}" payment-token="${PAYMENT_TOKEN}"
+        button-style="${r('gpay-style')||'black'}"
+        button-type="${r('gpay-type')||'buy'}">
+      </fbk-google-pay>`,
 
-  // Genera snippet fbk-card-wallet completo
-  function snippetFull() {
-    const layout  = r('full-layout')    || 'horizontal';
-    const opt     = r('full-optfields') || 'true';
-    const astyle  = r('full-astyle')    || 'black';
-    const atype   = r('full-atype')     || 'buy';
-    const gstyle  = r('full-gstyle')    || 'black';
-    const gtype   = r('full-gtype')     || 'buy';
-    return [
-      hlComment('&lt;!-- fbk-card-wallet: componente all-in-one\n     Mostra Apple Pay, Google Pay e form carta\n     in base al browser/device dell\'utente --&gt;'),
-      hl('fbk-card-wallet', [
-        ['id','fullWallet'],['style','width:100%'],
-        ['payment-id','{{ paymentID }}'],['payment-token','{{ paymentToken }}'],
-        ['layout', layout],['optional-fields', opt],
-        ['apple-button-style', astyle],['apple-button-type', atype],
-        ['google-button-style', gstyle],['google-button-type', gtype]
-      ]),
-      '',
-      `${hlKw('window')}[${hlStr("'fbk-elements'")}] = {\n  ${hlAttr('shop', `"${shopVal()}"`)},\n  ${hlAttr('callBackObj', '(e) => myCallbackFunction(e)')}\n};`
-    ].join('\n');
-  }
+    'slot-apay': () =>
+      `<fbk-apple-pay id="wc-apay" style="width:100%"
+        payment-id="${PAYMENT_ID}" payment-token="${PAYMENT_TOKEN}"
+        button-style="${r('apay-style')||'black'}"
+        button-type="${r('apay-type')||'buy'}">
+      </fbk-apple-pay>`,
 
-  // Mappa pannello → funzione snippet + id del pre
-  const SNIP_MAP = {
-    'card'      : { fn: snippetCard,     preId: 'snip-card'      },
-    'gpay'      : { fn: snippetGpay,     preId: 'snip-gpay'      },
-    'apay'      : { fn: snippetApay,     preId: 'snip-apay'      },
-    'card-apay' : { fn: snippetCardApay, preId: 'snip-card-apay' },
-    'card-gpay' : { fn: snippetCardGpay, preId: 'snip-card-gpay' },
-    'combo'     : { fn: snippetCombo,    preId: 'snip-combo'     },
-    'full'      : { fn: snippetFull,     preId: 'snip-full'      },
+    // COMBO: token diversi per ogni componente
+    'slot-card-apay': () =>
+      `<div style="display:flex;flex-direction:column;gap:12px;width:100%">
+        <fbk-apple-pay id="wc-capay-wallet" style="width:100%"
+          payment-id="${PAYMENT_ID_1}" payment-token="${PAYMENT_TOKEN_1}"
+          button-style="${r('capay-astyle')||'black'}"
+          button-type="${r('capay-atype')||'buy'}">
+        </fbk-apple-pay>
+        <fbk-card id="wc-capay-card" style="width:100%"
+          payment-id="${PAYMENT_ID_2}" payment-token="${PAYMENT_TOKEN_2}"
+          layout="${r('capay-layout')||'horizontal'}"
+          optional-fields="${r('capay-optfields')||'false'}">
+        </fbk-card>
+      </div>`,
+
+    'slot-card-gpay': () =>
+      `<div style="display:flex;flex-direction:column;gap:12px;width:100%">
+        <fbk-google-pay id="wc-cgpay-wallet" style="width:100%"
+          payment-id="${PAYMENT_ID_1}" payment-token="${PAYMENT_TOKEN_1}"
+          button-style="${r('cgpay-gstyle')||'black'}"
+          button-type="${r('cgpay-gtype')||'buy'}">
+        </fbk-google-pay>
+        <fbk-card id="wc-cgpay-card" style="width:100%"
+          payment-id="${PAYMENT_ID_2}" payment-token="${PAYMENT_TOKEN_2}"
+          layout="${r('cgpay-layout')||'horizontal'}"
+          optional-fields="${r('cgpay-optfields')||'false'}">
+        </fbk-card>
+      </div>`,
+
+    'slot-gpay-apay': () =>
+      `<div style="display:flex;flex-direction:column;gap:12px;width:100%">
+        <fbk-apple-pay id="wc-combo-apay" style="width:100%"
+          payment-id="${PAYMENT_ID_1}" payment-token="${PAYMENT_TOKEN_1}"
+          button-style="${r('combo-astyle')||'black'}"
+          button-type="${r('combo-atype')||'buy'}">
+        </fbk-apple-pay>
+        <fbk-google-pay id="wc-combo-gpay" style="width:100%"
+          payment-id="${PAYMENT_ID_2}" payment-token="${PAYMENT_TOKEN_2}"
+          button-style="${r('combo-gstyle')||'black'}"
+          button-type="${r('combo-gtype')||'buy'}">
+        </fbk-google-pay>
+      </div>`,
+
+    'slot-full': () =>
+      `<fbk-card-wallet id="wc-full" style="width:100%"
+        payment-id="${PAYMENT_ID}" payment-token="${PAYMENT_TOKEN}"
+        layout="${r('full-layout')||'horizontal'}"
+        optional-fields="${r('full-optfields')||'true'}"
+        apple-button-style="${r('full-astyle')||'black'}"
+        apple-button-type="${r('full-atype')||'buy'}"
+        google-button-style="${r('full-gstyle')||'black'}"
+        google-button-type="${r('full-gtype')||'buy'}">
+      </fbk-card-wallet>`,
   };
 
-  // Aggiorna lo snippet HTML + stile attivo delle pill
-  // Mappa pannello → id slot (per re-iniezione live al cambio opzione)
+  function injectComponents() {
+    // Solo il pannello corrente o tutti? Inietta tutti così il cambio tab non richiede re-apply.
+    // Per le combo inietta solo i combo slot (usano pid1/2), per i single solo i single slot.
+    if (isCombo()) {
+      const slotId = 'slot-' + CURRENT_PANEL;
+      const slot = document.getElementById(slotId);
+      if (slot && SLOT_BUILDERS[slotId]) slot.innerHTML = SLOT_BUILDERS[slotId]();
+    } else {
+      // inietta tutti i pannelli single con le stesse credenziali
+      ['slot-card','slot-gpay','slot-apay','slot-full'].forEach(id => {
+        const slot = document.getElementById(id);
+        if (slot && SLOT_BUILDERS[id]) slot.innerHTML = SLOT_BUILDERS[id]();
+      });
+    }
+  }
+
+  // ─────────────────────────────────────────────────────
+  // UPDATE OPTS – aggiorna snippet e active pill
+  // ─────────────────────────────────────────────────────
+  const SNIP_MAP = {
+    'card':      { fn: snippetCard,     preId: 'snip-card'      },
+    'gpay':      { fn: snippetGpay,     preId: 'snip-gpay'      },
+    'apay':      { fn: snippetApay,     preId: 'snip-apay'      },
+    'card-apay': { fn: snippetCardApay, preId: 'snip-card-apay' },
+    'card-gpay': { fn: snippetCardGpay, preId: 'snip-card-gpay' },
+    'gpay-apay': { fn: snippetCombo,    preId: 'snip-gpay-apay' },
+    'full':      { fn: snippetFull,     preId: 'snip-full'      },
+  };
+
   const PANEL_TO_SLOT = {
-    'card'      : 'slot-card',
-    'gpay'      : 'slot-gpay',
-    'apay'      : 'slot-apay',
-    'card-apay' : 'slot-card-apay',
-    'card-gpay' : 'slot-card-gpay',
-    'combo'     : 'slot-combo',
-    'full'      : 'slot-full',
+    'card': 'slot-card', 'gpay': 'slot-gpay', 'apay': 'slot-apay',
+    'card-apay': 'slot-card-apay', 'card-gpay': 'slot-card-gpay',
+    'gpay-apay': 'slot-gpay-apay', 'full': 'slot-full',
   };
 
   function updateOpts(panel) {
     const entry = SNIP_MAP[panel];
     if (!entry) return;
 
-    // 1. Aggiorna snippet di codice
+    // aggiorna snippet
     const pre = document.getElementById(entry.preId);
     if (pre) pre.innerHTML = entry.fn();
 
-    // 2. Aggiorna stile .active sulle pill
-    document.querySelectorAll(`#opts-${panel} .opts-pills label`).forEach(lbl => {
-      const inp = lbl.querySelector('input[type="radio"]');
-      lbl.classList.toggle('active', inp && inp.checked);
-    });
+    // active pill
+    const optsBar = document.getElementById('opts-' + panel);
+    if (optsBar) {
+      optsBar.querySelectorAll('.opts-pills label').forEach(lbl => {
+        const inp = lbl.querySelector('input[type="radio"]');
+        lbl.classList.toggle('active', !!(inp && inp.checked));
+      });
+    }
 
-    // 3. Re-inietta il componente live SE le credenziali sono già state applicate
-    if (PAYMENT_ID && PAYMENT_TOKEN) {
-      const slotId  = PANEL_TO_SLOT[panel];
-      const slot    = slotId && document.getElementById(slotId);
-      // Re-inietta solo se il placeholder non è più presente (= Applica già cliccato)
-      if (slot && !slot.querySelector('.slot-placeholder')) {
-        // Rilegge la scelta callback
-        const cbEnabled = document.querySelector('input[name="cbMode"]:checked')?.value === 'on';
-        window['fbk-elements'] = cbEnabled
-          ? { shop: SHOP_LOGIN, callBackObj: (ev) => myCallbackFunction(ev) }
-          : { shop: SHOP_LOGIN };
-
-        // Cerca il builder nell'ultima applyConfig (esposto globalmente)
-        if (window.__slotBuilders && window.__slotBuilders[slotId]) {
-          slot.innerHTML = window.__slotBuilders[slotId]();
-        }
-      }
+    // re-inject se credenziali già inserite e slot non è placeholder
+    const slotId = PANEL_TO_SLOT[panel];
+    const slot   = slotId && document.getElementById(slotId);
+    if (slot && !slot.querySelector('.slot-ph') && SLOT_BUILDERS[slotId]) {
+      window['fbk-elements'] = buildFbkConfig(cbEnabled());
+      slot.innerHTML = SLOT_BUILDERS[slotId]();
     }
   }
 
-  // Inizializza tutti gli snippet all'avvio
-  function initAllSnippets() {
-    Object.keys(SNIP_MAP).forEach(panel => updateOpts(panel));
+  // ─────────────────────────────────────────────────────
+  // SNIPPET GENERATORS – syntax highlighted HTML
+  // ─────────────────────────────────────────────────────
+  function kw(t)   { return `<span class="t-kw">${t}</span>`; }
+  function fn_(t)  { return `<span class="t-fn">${t}</span>`; }
+  function str(t)  { return `<span class="t-str">${t}</span>`; }
+  function tag(t)  { return `<span class="t-tag">${t}</span>`; }
+  function att(t)  { return `<span class="t-attr">${t}</span>`; }
+  function val(t)  { return `<span class="t-val">"${t}"</span>`; }
+  function cmt(t)  { return `<span class="t-comment">${t}</span>`; }
+  function pct(t)  { return `<span class="t-punct">${t}</span>`; }
+
+  function shopName() {
+    const s = document.getElementById('cfg-shop');
+    return (s && s.value.trim()) || 'GESPAY12345';
   }
 
-  // Aggiorna badge callback quando cambia il radio
-  document.querySelectorAll('input[name="cbMode"]').forEach(radio => {
-    radio.addEventListener('change', (e) => {
-      const isOn = e.target.value === 'on';
-      const badge = document.getElementById('cb-status-badge');
-      if (isOn) {
-        badge.textContent = 'callback ON';
-        badge.style.background = 'rgba(16,185,129,.15)';
-        badge.style.color = '#10b981';
-        badge.style.borderColor = 'rgba(16,185,129,.3)';
-      } else {
-        badge.textContent = 'callback OFF';
-        badge.style.background = 'rgba(239,68,68,.1)';
-        badge.style.color = '#ef4444';
-        badge.style.borderColor = 'rgba(239,68,68,.25)';
-      }
-    });
-  });
+  function fbkConfig(shop) {
+    return [
+      `${kw('window')}${pct('[')}${str("'fbk-elements'")}${pct(']')} ${pct('=')} ${pct('{')}`,
+      `  ${att('shop')}${pct(':')} ${str(`"${shop}"`)},  ${cmt('// ← tuo shopLogin')}`,
+      `  ${att('callBackObj')}${pct(':')} ${pct('(')}e${pct(')')} ${pct('=>')} ${fn_('myCallbackFunction')}${pct('(e)')}`,
+      `${pct('};')}`,
+    ].join('\n');
+  }
 
+  function snippetCard() {
+    const layout = r('card-layout') || 'horizontal';
+    const opt    = r('card-optfields') || 'true';
+    return [
+      cmt('&lt;!-- 1. Script Fabrick nel &lt;head&gt; --&gt;'),
+      `${tag('&lt;script')} ${att('src')}=${val('https://sandbox-web.axerve.com/orchestra/checkout/assets/elements/fbk-elements.js')}${tag('&gt;&lt;/script&gt;')}`,
+      '',
+      cmt('&lt;!-- 2. Custom element --&gt;'),
+      `${tag('&lt;fbk-card')}`,
+      `  ${att('id')}=${val('cardElement')} ${att('style')}=${val('width:100%')}`,
+      `  ${att('payment-id')}=${val('{{ paymentID }}')}`,
+      `  ${att('payment-token')}=${val('{{ paymentToken }}')}`,
+      `  ${att('layout')}=${val(layout)}`,
+      `  ${att('optional-fields')}=${val(opt)}${tag('&gt;')}`,
+      `${tag('&lt;/fbk-card&gt;')}`,
+      '',
+      cmt('// 3. Configura PRIMA di iniettare nel DOM'),
+      fbkConfig(shopName()),
+      '',
+      cmt('// 4. Imposta attributi da backend'),
+      `${kw('const')} el ${pct('=')} document${pct('.')}${fn_('getElementById')}${pct('(')}${str('"cardElement"')}${pct(');')}`,
+      `el${pct('.')}${fn_('setAttribute')}${pct('(')}${str('"payment-id"')}, paymentID${pct(');')}`,
+      `el${pct('.')}${fn_('setAttribute')}${pct('(')}${str('"payment-token"')}, paymentToken${pct(');')}`,
+    ].join('\n');
+  }
+
+  function snippetGpay() {
+    const style = r('gpay-style') || 'black';
+    const type  = r('gpay-type')  || 'buy';
+    return [
+      cmt(`&lt;!-- fbk-google-pay\n     button-style: black | white\n     button-type : plain | buy | pay --&gt;`),
+      `${tag('&lt;fbk-google-pay')}`,
+      `  ${att('id')}=${val('gpayElement')} ${att('style')}=${val('width:100%')}`,
+      `  ${att('payment-id')}=${val('{{ paymentID }}')}`,
+      `  ${att('payment-token')}=${val('{{ paymentToken }}')}`,
+      `  ${att('button-style')}=${val(style)}`,
+      `  ${att('button-type')}=${val(type)}${tag('&gt;')}`,
+      `${tag('&lt;/fbk-google-pay&gt;')}`,
+      '',
+      cmt('// ! Solo Chrome con Google Pay configurato'),
+      fbkConfig(shopName()),
+    ].join('\n');
+  }
+
+  function snippetApay() {
+    const style = r('apay-style') || 'black';
+    const type  = r('apay-type')  || 'buy';
+    return [
+      cmt(`&lt;!-- fbk-apple-pay\n     button-style: black | white | white-outline\n     button-type : plain | buy | pay --&gt;`),
+      `${tag('&lt;fbk-apple-pay')}`,
+      `  ${att('id')}=${val('apayElement')} ${att('style')}=${val('width:100%')}`,
+      `  ${att('payment-id')}=${val('{{ paymentID }}')}`,
+      `  ${att('payment-token')}=${val('{{ paymentToken }}')}`,
+      `  ${att('button-style')}=${val(style)}`,
+      `  ${att('button-type')}=${val(type)}${tag('&gt;')}`,
+      `${tag('&lt;/fbk-apple-pay&gt;')}`,
+      '',
+      cmt('// ! Solo Safari/iOS/macOS con Wallet Apple configurato'),
+      fbkConfig(shopName()),
+    ].join('\n');
+  }
+
+  function snippetCardApay() {
+    const as = r('capay-astyle')    || 'black';
+    const at = r('capay-atype')     || 'buy';
+    const lay = r('capay-layout')   || 'horizontal';
+    const opt = r('capay-optfields')|| 'false';
+    return [
+      cmt('&lt;!-- ATTENZIONE: sessioni separate → token diversi --&gt;'),
+      `${tag('&lt;div')} ${att('style')}=${val('display:flex;flex-direction:column;gap:12px')}${tag('&gt;')}`,
+      '',
+      `  ${cmt('&lt;!-- Apple Pay: paymentId/Token SESSIONE 1 --&gt;')}`,
+      `  ${tag('&lt;fbk-apple-pay')}`,
+      `    ${att('payment-id')}=${val('{{ paymentID_1 }}')}`,
+      `    ${att('payment-token')}=${val('{{ paymentToken_1 }}')}`,
+      `    ${att('button-style')}=${val(as)} ${att('button-type')}=${val(at)}${tag('&gt;')}`,
+      `  ${tag('&lt;/fbk-apple-pay&gt;')}`,
+      '',
+      `  ${cmt('&lt;!-- Carta: paymentId/Token SESSIONE 2 --&gt;')}`,
+      `  ${tag('&lt;fbk-card')}`,
+      `    ${att('payment-id')}=${val('{{ paymentID_2 }}')}`,
+      `    ${att('payment-token')}=${val('{{ paymentToken_2 }}')}`,
+      `    ${att('layout')}=${val(lay)} ${att('optional-fields')}=${val(opt)}${tag('&gt;')}`,
+      `  ${tag('&lt;/fbk-card&gt;')}`,
+      '',
+      `${tag('&lt;/div&gt;')}`,
+      '',
+      cmt('// window[\'fbk-elements\'] è CONDIVISO tra i due componenti.'),
+      cmt('// callBackObj riceverà una risposta per ciascuna sessione.'),
+      fbkConfig(shopName()),
+    ].join('\n');
+  }
+
+  function snippetCardGpay() {
+    const gs  = r('cgpay-gstyle')    || 'black';
+    const gt  = r('cgpay-gtype')     || 'buy';
+    const lay = r('cgpay-layout')    || 'horizontal';
+    const opt = r('cgpay-optfields') || 'false';
+    return [
+      cmt('&lt;!-- ATTENZIONE: sessioni separate → token diversi --&gt;'),
+      `${tag('&lt;div')} ${att('style')}=${val('display:flex;flex-direction:column;gap:12px')}${tag('&gt;')}`,
+      '',
+      `  ${cmt('&lt;!-- Google Pay: paymentId/Token SESSIONE 1 --&gt;')}`,
+      `  ${tag('&lt;fbk-google-pay')}`,
+      `    ${att('payment-id')}=${val('{{ paymentID_1 }}')}`,
+      `    ${att('payment-token')}=${val('{{ paymentToken_1 }}')}`,
+      `    ${att('button-style')}=${val(gs)} ${att('button-type')}=${val(gt)}${tag('&gt;')}`,
+      `  ${tag('&lt;/fbk-google-pay&gt;')}`,
+      '',
+      `  ${cmt('&lt;!-- Carta: paymentId/Token SESSIONE 2 --&gt;')}`,
+      `  ${tag('&lt;fbk-card')}`,
+      `    ${att('payment-id')}=${val('{{ paymentID_2 }}')}`,
+      `    ${att('payment-token')}=${val('{{ paymentToken_2 }}')}`,
+      `    ${att('layout')}=${val(lay)} ${att('optional-fields')}=${val(opt)}${tag('&gt;')}`,
+      `  ${tag('&lt;/fbk-card&gt;')}`,
+      '',
+      `${tag('&lt;/div&gt;')}`,
+      '',
+      fbkConfig(shopName()),
+    ].join('\n');
+  }
+
+  function snippetCombo() {
+    const as = r('combo-astyle') || 'black';
+    const at = r('combo-atype')  || 'buy';
+    const gs = r('combo-gstyle') || 'black';
+    const gt = r('combo-gtype')  || 'buy';
+    return [
+      cmt('&lt;!-- ATTENZIONE: sessioni separate → token diversi --&gt;'),
+      `${tag('&lt;div')} ${att('style')}=${val('display:flex;flex-direction:column;gap:12px')}${tag('&gt;')}`,
+      '',
+      `  ${cmt('&lt;!-- Apple Pay: SESSIONE 1 --&gt;')}`,
+      `  ${tag('&lt;fbk-apple-pay')}`,
+      `    ${att('payment-id')}=${val('{{ paymentID_1 }}')}`,
+      `    ${att('payment-token')}=${val('{{ paymentToken_1 }}')}`,
+      `    ${att('button-style')}=${val(as)} ${att('button-type')}=${val(at)}${tag('&gt;')}`,
+      `  ${tag('&lt;/fbk-apple-pay&gt;')}`,
+      '',
+      `  ${cmt('&lt;!-- Google Pay: SESSIONE 2 --&gt;')}`,
+      `  ${tag('&lt;fbk-google-pay')}`,
+      `    ${att('payment-id')}=${val('{{ paymentID_2 }}')}`,
+      `    ${att('payment-token')}=${val('{{ paymentToken_2 }}')}`,
+      `    ${att('button-style')}=${val(gs)} ${att('button-type')}=${val(gt)}${tag('&gt;')}`,
+      `  ${tag('&lt;/fbk-google-pay&gt;')}`,
+      '',
+      `${tag('&lt;/div&gt;')}`,
+      '',
+      fbkConfig(shopName()),
+    ].join('\n');
+  }
+
+  function snippetFull() {
+    const lay = r('full-layout')    || 'horizontal';
+    const opt = r('full-optfields') || 'true';
+    const as  = r('full-astyle')    || 'black';
+    const at  = r('full-atype')     || 'buy';
+    const gs  = r('full-gstyle')    || 'black';
+    const gt  = r('full-gtype')     || 'buy';
+    return [
+      cmt(`&lt;!-- fbk-card-wallet: componente all-in-one Fabrick\n     Apple Pay  → solo Safari/iOS/macOS\n     Google Pay → solo Chrome con GPay\n     Form carta → sempre visibile come fallback --&gt;`),
+      `${tag('&lt;fbk-card-wallet')}`,
+      `  ${att('id')}=${val('fullWallet')} ${att('style')}=${val('width:100%')}`,
+      `  ${att('payment-id')}=${val('{{ paymentID }}')}`,
+      `  ${att('payment-token')}=${val('{{ paymentToken }}')}`,
+      `  ${att('layout')}=${val(lay)}`,
+      `  ${att('optional-fields')}=${val(opt)}`,
+      `  ${att('apple-button-style')}=${val(as)} ${att('apple-button-type')}=${val(at)}`,
+      `  ${att('google-button-style')}=${val(gs)} ${att('google-button-type')}=${val(gt)}${tag('&gt;')}`,
+      `${tag('&lt;/fbk-card-wallet&gt;')}`,
+      '',
+      fbkConfig(shopName()),
+      '',
+      cmt('// Gestione risposta completa:'),
+      `${kw('function')} ${fn_('myCallbackFunction')}${pct('(response) {')}`,
+      `  ${kw('const')} ${pct('{')} flowStatus, redirect ${pct('}')} ${pct('=')} response${pct('.')}payload;`,
+      `  ${kw('if')} ${pct('(')}flowStatus ${pct('===')} ${str('"COMPLETED"')}${pct(')')} { window${pct('.')}location${pct('.')}href ${pct('=')} redirect${pct('.')}url; }`,
+      `  ${kw('else if')} ${pct('(')}flowStatus ${pct('===')} ${str('"FAILED"')}${pct(')')} { ${fn_('showError')}${pct('(response.error.description);')} }`,
+      `  ${kw('else if')} ${pct('(')}flowStatus ${pct('===')} ${str('"AUTHENTICATION_PENDING"')}${pct(')')} {`,
+      `    redirect${pct('.')}method ${pct('===')} ${str('"POST"')}`,
+      `      ${pct('?')} ${fn_('submitPostForm')}${pct('(redirect.url, redirect.data)')}`,
+      `      ${pct(':')} window${pct('.')}location${pct('.')}href ${pct('=')} redirect${pct('.')}url;`,
+      `  ${pct('}')}`,
+      `${pct('}')}`,
+    ].join('\n');
+  }
+
+  // ─────────────────────────────────────────────────────
+  // INIT
+  // ─────────────────────────────────────────────────────
   window.addEventListener('DOMContentLoaded', () => {
-    // Mostra il primo pannello di default (senza inizializzare i componenti)
-    document.getElementById('panel-card').classList.add('visible');
+    // Inizializza tutti gli snippet
+    Object.keys(SNIP_MAP).forEach(panel => {
+      const { fn, preId } = SNIP_MAP[panel];
+      const pre = document.getElementById(preId);
+      if (pre) pre.innerHTML = fn();
+    });
+
+    // Inizializza toggle UI
+    updateCbBadges();
   });
 </script>
 
