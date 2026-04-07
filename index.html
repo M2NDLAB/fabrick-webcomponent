@@ -1330,6 +1330,8 @@
     const note = $('opts-pending-note');
     if (note) note.style.display = 'none';
   }
+
+  function flashBtn(id, msg, ok=false) {
     const b = $(id); if(!b) return;
     b.textContent = msg;
     b.style.background = ok ? 'var(--green)' : 'var(--red)';
