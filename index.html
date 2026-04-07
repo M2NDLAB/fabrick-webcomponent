@@ -721,7 +721,8 @@
     </div>
     <div class="cfg-controls">
       <span class="cfg-lbl">Callback</span>
-      <span class="tip" data-tip="ON: Fabrick chiama la tua funzione JS con l'oggetto response. Nessun redirect automatico — gestisci tu.\nOFF: Fabrick redirecta automaticamente all'urlBack configurata sul portale Fabrick. Non ricevi l'oggetto response in JS.">i</span><div class="sw-track"></div><span class="sw-val" id="o-cb-lbl">ON</span></label>
+      <span class="tip" data-tip="ON: Fabrick chiama la tua funzione JS con l'oggetto response. Nessun redirect automatico — gestisci tu.\nOFF: Fabrick redirecta automaticamente all'urlBack configurata sul portale Fabrick. Non ricevi l'oggetto response in JS.">i</span>
+      <label class="sw"><input type="checkbox" id="o-cb" checked><div class="sw-track"></div><span class="sw-val" id="o-cb-lbl">ON</span></label>
       <div class="cfg-ml">
         <button class="btn btn-primary" id="o-apply" onclick="applyConfig()">Applica</button>
       </div>
@@ -1407,6 +1408,9 @@
     if (!cbOn) LOG.line('→ Senza callback: il response object NON arriverà in JS. Gestisci l\'esito server-side via payment/detail.', 'warn');
     LOG.end();
 
+    // ── Verifica comportamentale (non bloccante) ────────
+    VERIFY.mountOrder(cbOn, shop);
+
     if (!isCombo || STRAT === 'both') {
       injectSlot();
     } else {
@@ -1417,6 +1421,15 @@
     APPLIED = true;
     clearPendingBadge();
     updateCbBadge();
+
+    // ── Verifica combo sessions se applicabile ──────────
+    if (isCombo) {
+      const p1 = SESS_MODE === 'single' ? DS.pid : D.pid1;
+      const t1 = SESS_MODE === 'single' ? DS.tok : D.tok1;
+      const p2 = SESS_MODE === 'single' ? DS.pid : D.pid2;
+      const t2 = SESS_MODE === 'single' ? DS.tok : D.tok2;
+      VERIFY.comboSessions(COMP, SESS_MODE, p1, t1, p2, t2);
+    }
     $('snip').innerHTML = buildSnip();
     flashBtn(isCombo ? 'd-apply' : 'o-apply', 'Applicato', true);
   }
@@ -1430,7 +1443,24 @@
     syncAllPills();
     // NON re-inietta il componente per non cancellare i dati inseriti.
     // Aggiorna solo lo snippet. L'utente clicca Applica per applicare le nuove opzioni.
-    if (APPLIED) showPendingBadge();
+    if (APPLIED) {
+      showPendingBadge();
+      // Verifica attributi omessi
+      const allNames = {
+        card:      ['o-card-layout','o-card-opt'],
+        apay:      ['o-apay-style','o-apay-type'],
+        gpay:      ['o-gpay-style','o-gpay-type'],
+        full:      ['o-full-layout','o-full-opt','o-full-astyle','o-full-atype','o-full-gstyle','o-full-gtype'],
+        'card-apay':['u-capay-as','u-capay-at','u-capay-lay','u-capay-opt'],
+        'card-gpay':['u-cgpay-gs','u-cgpay-gt','u-cgpay-lay','u-cgpay-opt'],
+        'gpay-apay':['u-ga-as','u-ga-at','u-ga-gs','u-ga-gt'],
+      };
+      const omitted = (allNames[COMP]||[]).filter(n => {
+        const el = document.querySelector(`input[name="${n}"]:checked`);
+        return el && el.value === '__omit__';
+      });
+      if (omitted.length) VERIFY.omittedAttributes(COMP, omitted);
+    }
   }
 
   // ─── HTML BUILDERS ───────────────────────────────────
@@ -1608,6 +1638,8 @@
       key:     'color:#86EFAC;font-weight:600',
       val:     'color:#FDE68A',
       tag:     'background:#1E2F4A;color:#60A5FA;padding:1px 6px;border-radius:3px;font-size:10px',
+      check:   'color:#10B981;font-size:11px',
+      fail:    'color:#EF4444;font-size:11px',
     },
     group(title, color='title') {
       console.groupCollapsed(`%c${this._prefix} ${title}`, this._style[color]);
@@ -1624,6 +1656,15 @@
     },
     raw(label, obj) {
       console.log(`%c  ${label}:`, this._style.muted, obj);
+    },
+    check(label, pass, expected='', actual='') {
+      const s = pass ? 'check' : 'fail';
+      const icon = pass ? '✓' : '✗';
+      console.log(`%c  ${icon} ${label}`, this._style[s]);
+      if (!pass && (expected || actual)) {
+        console.log(`%c    atteso:  ${expected}`, this._style.muted);
+        console.log(`%c    trovato: ${actual}`, this._style.fail);
+      }
     },
     diagnose(code, message) {
       const known = {
@@ -1645,8 +1686,174 @@
     }
   };
 
-  // ─── CALLBACK ────────────────────────────────────────
-  let _pendingRedir = null;
+  // ─── VERIFY – log di verifica comportamentali (non bloccanti) ────────
+  // Stampano aspettativa vs realtà per ogni scenario chiave.
+  // Copiare il gruppo dalla console in caso di bug.
+  const VERIFY = {
+
+    // Verifica che window['fbk-elements'] sia stato configurato correttamente
+    // prima del mount del componente.
+    mountOrder(cbOn, shop) {
+      LOG.group('VERIFY · Mount order & configurazione', 'title');
+      LOG.check(
+        "window['fbk-elements'] settato prima di innerHTML",
+        true, // se siamo qui, è già stato settato — il check è per documentazione
+        'window["fbk-elements"] = {...} PRIMA di slot.innerHTML',
+        'OK — garantito dal flusso applyConfig()'
+      );
+      LOG.check(
+        'shop non vuoto',
+        !!shop,
+        'stringa non vuota',
+        shop || '(vuoto)'
+      );
+      LOG.check(
+        'callBackObj: comportamento atteso',
+        true,
+        cbOn
+          ? 'Fabrick chiamerà onCb(response) — NESSUN redirect automatico'
+          : 'Fabrick farà redirect automatico → questa console non vedrà nulla dopo il pagamento',
+        cbOn ? '✓ callback presente' : '⚠ callback assente'
+      );
+      if (!cbOn) {
+        LOG.line('→ Senza callback: dopo il pagamento il browser cambierà URL.', 'warn');
+        LOG.line('  Riceverai: ?a=SHOP&Status=OK&paymentID=xxx&paymentToken=xxx', 'muted');
+        LOG.line('  Poi lato server chiama GET payment/detail/{paymentID} con header PaymentToken.', 'muted');
+      }
+      LOG.end();
+    },
+
+    // Verifica la struttura della response ricevuta dalla callback.
+    // Confronta con la struttura attesa dalla doc Fabrick.
+    responseStructure(response) {
+      LOG.group('VERIFY · Struttura response callback', 'title');
+      LOG.sep();
+      const p = response?.payload;
+      const e = response?.error;
+      LOG.check('response.error esiste',     'error' in (response||{}),       'campo "error"',   Object.keys(response||{}).join(', '));
+      LOG.check('response.payload esiste',   'payload' in (response||{}),     'campo "payload"', Object.keys(response||{}).join(', '));
+      LOG.check('payload.flowStatus esiste', !!p?.flowStatus,                 'string',          String(p?.flowStatus));
+      LOG.check('flowStatus è valore noto',
+        ['COMPLETED','FAILED','AUTHENTICATION_PENDING','EXPIRED'].includes(p?.flowStatus),
+        'COMPLETED|FAILED|AUTHENTICATION_PENDING|EXPIRED',
+        p?.flowStatus || '(assente)'
+      );
+      LOG.check('payload.redirect esiste', 'redirect' in (p||{}),  'campo "redirect"', p ? Object.keys(p).join(', ') : '(no payload)');
+      if (p?.redirect) {
+        LOG.check('redirect.method è GET o POST',
+          ['GET','POST'].includes(p.redirect?.method),
+          'GET|POST',
+          p.redirect?.method || '(assente)'
+        );
+        LOG.check('redirect.url non vuota', !!p.redirect?.url, 'URL string', p.redirect?.url || '(vuota)');
+      }
+      LOG.sep();
+
+      // Verifica comportamento atteso per flowStatus
+      const status = p?.flowStatus;
+      LOG.line('COMPORTAMENTO ATTESO per ' + (status || 'UNKNOWN'), 'title');
+      if (status === 'COMPLETED') {
+        LOG.check('Redirect verso thank-you page', !!p?.redirect?.url,
+          'redirect.url popolata', p?.redirect?.url || '(assente)');
+        LOG.line('→ In produzione: chiama payment/detail per conferma, poi redirect.', 'ok');
+        LOG.line('→ Non dare per scontato il COMPLETED: verifica sempre payment/detail.', 'warn');
+      } else if (status === 'FAILED') {
+        LOG.line('→ Transazione rifiutata. error.code e error.description contengono il motivo.', 'err');
+        LOG.check('error.code presente',       !!e?.code,        'string', e?.code||'(assente)');
+        LOG.check('error.description presente', !!e?.description, 'string', e?.description||'(assente)');
+        LOG.line('→ In produzione: mostra messaggio di errore, NON redirectare automaticamente.', 'warn');
+      } else if (status === 'AUTHENTICATION_PENDING') {
+        LOG.line('→ 3DS richiesto. Il redirect è OBBLIGATORIO per completare l\'autenticazione.', 'warn');
+        LOG.check('redirect.method è POST (tipico per 3DS)',
+          p?.redirect?.method === 'POST',
+          'POST', p?.redirect?.method || '(assente)');
+        LOG.line('→ Dopo il 3DS il buyer torna sul tuo sito e Fabrick richiama la callback.', 'info');
+      } else if (status === 'EXPIRED') {
+        LOG.line('→ Sessione scaduta per timeout. Non è possibile procedere.', 'err');
+        LOG.line('→ In produzione: mostra messaggio e permetti di riavviare il checkout.', 'warn');
+      }
+      LOG.raw('response completo', response);
+      LOG.end();
+    },
+
+    // Verifica la configurazione combo (sessioni separate).
+    comboSessions(comp, sessMode, pid1, tok1, pid2, tok2) {
+      LOG.group('VERIFY · Combo — configurazione sessioni', 'warn');
+      LOG.kv('componente', comp);
+      LOG.kv('sessMode',   sessMode);
+      LOG.sep();
+      if (sessMode === 'single') {
+        LOG.check('Sessione SINGOLA (⚠ conflitto atteso)',
+          pid1 === pid2 && tok1 === tok2,
+          'pid1 === pid2 e tok1 === tok2',
+          pid1 === pid2 ? 'sì (corretto per test conflitto)' : 'no (diverse, inatteso)'
+        );
+        LOG.line('→ Entrambi i componenti useranno la stessa sessione Fabrick.', 'warn');
+        LOG.line('→ Comportamento atteso: doppio loading, possibile errore "unhandled".', 'warn');
+      } else {
+        LOG.check('pid1 ≠ pid2 (sessioni indipendenti)', pid1 !== pid2, 'valori diversi',
+          pid1 === pid2 ? '⚠ UGUALI — conflitto garantito!' : 'OK — diversi');
+        LOG.check('tok1 ≠ tok2', tok1 !== tok2, 'valori diversi',
+          tok1 === tok2 ? '⚠ UGUALI — stesso token per entrambi!' : 'OK — diversi');
+        LOG.line('→ Due sessioni separate. Se l\'utente completa una, l\'altra rimane PENDING.', 'info');
+        LOG.line('→ Devi gestire tu la mutua esclusione (disabilita uno dopo che l\'altro completa).', 'warn');
+      }
+      LOG.end();
+    },
+
+    // Verifica che gli attributi omessi producano il comportamento Fabrick di default.
+    omittedAttributes(comp, omitted) {
+      if (!omitted.length) return;
+      LOG.group(`VERIFY · Attributi omessi (test default Fabrick) — ${comp}`, 'warn');
+      omitted.forEach(a => {
+        LOG.line(`${a}: omesso → Fabrick userà il suo valore di default`, 'warn');
+      });
+      LOG.line('→ Osserva il componente nel preview per verificare il comportamento Fabrick.', 'info');
+      LOG.line('→ Se il componente non si comporta come atteso, l\'attributo potrebbe essere obbligatorio.', 'muted');
+      LOG.end();
+    },
+
+    // Stampa il digest completo dello stato della demo (utile da copiare in caso di bug).
+    stateSnapshot() {
+      LOG.group('VERIFY · Snapshot stato demo', 'title');
+      LOG.kv('COMP',       COMP);
+      LOG.kv('STRAT',      STRAT);
+      LOG.kv('SESS_MODE',  SESS_MODE);
+      LOG.kv('APPLIED',    String(APPLIED));
+      LOG.sep();
+      LOG.kv('O.shop',  O.shop  || '(vuoto)');
+      LOG.kv('O.pid',   O.pid   || '(vuoto)');
+      LOG.kv('O.token', O.token ? O.token.slice(0,12)+'…' : '(vuoto)');
+      LOG.sep();
+      LOG.kv('D.shop',   D.shop  || '(vuoto)');
+      LOG.kv('D.pid1',   D.pid1  || '(vuoto)');
+      LOG.kv('D.tok1',   D.tok1  ? D.tok1.slice(0,12)+'…'  : '(vuoto)');
+      LOG.kv('D.pid2',   D.pid2  || '(vuoto)');
+      LOG.kv('D.tok2',   D.tok2  ? D.tok2.slice(0,12)+'…'  : '(vuoto)');
+      LOG.kv('D.shop2',  D.shop2 || '(ereditato da D.shop)');
+      LOG.sep();
+      LOG.kv('DS.shop',  DS.shop  || '(vuoto)');
+      LOG.kv('DS.pid',   DS.pid   || '(vuoto)');
+      LOG.kv('DS.tok',   DS.tok   ? DS.tok.slice(0,12)+'…'  : '(vuoto)');
+      LOG.sep();
+      LOG.kv("window['fbk-elements']",
+        JSON.stringify({ shop: window['fbk-elements']?.shop, callBackObj: window['fbk-elements']?.callBackObj ? '[Function]' : undefined })
+      );
+      LOG.end();
+    },
+  };
+
+  // Banner di avvio — stampato una sola volta al caricamento della pagina
+  (function startupBanner() {
+    console.log('%c╔══════════════════════════════════════════════════════╗', 'color:#2563EB');
+    console.log('%c  Fabrick Web Components Demo — Debug Console', 'color:#60A5FA;font-weight:700;font-size:13px');
+    console.log('%c  Tutti i log sono raggruppati e collassabili.', 'color:#8FA3C8;font-size:11px');
+    console.log('%c  Incolla un gruppo espanso per ottenere supporto.', 'color:#8FA3C8;font-size:11px');
+    console.log('%c╚══════════════════════════════════════════════════════╝', 'color:#2563EB');
+    console.log('%c  Comandi utili:', 'color:#4A6080');
+    console.log('%c  VERIFY.stateSnapshot()  → stampa lo stato completo della demo', 'color:#4A6080');
+    console.log('%c  SDK sandbox: sandbox-web.axerve.com/orchestra/checkout/assets/elements/fbk-elements.js', 'color:#3D5275;font-size:10px');
+  })();
 
   function onCb(response) {
     const status = response?.payload?.flowStatus ?? 'UNKNOWN';
@@ -1660,6 +1867,9 @@
       AUTHENTICATION_PENDING: 'warn', UNKNOWN: 'warn'
     };
     LOG.group(`callBackObj ricevuta — ${status}`, statusStyle[status] || 'warn');
+
+    // Verifica struttura (non bloccante)
+    VERIFY.responseStructure(response);
     LOG.sep();
 
     LOG.line('FLOW STATUS', 'title');
