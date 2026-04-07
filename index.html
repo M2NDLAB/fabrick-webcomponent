@@ -430,6 +430,111 @@
     .footer-link:hover { border-color: var(--accent-l); color: var(--accent-l); transform: translateY(-1px); }
     .footer-link.status:hover { border-color: var(--green); color: var(--green); }
 
+    /* ──────────── TOOLTIP ──────────── */
+    .tip {
+      position: relative;
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 15px; height: 15px;
+      border-radius: 50%;
+      border: 1px solid var(--border2);
+      background: var(--surf2);
+      color: var(--muted);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px; font-weight: 700;
+      cursor: default;
+      flex-shrink: 0;
+      transition: border-color .15s, color .15s;
+      vertical-align: middle;
+    }
+    .tip:hover { border-color: var(--accent-l); color: var(--accent-l); }
+    .tip::after {
+      content: attr(data-tip);
+      position: absolute;
+      left: 50%; top: calc(100% + 8px);
+      transform: translateX(-50%);
+      background: var(--surf3);
+      border: 1px solid var(--border2);
+      border-radius: var(--rsm);
+      padding: 9px 13px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 12px; font-weight: 400;
+      line-height: 1.55;
+      color: var(--text2);
+      white-space: pre-line;        /* rispetta \n nel testo */
+      max-width: 300px;
+      min-width: 180px;
+      text-align: left;
+      pointer-events: none;
+      opacity: 0;
+      visibility: hidden;
+      z-index: 100;
+      box-shadow: 0 8px 24px rgba(0,0,0,.4);
+      transition: opacity .15s, visibility .15s;
+    }
+    /* freccia in alto */
+    .tip::before {
+      content: '';
+      position: absolute;
+      left: 50%; top: calc(100% + 3px);
+      transform: translateX(-50%);
+      border: 5px solid transparent;
+      border-bottom-color: var(--border2);
+      pointer-events: none;
+      opacity: 0; visibility: hidden;
+      transition: opacity .15s, visibility .15s;
+      z-index: 101;
+    }
+    .tip:hover::after, .tip:hover::before { opacity: 1; visibility: visible; }
+    /* versione che si apre in alto (se il tooltip è in basso alla pagina) */
+    .tip.up::after {
+      top: auto; bottom: calc(100% + 8px);
+    }
+    .tip.up::before {
+      top: auto; bottom: calc(100% + 3px);
+      border-bottom-color: transparent;
+      border-top-color: var(--border2);
+    }
+
+    
+    /* ── OMIT PILL ── */
+    .op label.omit-lbl {
+      color: var(--muted); border-style: dashed;
+      border-color: var(--border);
+    }
+    .op label.omit-lbl.active {
+      background: rgba(239,68,68,.08);
+      border-color: rgba(239,68,68,.35);
+      color: var(--red);
+    }
+    .op label.omit-lbl:hover:not(.active) { border-color: var(--border2); color: var(--text2); }
+
+    /* ── COMBO SESSION MODE ── */
+    .sess-mode {
+      display: flex; gap: 6px; margin-bottom: 16px;
+    }
+    .sm-btn {
+      flex: 1; display: flex; align-items: center; gap: 8px;
+      padding: 10px 14px; border-radius: var(--rsm);
+      border: 1px solid var(--border); background: var(--surf2);
+      cursor: pointer; transition: all .15s; user-select: none;
+    }
+    .sm-btn input[type=radio] { display: none; }
+    .sm-btn .sm-ico {
+      width: 28px; height: 28px; border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; flex-shrink: 0;
+      background: var(--surf3); border: 1px solid var(--border2);
+      transition: all .15s;
+    }
+    .sm-btn .sm-txt strong { font-size: 12px; color: var(--text2); display: block; font-weight: 700; }
+    .sm-btn .sm-txt span   { font-size: 10px; color: var(--muted); font-family: 'JetBrains Mono', monospace; }
+    .sm-btn.active {
+      border-color: var(--accent);
+      background: var(--surf3);
+    }
+    .sm-btn.active .sm-ico { background: var(--accent-g); border-color: rgba(37,99,235,.4); }
+    .sm-btn.active .sm-txt strong { color: var(--text); }
+
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.2} }
     @keyframes fade { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
     .fadein { animation: fade .25s ease; }
@@ -464,6 +569,7 @@
   <div class="step-hd" style="margin-top:8px">
     <span class="step-num">1</span>
     <h3>Seleziona componente</h3>
+    <span class="tip" data-tip="I componenti ufficiali Fabrick (riga superiore) usano una sola sessione di pagamento. Le combinazioni non ufficiali (riga inferiore) affiancano due componenti separati — richiedono token diversi per evitare conflitti di sessione.">i</span>
   </div>
 
   <div class="comp-grid">
@@ -513,7 +619,9 @@
 
   <!-- divider -->
   <div class="grid-divider">
-    <span>combinazioni non ufficiali</span>
+    <span>combinazioni non ufficiali
+      <span class="tip" data-tip="Non sono componenti Fabrick nativi ma due componenti affiancati dal tuo codice. Ogni componente ha la propria sessione di pagamento → servono due paymentToken distinti. Se l'utente ne completa uno, l'altro rimane in stato pending: devi gestire tu la mutua esclusione lato tuo.">i</span>
+    </span>
   </div>
 
   <div class="comp-grid" style="grid-template-columns:repeat(3,1fr)">
@@ -592,6 +700,7 @@
   <div class="step-hd">
     <span class="step-num">2</span>
     <h3>Configurazione</h3>
+    <span class="tip" data-tip="Shop Login: identificativo del tuo negozio su Fabrick (es. GESPAY12345).\nPayment ID + Payment Token: ottenuti dalla chiamata POST payment/create sul tuo backend. Sono monouso e scadono in ~15 min in sandbox.\nNon usare le credenziali di default: sono placeholder, non funzionano.">i</span>
   </div>
 
   <!-- CONFIG SINGOLA (componenti ufficiali) -->
@@ -612,7 +721,7 @@
     </div>
     <div class="cfg-controls">
       <span class="cfg-lbl">Callback</span>
-      <label class="sw"><input type="checkbox" id="o-cb" checked><div class="sw-track"></div><span class="sw-val" id="o-cb-lbl">ON</span></label>
+      <span class="tip" data-tip="ON: Fabrick chiama la tua funzione JS con l'oggetto response. Nessun redirect automatico — gestisci tu.\nOFF: Fabrick redirecta automaticamente all'urlBack configurata sul portale Fabrick. Non ricevi l'oggetto response in JS.">i</span><div class="sw-track"></div><span class="sw-val" id="o-cb-lbl">ON</span></label>
       <div class="cfg-ml">
         <button class="btn btn-primary" id="o-apply" onclick="applyConfig()">Applica</button>
       </div>
@@ -621,7 +730,57 @@
 
   <!-- CONFIG DOPPIA (combo) -->
   <div class="config-box dual" id="cfg-dual" style="display:none">
-    <div class="dual-block">
+
+    <!-- Modalità sessione -->
+    <div style="margin-bottom:16px">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;display:flex;align-items:center;gap:6px">
+        Modalità sessione
+        <span class="tip" data-tip="Singola: stesso Shop/PaymentID/Token per entrambi i componenti. ⚠ Causa conflitto — entrambi si avviano sulla stessa sessione simultaneamente. Utile solo per verificare il comportamento Fabrick in questo scenario.\nSeparata: token diversi per ogni componente. Sessioni indipendenti — devi gestire tu la mutua esclusione.">i</span>
+      </div>
+      <div class="sess-mode">
+        <label class="sm-btn" id="sm-single-btn" onclick="setSessionMode('single')">
+          <input type="radio" name="d-sess-mode" value="single"/>
+          <div class="sm-ico">1×</div>
+          <div class="sm-txt">
+            <strong>Sessione singola</strong>
+            <span>stesso pid/token per entrambi ⚠</span>
+          </div>
+        </label>
+        <label class="sm-btn active" id="sm-dual-btn" onclick="setSessionMode('dual')">
+          <input type="radio" name="d-sess-mode" value="dual" checked/>
+          <div class="sm-ico">2×</div>
+          <div class="sm-txt">
+            <strong>Sessioni separate</strong>
+            <span>token distinti (consigliato)</span>
+          </div>
+        </label>
+      </div>
+    </div>
+
+    <!-- Row singola (visibile in modalità single) -->
+    <div id="d-single-row" style="display:none">
+      <div class="tok-row tok1" style="border-color:var(--border)">
+        <span class="tok-lbl" style="color:var(--accent-l)" id="tok-single-lbl">ENTRAMBI I COMPONENTI · stessa sessione ⚠</span>
+        <div class="cfg-field">
+          <label>Shop Login</label>
+          <input id="d-shop-s" type="text" placeholder="GESPAY12345" value="GESPAY12345"/>
+        </div>
+        <div class="cfg-field">
+          <label>Payment ID</label>
+          <input id="d-pid-s" type="text" placeholder="paymentId (condiviso)"/>
+        </div>
+        <div class="cfg-field">
+          <label>Payment Token</label>
+          <input id="d-token-s" type="text" class="wide" placeholder="token (condiviso)"/>
+        </div>
+      </div>
+      <div style="margin-top:10px;padding:10px 14px;background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.2);border-radius:var(--rsm);font-size:11.5px;color:#FCA5A5;line-height:1.55">
+        ⚠ Stessa sessione per entrambi i componenti: entrambi si avvieranno in parallelo sulla stessa sessione Fabrick → conflitto, doppio loading, comportamento imprevedibile. Usa solo per testare questo scenario.
+      </div>
+    </div>
+
+    <!-- Rows doppie (visibile in modalità dual) -->
+    <div id="d-dual-rows" class="dual-block">
       <div class="tok-row tok1">
         <span class="tok-lbl" id="tok1-lbl">SESSIONE 1 · fbk-apple-pay</span>
         <div class="cfg-field">
@@ -640,7 +799,9 @@
       <div class="tok-row tok2">
         <span class="tok-lbl" id="tok2-lbl" style="color:var(--yellow)">SESSIONE 2 · fbk-card</span>
         <div class="cfg-field">
-          <label>Shop Login <span style="color:var(--muted);font-size:9px">(vuoto = usa sessione 1)</span></label>
+          <label>Shop Login <span style="color:var(--muted);font-size:9px">(vuoto = usa sessione 1)</span>
+            <span class="tip up" data-tip="Se vuoto, viene usato lo stesso Shop Login della sessione 1. Utile se entrambi i componenti appartengono allo stesso merchant. Inserisci un valore diverso solo se la sessione 2 è di un merchant differente.">i</span>
+          </label>
           <input id="d-shop2" type="text" placeholder="default: shop sessione 1"/>
         </div>
         <div class="cfg-field">
@@ -653,8 +814,10 @@
         </div>
       </div>
     </div>
+
     <div class="cfg-controls">
       <span class="cfg-lbl">Callback</span>
+      <span class="tip up" data-tip="ON: Fabrick chiama la tua funzione JS con l'oggetto response. Nessun redirect automatico — gestisci tu.\nOFF: Fabrick redirecta automaticamente all'urlBack configurata sul portale Fabrick. Non ricevi l'oggetto response in JS.">i</span>
       <label class="sw"><input type="checkbox" id="d-cb" checked><div class="sw-track"></div><span class="sw-val" id="d-cb-lbl">ON</span></label>
       <div class="cfg-ml">
         <button class="btn btn-primary" id="d-apply" onclick="applyConfig()">Applica</button>
@@ -666,16 +829,19 @@
   <div class="step-hd">
     <span class="step-num">3</span>
     <h3>Opzioni componente</h3>
+    <span class="tip" data-tip="Le opzioni modificano solo lo snippet di codice. Il componente live non si aggiorna automaticamente per evitare di cancellare i dati già inseriti — clicca Applica per applicare le nuove opzioni al componente.">i</span>
   </div>
 
   <div id="opts-card" class="opts-bar">
     <div class="og"><span class="og-lbl">layout</span><div class="op">
       <label class="active"><input type="radio" name="o-card-layout" value="horizontal" checked onchange="liveReload()"><span>horizontal</span></label>
       <label><input type="radio" name="o-card-layout" value="vertical" onchange="liveReload()"><span>vertical</span></label>
+          <label class="omit-lbl"><input type="radio" name="o-card-layout" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
     </div></div>
-    <div class="og"><span class="og-lbl">optional-fields (nome/cognome 3DS)</span><div class="op">
+    <div class="og"><span class="og-lbl">optional-fields (nome/cognome 3DS) <span class="tip" data-tip="true: aggiunge i campi Nome e Cognome al form carta. Utile per le transazioni 3DS che richiedono i dati del titolare per l'autenticazione. false: form minimo (solo numero carta, scadenza, CVV).">i</span></span><div class="op">
       <label><input type="radio" name="o-card-opt" value="false" onchange="liveReload()"><span>false</span></label>
       <label class="active"><input type="radio" name="o-card-opt" value="true" checked onchange="liveReload()"><span>true</span></label>
+          <label class="omit-lbl"><input type="radio" name="o-card-opt" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
     </div></div>
   </div>
 
@@ -684,11 +850,13 @@
       <label class="active"><input type="radio" name="o-apay-style" value="black" checked onchange="liveReload()"><span>black</span></label>
       <label><input type="radio" name="o-apay-style" value="white" onchange="liveReload()"><span>white</span></label>
       <label><input type="radio" name="o-apay-style" value="white-outline" onchange="liveReload()"><span>white-outline</span></label>
+          <label class="omit-lbl"><input type="radio" name="o-apay-style" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
     </div></div>
     <div class="og"><span class="og-lbl">button-type</span><div class="op">
       <label><input type="radio" name="o-apay-type" value="plain" onchange="liveReload()"><span>plain</span></label>
       <label class="active"><input type="radio" name="o-apay-type" value="buy" checked onchange="liveReload()"><span>buy</span></label>
       <label><input type="radio" name="o-apay-type" value="pay" onchange="liveReload()"><span>pay</span></label>
+          <label class="omit-lbl"><input type="radio" name="o-apay-type" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
     </div></div>
   </div>
 
@@ -696,11 +864,13 @@
     <div class="og"><span class="og-lbl">button-style</span><div class="op">
       <label class="active"><input type="radio" name="o-gpay-style" value="black" checked onchange="liveReload()"><span>black</span></label>
       <label><input type="radio" name="o-gpay-style" value="white" onchange="liveReload()"><span>white</span></label>
+          <label class="omit-lbl"><input type="radio" name="o-gpay-style" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
     </div></div>
     <div class="og"><span class="og-lbl">button-type</span><div class="op">
       <label><input type="radio" name="o-gpay-type" value="plain" onchange="liveReload()"><span>plain</span></label>
       <label class="active"><input type="radio" name="o-gpay-type" value="buy" checked onchange="liveReload()"><span>buy</span></label>
       <label><input type="radio" name="o-gpay-type" value="pay" onchange="liveReload()"><span>pay</span></label>
+          <label class="omit-lbl"><input type="radio" name="o-gpay-type" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
     </div></div>
   </div>
 
@@ -708,29 +878,40 @@
     <div class="og"><span class="og-lbl">layout</span><div class="op">
       <label class="active"><input type="radio" name="o-full-layout" value="horizontal" checked onchange="liveReload()"><span>horizontal</span></label>
       <label><input type="radio" name="o-full-layout" value="vertical" onchange="liveReload()"><span>vertical</span></label>
+          <label class="omit-lbl"><input type="radio" name="o-full-layout" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
     </div></div>
-    <div class="og"><span class="og-lbl">optional-fields</span><div class="op">
-      <label><input type="radio" name="o-full-opt" value="false" onchange="liveReload()"><span>false</span></label>
-      <label class="active"><input type="radio" name="o-full-opt" value="true" checked onchange="liveReload()"><span>true</span></label>
-    </div></div>
+    <div class="og">
+      <span class="og-lbl">optional-fields
+        <span style="font-size:9px;color:var(--orange);margin-left:4px" title="fbk-card-wallet potrebbe non rispettare questo attributo. Se i campi compaiono sempre, è un comportamento gestito dal componente Fabrick.">⚠ vedi nota</span>
+      </span>
+      <div class="op">
+        <label><input type="radio" name="o-full-opt" value="false" onchange="liveReload()"><span>false</span></label>
+        <label class="active"><input type="radio" name="o-full-opt" value="true" checked onchange="liveReload()"><span>true</span></label>
+          <label class="omit-lbl"><input type="radio" name="o-full-opt" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
+      </div>
+    </div>
     <div class="og"><span class="og-lbl">apple · style</span><div class="op">
       <label class="active"><input type="radio" name="o-full-astyle" value="black" checked onchange="liveReload()"><span>black</span></label>
       <label><input type="radio" name="o-full-astyle" value="white" onchange="liveReload()"><span>white</span></label>
       <label><input type="radio" name="o-full-astyle" value="white-outline" onchange="liveReload()"><span>white-outline</span></label>
+          <label class="omit-lbl"><input type="radio" name="o-full-astyle" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
     </div></div>
     <div class="og"><span class="og-lbl">apple · type</span><div class="op">
       <label><input type="radio" name="o-full-atype" value="plain" onchange="liveReload()"><span>plain</span></label>
       <label class="active"><input type="radio" name="o-full-atype" value="buy" checked onchange="liveReload()"><span>buy</span></label>
       <label><input type="radio" name="o-full-atype" value="pay" onchange="liveReload()"><span>pay</span></label>
+          <label class="omit-lbl"><input type="radio" name="o-full-atype" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
     </div></div>
     <div class="og"><span class="og-lbl">google · style</span><div class="op">
       <label class="active"><input type="radio" name="o-full-gstyle" value="black" checked onchange="liveReload()"><span>black</span></label>
       <label><input type="radio" name="o-full-gstyle" value="white" onchange="liveReload()"><span>white</span></label>
+          <label class="omit-lbl"><input type="radio" name="o-full-gstyle" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
     </div></div>
     <div class="og"><span class="og-lbl">google · type</span><div class="op">
       <label><input type="radio" name="o-full-gtype" value="plain" onchange="liveReload()"><span>plain</span></label>
       <label class="active"><input type="radio" name="o-full-gtype" value="buy" checked onchange="liveReload()"><span>buy</span></label>
       <label><input type="radio" name="o-full-gtype" value="pay" onchange="liveReload()"><span>pay</span></label>
+          <label class="omit-lbl"><input type="radio" name="o-full-gtype" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
     </div></div>
   </div>
 
@@ -740,19 +921,23 @@
       <label class="active"><input type="radio" name="u-capay-as" value="black" checked onchange="liveReload()"><span>black</span></label>
       <label><input type="radio" name="u-capay-as" value="white" onchange="liveReload()"><span>white</span></label>
       <label><input type="radio" name="u-capay-as" value="white-outline" onchange="liveReload()"><span>white-outline</span></label>
+          <label class="omit-lbl"><input type="radio" name="u-capay-as" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
     </div></div>
     <div class="og"><span class="og-lbl">apple · type</span><div class="op">
       <label><input type="radio" name="u-capay-at" value="plain" onchange="liveReload()"><span>plain</span></label>
       <label class="active"><input type="radio" name="u-capay-at" value="buy" checked onchange="liveReload()"><span>buy</span></label>
       <label><input type="radio" name="u-capay-at" value="pay" onchange="liveReload()"><span>pay</span></label>
+          <label class="omit-lbl"><input type="radio" name="u-capay-at" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
     </div></div>
     <div class="og"><span class="og-lbl">card · layout</span><div class="op">
       <label class="active"><input type="radio" name="u-capay-lay" value="horizontal" checked onchange="liveReload()"><span>horizontal</span></label>
       <label><input type="radio" name="u-capay-lay" value="vertical" onchange="liveReload()"><span>vertical</span></label>
+          <label class="omit-lbl"><input type="radio" name="u-capay-lay" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
     </div></div>
     <div class="og"><span class="og-lbl">card · optional-fields</span><div class="op">
       <label class="active"><input type="radio" name="u-capay-opt" value="false" checked onchange="liveReload()"><span>false</span></label>
       <label><input type="radio" name="u-capay-opt" value="true" onchange="liveReload()"><span>true</span></label>
+          <label class="omit-lbl"><input type="radio" name="u-capay-opt" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
     </div></div>
   </div>
 
@@ -760,19 +945,23 @@
     <div class="og"><span class="og-lbl">google · style</span><div class="op">
       <label class="active"><input type="radio" name="u-cgpay-gs" value="black" checked onchange="liveReload()"><span>black</span></label>
       <label><input type="radio" name="u-cgpay-gs" value="white" onchange="liveReload()"><span>white</span></label>
+          <label class="omit-lbl"><input type="radio" name="u-cgpay-gs" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
     </div></div>
     <div class="og"><span class="og-lbl">google · type</span><div class="op">
       <label><input type="radio" name="u-cgpay-gt" value="plain" onchange="liveReload()"><span>plain</span></label>
       <label class="active"><input type="radio" name="u-cgpay-gt" value="buy" checked onchange="liveReload()"><span>buy</span></label>
       <label><input type="radio" name="u-cgpay-gt" value="pay" onchange="liveReload()"><span>pay</span></label>
+          <label class="omit-lbl"><input type="radio" name="u-cgpay-gt" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
     </div></div>
     <div class="og"><span class="og-lbl">card · layout</span><div class="op">
       <label class="active"><input type="radio" name="u-cgpay-lay" value="horizontal" checked onchange="liveReload()"><span>horizontal</span></label>
       <label><input type="radio" name="u-cgpay-lay" value="vertical" onchange="liveReload()"><span>vertical</span></label>
+          <label class="omit-lbl"><input type="radio" name="u-cgpay-lay" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
     </div></div>
     <div class="og"><span class="og-lbl">card · optional-fields</span><div class="op">
       <label class="active"><input type="radio" name="u-cgpay-opt" value="false" checked onchange="liveReload()"><span>false</span></label>
       <label><input type="radio" name="u-cgpay-opt" value="true" onchange="liveReload()"><span>true</span></label>
+          <label class="omit-lbl"><input type="radio" name="u-cgpay-opt" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
     </div></div>
   </div>
 
@@ -781,20 +970,24 @@
       <label class="active"><input type="radio" name="u-ga-as" value="black" checked onchange="liveReload()"><span>black</span></label>
       <label><input type="radio" name="u-ga-as" value="white" onchange="liveReload()"><span>white</span></label>
       <label><input type="radio" name="u-ga-as" value="white-outline" onchange="liveReload()"><span>white-outline</span></label>
+          <label class="omit-lbl"><input type="radio" name="u-ga-as" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
     </div></div>
     <div class="og"><span class="og-lbl">apple · type</span><div class="op">
       <label><input type="radio" name="u-ga-at" value="plain" onchange="liveReload()"><span>plain</span></label>
       <label class="active"><input type="radio" name="u-ga-at" value="buy" checked onchange="liveReload()"><span>buy</span></label>
       <label><input type="radio" name="u-ga-at" value="pay" onchange="liveReload()"><span>pay</span></label>
+          <label class="omit-lbl"><input type="radio" name="u-ga-at" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
     </div></div>
     <div class="og"><span class="og-lbl">google · style</span><div class="op">
       <label class="active"><input type="radio" name="u-ga-gs" value="black" checked onchange="liveReload()"><span>black</span></label>
       <label><input type="radio" name="u-ga-gs" value="white" onchange="liveReload()"><span>white</span></label>
+          <label class="omit-lbl"><input type="radio" name="u-ga-gs" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
     </div></div>
     <div class="og"><span class="og-lbl">google · type</span><div class="op">
       <label><input type="radio" name="u-ga-gt" value="plain" onchange="liveReload()"><span>plain</span></label>
       <label class="active"><input type="radio" name="u-ga-gt" value="buy" checked onchange="liveReload()"><span>buy</span></label>
       <label><input type="radio" name="u-ga-gt" value="pay" onchange="liveReload()"><span>pay</span></label>
+          <label class="omit-lbl"><input type="radio" name="u-ga-gt" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
     </div></div>
   </div>
 
@@ -802,6 +995,7 @@
   <div class="step-hd">
     <span class="step-num">4</span>
     <h3>Preview &amp; codice</h3>
+    <span class="tip" data-tip="Preview: il componente Fabrick reale, connesso al sandbox. Inserisce dati veri per testare il flusso.\nCode: lo snippet da integrare nel tuo progetto, aggiornato in base alle opzioni selezionate. Il bottone copy copia il testo grezzo.">i</span>
   </div>
 
   <!-- choice overlay (strategia scelta utente) -->
@@ -815,9 +1009,14 @@
   <div class="viewer" id="viewer">
     <div class="viewer-bar">
       <div class="vlabel"><span class="vdot"></span><span id="viewer-label">fbk-card · preview</span></div>
-      <div class="vtoggle">
-        <button class="vt active" onclick="setView('preview',this)">Preview</button>
-        <button class="vt" onclick="setView('code',this)">Code</button>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span id="opts-pending-note" style="display:none;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--orange);letter-spacing:.05em">
+          ↑ clicca Applica per aggiornare
+        </span>
+        <div class="vtoggle">
+          <button class="vt active" onclick="setView('preview',this)">Preview</button>
+          <button class="vt" onclick="setView('code',this)">Code</button>
+        </div>
       </div>
     </div>
     <div class="face-preview">
@@ -834,6 +1033,7 @@
         <div class="snip-src">
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
           <span>sandbox-web.axerve.com</span> · fbk-elements.js
+          <span class="tip" data-tip="Script Fabrick da includere nel &lt;head&gt; una sola volta. In produzione sostituire con:\nhttps://web.axerve.com/orchestra/checkout/assets/elements/fbk-elements.js\nDeve essere caricato PRIMA di settare window['fbk-elements'] e PRIMA di inserire i custom elements nel DOM.">i</span>
         </div>
         <div class="cr">
           <span class="clang" id="snip-label">snippet</span>
@@ -848,13 +1048,83 @@
   <div class="step-hd">
     <span class="step-num">5</span>
     <h3>Risposta callback</h3>
+    <span class="tip up" data-tip="Con callBackObj ON: questa sezione mostra la risposta ricevuta da Fabrick in tempo reale. Puoi scegliere se seguire il redirect o restare qui per debug.\nCon callBackObj OFF: Fabrick redirecta automaticamente — questa sezione non riceverà nulla.">i</span>
+  </div>
+
+  <!-- Spiegazione callback vs redirect -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+
+    <!-- CON callback -->
+    <div style="padding:14px 16px;background:rgba(16,185,129,.06);border:1px solid rgba(16,185,129,.2);border-radius:var(--rsm)">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--green);margin-bottom:8px">
+        ✓ Con callBackObj (modalità attuale)
+      </div>
+      <div style="font-size:12px;color:var(--text2);line-height:1.65">
+        Fabrick chiama la tua funzione con <code style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent-l);background:var(--accent-g);padding:1px 4px;border-radius:3px">response</code> e <strong style="color:var(--text)">non fa nulla d'altro</strong>.<br>
+        L'oggetto torna <strong style="color:var(--green)">sempre</strong>, per ogni stato:
+        COMPLETED, FAILED, EXPIRED, AUTHENTICATION_PENDING.<br>
+        Il redirect è <strong style="color:var(--text)">completamente tuo</strong>.
+        In produzione chiami <code style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent-l);background:var(--accent-g);padding:1px 4px;border-radius:3px">payment/detail</code> e poi redirecti.
+      </div>
+    </div>
+
+    <!-- SENZA callback -->
+    <div style="padding:14px 16px;background:rgba(245,158,11,.05);border:1px solid rgba(245,158,11,.2);border-radius:var(--rsm)">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--yellow);margin-bottom:8px">
+        ⚠ Senza callBackObj (redirect automatico)
+      </div>
+      <div style="font-size:12px;color:var(--text2);line-height:1.65">
+        Fabrick fa redirect automatico all'<strong style="color:var(--text)">urlBack</strong> configurata sul portale.<br>
+        Ricevi: <code style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--yellow)">?a=SHOP&Status=OK&paymentID=xxx&paymentToken=xxx</code><br>
+        <strong style="color:var(--text)">Non ricevi l'oggetto response in JS.</strong><br>
+        Poi chiami <code style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent-l);background:var(--accent-g);padding:1px 4px;border-radius:3px">payment/detail</code> lato server con il paymentToken dell'URL.
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Eccezione 3DS sempre presente -->
+  <div style="padding:10px 14px;margin-bottom:12px;background:rgba(37,99,235,.05);border:1px solid rgba(37,99,235,.2);border-radius:var(--rsm);font-size:12px;color:var(--text2);display:flex;gap:8px;align-items:flex-start">
+    <span style="color:var(--accent-l);flex-shrink:0;font-size:14px">ℹ</span>
+    <span>
+      <strong style="color:var(--text)">Eccezione — AUTHENTICATION_PENDING (3DS):</strong>
+      il redirect avviene sempre, con o senza callBackObj. È tecnico e obbligatorio per completare l'autenticazione 3D Secure. Dopo il 3DS il buyer torna sul tuo sito e Fabrick richiama la callback (o redirecta automaticamente) con l'esito finale.
+    </span>
   </div>
 
   <div class="rlog">
     <div class="rlog-head">
       <span class="ldot"></span>
       <span>callBackObj – risposta Fabrick in tempo reale</span>
+      <span id="cb-status-pill" style="margin-left:auto;display:none"></span>
       <span class="cbbadge cbon" id="cb-badge">callback ON</span>
+    </div>
+    <!-- Overlay callback OFF: sostituisce l'intera area log -->
+    <div id="cb-off-overlay" style="display:none;padding:20px 18px;text-align:center;border-bottom:1px solid var(--border)">
+      <div style="font-size:13px;font-weight:700;color:var(--yellow);margin-bottom:8px">Callback disabilitata</div>
+      <div style="font-size:12px;color:var(--text2);line-height:1.65;max-width:520px;margin:0 auto">
+        Con <code style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--red);background:rgba(239,68,68,.08);padding:1px 5px;border-radius:3px">callBackObj</code> assente, Fabrick fa redirect automatico alla
+        <strong style="color:var(--text)">urlBack configurata sul portale</strong>.<br>
+        Nessuna funzione JS viene chiamata. Questo log non riceverà nessun dato.<br>
+        Il browser cambierà pagina prima che tu possa vedere qualcosa qui.
+      </div>
+    </div>
+    <!-- Action bar (visibile solo con callback ON) -->
+    <div id="cb-actions" style="display:none;padding:10px 14px;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:8px;align-items:center;background:rgba(0,0,0,.15)">
+      <span id="cb-action-label" style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);flex:1">
+        In attesa di un'azione…
+      </span>
+      <button id="btn-redir-ok" onclick="doRedirect()"
+        style="display:none;padding:6px 14px;border-radius:6px;border:1px solid rgba(16,185,129,.35);background:rgba(16,185,129,.1);color:#10B981;font-family:'JetBrains Mono',monospace;font-size:11px;cursor:pointer;transition:all .15s"
+        onmouseover="this.style.background='rgba(16,185,129,.2)'" onmouseout="this.style.background='rgba(16,185,129,.1)'">
+        ↗ Segui redirect (come farebbe produzione)
+      </button>
+      <button id="btn-redir-skip"
+        style="display:none;padding:6px 14px;border-radius:6px;border:1px solid var(--border2);background:var(--surface);color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:11px;cursor:pointer;transition:all .15s"
+        onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--muted)'"
+        onclick="dismissAction()">
+        ✕ Rimani qui (debug)
+      </button>
     </div>
     <div class="rout" id="rout">In attesa di una risposta dal Web Component…</div>
   </div>
@@ -913,7 +1183,6 @@
     </a>
   </div>
 </footer>
-</footer>
 
 <!-- ═══════════════════ JS ═══════════════════ -->
 <script>
@@ -922,15 +1191,37 @@
   const COMBOS   = new Set(['card-apay','card-gpay','gpay-apay']);
 
   let COMP    = 'card';
-  let STRAT   = 'both';
-  let APPLIED = false;
+  let STRAT     = 'both';
+  let APPLIED   = false;
+  let SESS_MODE = 'dual'; // 'single' | 'dual' — modalità sessione per combo
 
   let O = { shop:'', pid:'', token:'' };
   let D = { shop:'', shop2:'', pid1:'', tok1:'', pid2:'', tok2:'' };
+  // singola sessione combo
+  let DS = { shop:'', pid:'', tok:'' };
 
   // ─── HELPERS ─────────────────────────────────────────
   const $ = id => document.getElementById(id);
-  const r = n  => { const e = document.querySelector(`input[name="${n}"]:checked`); return e ? e.value : ''; };
+  // r(): legge il radio checked; se valore è __omit__ restituisce null
+  const r = n => {
+    const e = document.querySelector(`input[name="${n}"]:checked`);
+    if (!e) return null;
+    return e.value === '__omit__' ? null : e.value;
+  };
+  // attr(): genera stringa attributo HTML; se val è null lo omette (testa il default Fabrick)
+  const attr = (name, val) => val !== null && val !== undefined ? ` ${name}="${val}"` : '';
+  const attrSnip = (name, val) => val !== null && val !== undefined
+    ? `\n  ${ta(name)}=${tv(val)}` : `\n  ${tc(`<!-- ${name} omesso → default Fabrick -->`)}`;
+
+  // setSessionMode
+  function setSessionMode(mode) {
+    SESS_MODE = mode;
+    document.getElementById('d-single-row').style.display  = mode === 'single' ? '' : 'none';
+    document.getElementById('d-dual-rows').style.display   = mode === 'dual'   ? '' : 'none';
+    document.getElementById('sm-single-btn').classList.toggle('active', mode === 'single');
+    document.getElementById('sm-dual-btn').classList.toggle('active',   mode === 'dual');
+    $('snip').innerHTML = buildSnip();
+  }
 
   // syntax helpers
   const tc = s => `<span class="tc">${s}</span>`;
@@ -1062,14 +1353,19 @@
     const isCombo = COMBOS.has(COMP);
 
     if (isCombo) {
-      D.shop  = $('d-shop').value.trim();
-      D.shop2 = $('d-shop2').value.trim(); // può essere vuoto → eredita D.shop
-      D.pid1  = $('d-pid1').value.trim();
-      D.tok1  = $('d-token1').value.trim();
-      D.pid2  = $('d-pid2').value.trim();
-      D.tok2  = $('d-token2').value.trim();
-      if (!D.shop || !D.pid1 || !D.tok1 || !D.pid2 || !D.tok2) {
-        flashBtn('d-apply','Campi mancanti'); return;
+      if (SESS_MODE === 'single') {
+        DS.shop = ($('d-shop-s')?.value || '').trim();
+        DS.pid  = ($('d-pid-s')?.value  || '').trim();
+        DS.tok  = ($('d-token-s')?.value|| '').trim();
+        if (!DS.shop || !DS.pid || !DS.tok) { flashBtn('d-apply','Campi mancanti'); return; }
+      } else {
+        D.shop  = $('d-shop').value.trim();
+        D.shop2 = $('d-shop2').value.trim();
+        D.pid1  = $('d-pid1').value.trim();
+        D.tok1  = $('d-token1').value.trim();
+        D.pid2  = $('d-pid2').value.trim();
+        D.tok2  = $('d-token2').value.trim();
+        if (!D.shop || !D.pid1 || !D.tok1 || !D.pid2 || !D.tok2) { flashBtn('d-apply','Campi mancanti'); return; }
       }
     } else {
       O.shop  = $('o-shop').value.trim();
@@ -1088,6 +1384,29 @@
       ? { shop, callBackObj: e => onCb(e) }
       : { shop };
 
+    // ── Log di configurazione ─────────────────────────────
+    LOG.group('Configurazione applicata — window[\'fbk-elements\'] settato', 'ok');
+    LOG.kv('shop', shop);
+    LOG.kv('callBackObj', cbOn
+      ? '✓ presente — Fabrick chiamerà la tua funzione, NESSUN redirect automatico'
+      : '✗ assente — Fabrick farà redirect automatico alla urlBack del portale',
+      cbOn ? 'ok' : 'warn');
+    if (isCombo) {
+      LOG.sep();
+      LOG.line('COMBO — sessioni separate', 'warn');
+      LOG.kv('pid sessione 1', D.pid1);
+      LOG.kv('pid sessione 2', D.pid2);
+      LOG.kv('shop sessione 2', D.shop2 || D.shop + ' (ereditato)');
+    } else {
+      LOG.sep();
+      LOG.kv('paymentID',    O.pid);
+      LOG.kv('paymentToken', O.token ? O.token.slice(0,12) + '…(troncato)' : '—');
+    }
+    LOG.sep();
+    LOG.line('✓ window[\'fbk-elements\'] settato PRIMA del mount — ordine corretto.', 'ok');
+    if (!cbOn) LOG.line('→ Senza callback: il response object NON arriverà in JS. Gestisci l\'esito server-side via payment/detail.', 'warn');
+    LOG.end();
+
     if (!isCombo || STRAT === 'both') {
       injectSlot();
     } else {
@@ -1096,6 +1415,7 @@
     }
 
     APPLIED = true;
+    clearPendingBadge();
     updateCbBadge();
     $('snip').innerHTML = buildSnip();
     flashBtn(isCombo ? 'd-apply' : 'o-apply', 'Applicato', true);
@@ -1108,7 +1428,9 @@
   function liveReload() {
     $('snip').innerHTML = buildSnip();
     syncAllPills();
-    if (APPLIED && (!COMBOS.has(COMP) || STRAT === 'both')) injectSlot();
+    // NON re-inietta il componente per non cancellare i dati inseriti.
+    // Aggiorna solo lo snippet. L'utente clicca Applica per applicare le nuove opzioni.
+    if (APPLIED) showPendingBadge();
   }
 
   // ─── HTML BUILDERS ───────────────────────────────────
@@ -1116,16 +1438,21 @@
     const isCombo = COMBOS.has(COMP);
     if (!isCombo) {
       switch (COMP) {
-        case 'card': return `<fbk-card style="width:100%" payment-id="${O.pid}" payment-token="${O.token}" layout="${r('o-card-layout')||'horizontal'}" optional-fields="${r('o-card-opt')||'true'}"></fbk-card>`;
-        case 'apay': return `<fbk-apple-pay style="width:100%" payment-id="${O.pid}" payment-token="${O.token}" button-style="${r('o-apay-style')||'black'}" button-type="${r('o-apay-type')||'buy'}"></fbk-apple-pay>`;
-        case 'gpay': return `<fbk-google-pay style="width:100%" payment-id="${O.pid}" payment-token="${O.token}" button-style="${r('o-gpay-style')||'black'}" button-type="${r('o-gpay-type')||'buy'}"></fbk-google-pay>`;
-        case 'full': return `<fbk-card-wallet style="width:100%" payment-id="${O.pid}" payment-token="${O.token}" layout="${r('o-full-layout')||'horizontal'}" optional-fields="${r('o-full-opt')||'true'}" apple-button-style="${r('o-full-astyle')||'black'}" apple-button-type="${r('o-full-atype')||'buy'}" google-button-style="${r('o-full-gstyle')||'black'}" google-button-type="${r('o-full-gtype')||'buy'}"></fbk-card-wallet>`;
+        case 'card': return `<fbk-card style="width:100%" payment-id="${O.pid}" payment-token="${O.token}"${attr('layout',r('o-card-layout'))}${attr('optional-fields',r('o-card-opt'))}></fbk-card>`;
+        case 'apay': return `<fbk-apple-pay style="width:100%" payment-id="${O.pid}" payment-token="${O.token}"${attr('button-style',r('o-apay-style'))}${attr('button-type',r('o-apay-type'))}></fbk-apple-pay>`;
+        case 'gpay': return `<fbk-google-pay style="width:100%" payment-id="${O.pid}" payment-token="${O.token}"${attr('button-style',r('o-gpay-style'))}${attr('button-type',r('o-gpay-type'))}></fbk-google-pay>`;
+        case 'full': return `<fbk-card-wallet style="width:100%" payment-id="${O.pid}" payment-token="${O.token}"${attr('layout',r('o-full-layout'))}${attr('optional-fields',r('o-full-opt'))}${attr('apple-button-style',r('o-full-astyle'))}${attr('apple-button-type',r('o-full-atype'))}${attr('google-button-style',r('o-full-gstyle'))}${attr('google-button-type',r('o-full-gtype'))}></fbk-card-wallet>`;
       }
     } else {
+      // credenziali in base a SESS_MODE
+      const pid1  = SESS_MODE === 'single' ? DS.pid  : D.pid1;
+      const tok1  = SESS_MODE === 'single' ? DS.tok  : D.tok1;
+      const pid2  = SESS_MODE === 'single' ? DS.pid  : D.pid2;
+      const tok2  = SESS_MODE === 'single' ? DS.tok  : D.tok2;
       switch (COMP) {
-        case 'card-apay': return `<div style="display:flex;flex-direction:column;gap:12px;width:100%"><fbk-apple-pay style="width:100%" payment-id="${D.pid1}" payment-token="${D.tok1}" button-style="${r('u-capay-as')||'black'}" button-type="${r('u-capay-at')||'buy'}"></fbk-apple-pay><fbk-card style="width:100%" payment-id="${D.pid2}" payment-token="${D.tok2}" layout="${r('u-capay-lay')||'horizontal'}" optional-fields="${r('u-capay-opt')||'false'}"></fbk-card></div>`;
-        case 'card-gpay': return `<div style="display:flex;flex-direction:column;gap:12px;width:100%"><fbk-google-pay style="width:100%" payment-id="${D.pid1}" payment-token="${D.tok1}" button-style="${r('u-cgpay-gs')||'black'}" button-type="${r('u-cgpay-gt')||'buy'}"></fbk-google-pay><fbk-card style="width:100%" payment-id="${D.pid2}" payment-token="${D.tok2}" layout="${r('u-cgpay-lay')||'horizontal'}" optional-fields="${r('u-cgpay-opt')||'false'}"></fbk-card></div>`;
-        case 'gpay-apay': return `<div style="display:flex;flex-direction:column;gap:12px;width:100%"><fbk-apple-pay style="width:100%" payment-id="${D.pid1}" payment-token="${D.tok1}" button-style="${r('u-ga-as')||'black'}" button-type="${r('u-ga-at')||'buy'}"></fbk-apple-pay><fbk-google-pay style="width:100%" payment-id="${D.pid2}" payment-token="${D.tok2}" button-style="${r('u-ga-gs')||'black'}" button-type="${r('u-ga-gt')||'buy'}"></fbk-google-pay></div>`;
+        case 'card-apay': return `<div style="display:flex;flex-direction:column;gap:12px;width:100%"><fbk-apple-pay style="width:100%" payment-id="${pid1}" payment-token="${tok1}"${attr('button-style',r('u-capay-as'))}${attr('button-type',r('u-capay-at'))}></fbk-apple-pay><fbk-card style="width:100%" payment-id="${pid2}" payment-token="${tok2}"${attr('layout',r('u-capay-lay'))}${attr('optional-fields',r('u-capay-opt'))}></fbk-card></div>`;
+        case 'card-gpay': return `<div style="display:flex;flex-direction:column;gap:12px;width:100%"><fbk-google-pay style="width:100%" payment-id="${pid1}" payment-token="${tok1}"${attr('button-style',r('u-cgpay-gs'))}${attr('button-type',r('u-cgpay-gt'))}></fbk-google-pay><fbk-card style="width:100%" payment-id="${pid2}" payment-token="${tok2}"${attr('layout',r('u-cgpay-lay'))}${attr('optional-fields',r('u-cgpay-opt'))}></fbk-card></div>`;
+        case 'gpay-apay': return `<div style="display:flex;flex-direction:column;gap:12px;width:100%"><fbk-apple-pay style="width:100%" payment-id="${pid1}" payment-token="${tok1}"${attr('button-style',r('u-ga-as'))}${attr('button-type',r('u-ga-at'))}></fbk-apple-pay><fbk-google-pay style="width:100%" payment-id="${pid2}" payment-token="${tok2}"${attr('button-style',r('u-ga-gs'))}${attr('button-type',r('u-ga-gt'))}></fbk-google-pay></div>`;
       }
     }
     return '';
@@ -1153,14 +1480,17 @@
   function buildOfficialSnip(shop, cbOn) {
     const conf = fbkConf(shop, cbOn);
     const imp  = scriptImport();
+    // helper: genera riga attributo o commento se omesso
+    const as = (name, val) => val !== null
+      ? `\n  ${ta(name)}=${tv(val)}`
+      : `\n  ${tc(`<!-- ${name}: omesso → default Fabrick -->`)}`;
     switch (COMP) {
       case 'card': return [
         imp,
         tc('&lt;!-- 2. Inserisci il componente dove vuoi nel body --&gt;'),
         `${tt('&lt;fbk-card')}`,
-        `  ${ta('payment-id')}=${tv('{{ paymentID }}')} ${ta('payment-token')}=${tv('{{ paymentToken }}')}`,
-        `  ${ta('layout')}=${tv(r('o-card-layout')||'horizontal')}`,
-        `  ${ta('optional-fields')}=${tv(r('o-card-opt')||'true')}${tt('&gt;&lt;/fbk-card&gt;')}`,
+        `  ${ta('payment-id')}=${tv('{{ paymentID }}')} ${ta('payment-token')}=${tv('{{ paymentToken }}')}` +
+        as('layout', r('o-card-layout')) + as('optional-fields', r('o-card-opt')) + tt('&gt;&lt;/fbk-card&gt;'),
         '', conf, '',
         tc('// flowStatus: COMPLETED | FAILED | AUTHENTICATION_PENDING | EXPIRED'),
         `${tp('function')} ${tf('myCallbackFunction')}${tp('(res) {')}`,
@@ -1173,26 +1503,26 @@
         imp,
         tc('&lt;!-- fbk-apple-pay: sempre visibile.\n     Safari/iOS/macOS con Wallet → pulsante Apple Pay nativo\n     Altri browser → Fabrick gestisce il flusso QR code Apple Pay --&gt;'),
         `${tt('&lt;fbk-apple-pay')}`,
-        `  ${ta('payment-id')}=${tv('{{ paymentID }}')} ${ta('payment-token')}=${tv('{{ paymentToken }}')}`,
-        `  ${ta('button-style')}=${tv(r('o-apay-style')||'black')} ${ta('button-type')}=${tv(r('o-apay-type')||'buy')}${tt('&gt;&lt;/fbk-apple-pay&gt;')}`,
+        `  ${ta('payment-id')}=${tv('{{ paymentID }}')} ${ta('payment-token')}=${tv('{{ paymentToken }}')}` +
+        as('button-style', r('o-apay-style')) + as('button-type', r('o-apay-type')) + tt('&gt;&lt;/fbk-apple-pay&gt;'),
         '', conf,
       ].join('\n');
       case 'gpay': return [
         imp,
         tc('&lt;!-- Visibile SOLO su Chrome con Google Pay configurato --&gt;'),
         `${tt('&lt;fbk-google-pay')}`,
-        `  ${ta('payment-id')}=${tv('{{ paymentID }}')} ${ta('payment-token')}=${tv('{{ paymentToken }}')}`,
-        `  ${ta('button-style')}=${tv(r('o-gpay-style')||'black')} ${ta('button-type')}=${tv(r('o-gpay-type')||'buy')}${tt('&gt;&lt;/fbk-google-pay&gt;')}`,
+        `  ${ta('payment-id')}=${tv('{{ paymentID }}')} ${ta('payment-token')}=${tv('{{ paymentToken }}')}` +
+        as('button-style', r('o-gpay-style')) + as('button-type', r('o-gpay-type')) + tt('&gt;&lt;/fbk-google-pay&gt;'),
         '', conf,
       ].join('\n');
       case 'full': return [
         imp,
         tc('&lt;!-- all-in-one: Apple Pay → sempre (QR code su browser non Safari) · Google Pay → Chrome · Carta → sempre --&gt;'),
         `${tt('&lt;fbk-card-wallet')}`,
-        `  ${ta('payment-id')}=${tv('{{ paymentID }}')} ${ta('payment-token')}=${tv('{{ paymentToken }}')}`,
-        `  ${ta('layout')}=${tv(r('o-full-layout')||'horizontal')} ${ta('optional-fields')}=${tv(r('o-full-opt')||'true')}`,
-        `  ${ta('apple-button-style')}=${tv(r('o-full-astyle')||'black')} ${ta('apple-button-type')}=${tv(r('o-full-atype')||'buy')}`,
-        `  ${ta('google-button-style')}=${tv(r('o-full-gstyle')||'black')} ${ta('google-button-type')}=${tv(r('o-full-gtype')||'buy')}${tt('&gt;')}`,
+        `  ${ta('payment-id')}=${tv('{{ paymentID }}')} ${ta('payment-token')}=${tv('{{ paymentToken }}')}` +
+        as('layout', r('o-full-layout')) + as('optional-fields', r('o-full-opt')) +
+        as('apple-button-style', r('o-full-astyle')) + as('apple-button-type', r('o-full-atype')) +
+        as('google-button-style', r('o-full-gstyle')) + as('google-button-type', r('o-full-gtype')) + tt('&gt;'),
         `${tt('&lt;/fbk-card-wallet&gt;')}`,
         '', conf, '',
         `${tp('function')} ${tf('myCallbackFunction')}${tp('(res) {')}`,
@@ -1210,71 +1540,302 @@
 
   function buildComboSnip(shop, cbOn) {
     const imp = scriptImport();
-    const stratNote = STRAT === 'choice'
-      ? tc('// STRATEGIA: scelta utente — carica 1 componente alla volta\n// (imposta window["fbk-elements"] e innerHTML solo alla scelta utente)\n')
-      : tc('// ATTENZIONE: due componenti attivi simultaneamente (solo testing)\n// In produzione usa "scelta utente" o &lt;fbk-card-wallet&gt;\n');
+    const as = (name, val) => val !== null
+      ? `\n    ${ta(name)}=${tv(val)}`
+      : `\n    ${tc(`<!-- ${name}: omesso → default Fabrick -->`)}`;
+
+    const sessModeNote = SESS_MODE === 'single'
+      ? tc('// ⚠ SESSIONE SINGOLA: stesso pid/token per entrambi i componenti.\n// Entrambi si avvieranno sulla stessa sessione → conflitto.\n// Usa solo per testare il comportamento Fabrick in questo scenario.\n')
+      : (STRAT === 'choice'
+        ? tc('// STRATEGIA: scelta utente — carica 1 componente alla volta.\n')
+        : tc('// ATTENZIONE: due sessioni separate. Se l\'utente completa una, l\'altra rimane pending.\n// Gestisci tu la mutua esclusione. In produzione usa "scelta utente" o fbk-card-wallet.\n'));
 
     const conf = fbkConf(shop, cbOn);
-    const note2 = tc(`// Shop sessione 2: "${D.shop2 || D.shop || 'GESPAY12345'}" (${D.shop2 ? 'specifico' : 'ereditato da sessione 1'})`);
+    const pid1Var  = SESS_MODE === 'single' ? '{{ pid }}'   : '{{ pid1 }}';
+    const tok1Var  = SESS_MODE === 'single' ? '{{ token }}' : '{{ token1 }}';
+    const pid2Var  = SESS_MODE === 'single' ? '{{ pid }}'   : '{{ pid2 }}';
+    const tok2Var  = SESS_MODE === 'single' ? '{{ token }}' : '{{ token2 }}';
+    const note2 = SESS_MODE === 'dual'
+      ? tc(`// Shop sessione 2: "${D.shop2 || D.shop || 'GESPAY12345'}" (${D.shop2 ? 'specifico' : 'ereditato da sessione 1'})`)
+      : '';
 
     switch (COMP) {
       case 'card-apay': return [
-        imp, stratNote, '',
-        tc('&lt;!-- Sessione 1 → fbk-apple-pay (sempre visibile: pulsante nativo su Safari, QR code sugli altri browser)\n     Sessione 2 → fbk-card --&gt;'),
+        imp, sessModeNote, '',
+        tc('&lt;!-- Sessione 1 → fbk-apple-pay · Sessione 2 → fbk-card --&gt;'),
         `${tt('&lt;div')} ${ta('style')}=${tv('display:flex;flex-direction:column;gap:12px')}${tt('&gt;')}`,
-        `  ${tt('&lt;fbk-apple-pay')} ${ta('payment-id')}=${tv('{{ pid1 }}')} ${ta('payment-token')}=${tv('{{ token1 }}')}`,
-        `    ${ta('button-style')}=${tv(r('u-capay-as')||'black')} ${ta('button-type')}=${tv(r('u-capay-at')||'buy')}${tt('&gt;&lt;/fbk-apple-pay&gt;')}`,
-        `  ${tt('&lt;fbk-card')} ${ta('payment-id')}=${tv('{{ pid2 }}')} ${ta('payment-token')}=${tv('{{ token2 }}')}`,
-        `    ${ta('layout')}=${tv(r('u-capay-lay')||'horizontal')} ${ta('optional-fields')}=${tv(r('u-capay-opt')||'false')}${tt('&gt;&lt;/fbk-card&gt;')}`,
+        `  ${tt('&lt;fbk-apple-pay')} ${ta('payment-id')}=${tv(pid1Var)} ${ta('payment-token')}=${tv(tok1Var)}` +
+        as('button-style', r('u-capay-as')) + as('button-type', r('u-capay-at')) + tt('&gt;&lt;/fbk-apple-pay&gt;'),
+        `  ${tt('&lt;fbk-card')} ${ta('payment-id')}=${tv(pid2Var)} ${ta('payment-token')}=${tv(tok2Var)}` +
+        as('layout', r('u-capay-lay')) + as('optional-fields', r('u-capay-opt')) + tt('&gt;&lt;/fbk-card&gt;'),
         `${tt('&lt;/div&gt;')}`, '', note2, conf,
-      ].join('\n');
+      ].filter(Boolean).join('\n');
       case 'card-gpay': return [
-        imp, stratNote, '',
+        imp, sessModeNote, '',
         tc('&lt;!-- Sessione 1 → fbk-google-pay · Sessione 2 → fbk-card --&gt;'),
         `${tt('&lt;div')} ${ta('style')}=${tv('display:flex;flex-direction:column;gap:12px')}${tt('&gt;')}`,
-        `  ${tt('&lt;fbk-google-pay')} ${ta('payment-id')}=${tv('{{ pid1 }}')} ${ta('payment-token')}=${tv('{{ token1 }}')}`,
-        `    ${ta('button-style')}=${tv(r('u-cgpay-gs')||'black')} ${ta('button-type')}=${tv(r('u-cgpay-gt')||'buy')}${tt('&gt;&lt;/fbk-google-pay&gt;')}`,
-        `  ${tt('&lt;fbk-card')} ${ta('payment-id')}=${tv('{{ pid2 }}')} ${ta('payment-token')}=${tv('{{ token2 }}')}`,
-        `    ${ta('layout')}=${tv(r('u-cgpay-lay')||'horizontal')} ${ta('optional-fields')}=${tv(r('u-cgpay-opt')||'false')}${tt('&gt;&lt;/fbk-card&gt;')}`,
+        `  ${tt('&lt;fbk-google-pay')} ${ta('payment-id')}=${tv(pid1Var)} ${ta('payment-token')}=${tv(tok1Var)}` +
+        as('button-style', r('u-cgpay-gs')) + as('button-type', r('u-cgpay-gt')) + tt('&gt;&lt;/fbk-google-pay&gt;'),
+        `  ${tt('&lt;fbk-card')} ${ta('payment-id')}=${tv(pid2Var)} ${ta('payment-token')}=${tv(tok2Var)}` +
+        as('layout', r('u-cgpay-lay')) + as('optional-fields', r('u-cgpay-opt')) + tt('&gt;&lt;/fbk-card&gt;'),
         `${tt('&lt;/div&gt;')}`, '', note2, conf,
-      ].join('\n');
+      ].filter(Boolean).join('\n');
       case 'gpay-apay': return [
-        imp, stratNote, '',
-        tc('&lt;!-- Sessione 1 → fbk-apple-pay (sempre visibile: pulsante nativo su Safari, QR code sugli altri browser)\n     Sessione 2 → fbk-google-pay (richiede Chrome con GPay configurato) --&gt;'),
+        imp, sessModeNote, '',
+        tc('&lt;!-- Sessione 1 → fbk-apple-pay · Sessione 2 → fbk-google-pay --&gt;'),
         `${tt('&lt;div')} ${ta('style')}=${tv('display:flex;flex-direction:column;gap:12px')}${tt('&gt;')}`,
-        `  ${tt('&lt;fbk-apple-pay')} ${ta('payment-id')}=${tv('{{ pid1 }}')} ${ta('payment-token')}=${tv('{{ token1 }}')}`,
-        `    ${ta('button-style')}=${tv(r('u-ga-as')||'black')} ${ta('button-type')}=${tv(r('u-ga-at')||'buy')}${tt('&gt;&lt;/fbk-apple-pay&gt;')}`,
-        `  ${tt('&lt;fbk-google-pay')} ${ta('payment-id')}=${tv('{{ pid2 }}')} ${ta('payment-token')}=${tv('{{ token2 }}')}`,
-        `    ${ta('button-style')}=${tv(r('u-ga-gs')||'black')} ${ta('button-type')}=${tv(r('u-ga-gt')||'buy')}${tt('&gt;&lt;/fbk-google-pay&gt;')}`,
+        `  ${tt('&lt;fbk-apple-pay')} ${ta('payment-id')}=${tv(pid1Var)} ${ta('payment-token')}=${tv(tok1Var)}` +
+        as('button-style', r('u-ga-as')) + as('button-type', r('u-ga-at')) + tt('&gt;&lt;/fbk-apple-pay&gt;'),
+        `  ${tt('&lt;fbk-google-pay')} ${ta('payment-id')}=${tv(pid2Var)} ${ta('payment-token')}=${tv(tok2Var)}` +
+        as('button-style', r('u-ga-gs')) + as('button-type', r('u-ga-gt')) + tt('&gt;&lt;/fbk-google-pay&gt;'),
         `${tt('&lt;/div&gt;')}`, '', note2, conf,
-      ].join('\n');
+      ].filter(Boolean).join('\n');
     }
     return '';
   }
 
+  // ─── DEBUG LOGGER ────────────────────────────────────
+  // Log strutturato indipendente dall'UI. Sempre attivo.
+  const LOG = {
+    _prefix: '[Fabrick Demo]',
+    _style: {
+      title:   'color:#60A5FA;font-weight:700;font-size:12px',
+      info:    'color:#8FA3C8;font-size:11px',
+      ok:      'color:#10B981;font-weight:600',
+      warn:    'color:#F59E0B;font-weight:600',
+      err:     'color:#EF4444;font-weight:700',
+      muted:   'color:#4A6080;font-size:10px',
+      key:     'color:#86EFAC;font-weight:600',
+      val:     'color:#FDE68A',
+      tag:     'background:#1E2F4A;color:#60A5FA;padding:1px 6px;border-radius:3px;font-size:10px',
+    },
+    group(title, color='title') {
+      console.groupCollapsed(`%c${this._prefix} ${title}`, this._style[color]);
+    },
+    end() { console.groupEnd(); },
+    kv(key, val, style='val') {
+      console.log(`%c  ${key}:%c ${val}`, this._style.key, this._style[style]||this._style.val);
+    },
+    line(msg, style='info') {
+      console.log(`%c  ${msg}`, this._style[style]);
+    },
+    sep() {
+      console.log('%c  ─────────────────────────────────────────', this._style.muted);
+    },
+    raw(label, obj) {
+      console.log(`%c  ${label}:`, this._style.muted, obj);
+    },
+    diagnose(code, message) {
+      const known = {
+        'unhandled': [
+          'Il token è scaduto o già consumato (TTL sandbox ~15 min)',
+          'Il paymentID non corrisponde al paymentToken',
+          'Lo shopLogin non corrisponde alla coppia pid/token',
+          'La sessione è già stata completata o annullata',
+          'Il token è stato creato per un ambiente diverso (prod vs sandbox)',
+        ],
+        'invalid_token': ['Token malformato o non parsabile'],
+        'expired': ['Sessione scaduta — genera un nuovo payment/create'],
+        'unauthorized': ['ShopLogin non autorizzato per questo paymentID'],
+      };
+      const hints = known[code] || ['Errore non classificato — controlla la console network per la risposta raw'];
+      console.log('%c  Possibili cause:', this._style.warn);
+      hints.forEach((h,i) => console.log(`%c  ${i+1}. ${h}`, this._style.info));
+      console.log('%c  → Genera un nuovo token con payment/create e riprova', this._style.ok);
+    }
+  };
+
   // ─── CALLBACK ────────────────────────────────────────
+  let _pendingRedir = null;
+
   function onCb(response) {
     const status = response?.payload?.flowStatus ?? 'UNKNOWN';
     const err    = response?.error;
     const redir  = response?.payload?.redirect;
-    const cls    = status === 'COMPLETED' ? 'sok' : (status === 'FAILED' || status === 'EXPIRED') ? 'serr' : 'swrn';
-    const errL   = err?.code ? `\nerror.code  : ${err.code}\nerror.desc  : ${err.description??'—'}` : '\nerror       : nessuno';
-    const redL   = redir ? `\nredirect.method : ${redir.method??'—'}\nredirect.url    : ${redir.url??'—'}` : '\nredirect    : nessuno';
-    $('rout').innerHTML = `<span class="${cls}">[${status}]</span>${errL}${redL}\n\n${tc('— raw ────────')}\n${JSON.stringify(response,null,2)}`;
-    console.log('[Fabrick WC]', status, response);
-    if ((status==='COMPLETED'||status==='FAILED') && redir?.url) console.log('[Fabrick] redirect →', redir.url);
-    if (status==='AUTHENTICATION_PENDING' && redir) {
-      redir.method==='POST' ? postRedir(redir.url, redir.data) : (window.location.href = redir.url);
+    const payload = response?.payload;
+
+    // ── Log strutturato ──────────────────────────────────
+    const statusStyle = {
+      COMPLETED: 'ok', FAILED: 'err', EXPIRED: 'err',
+      AUTHENTICATION_PENDING: 'warn', UNKNOWN: 'warn'
+    };
+    LOG.group(`callBackObj ricevuta — ${status}`, statusStyle[status] || 'warn');
+    LOG.sep();
+
+    LOG.line('FLOW STATUS', 'title');
+    LOG.kv('flowStatus', status, statusStyle[status] || 'warn');
+
+    if (err && (err.code || err.description)) {
+      LOG.sep();
+      LOG.line('ERROR', 'err');
+      LOG.kv('code',        err.code        || '—');
+      LOG.kv('description', err.description || '—');
+    }
+
+    if (redir) {
+      LOG.sep();
+      LOG.line('REDIRECT');
+      LOG.kv('method', redir.method || '—');
+      LOG.kv('url',    redir.url    || '—');
+      if (redir.data) LOG.raw('data', redir.data);
+    }
+
+    if (payload) {
+      LOG.sep();
+      LOG.line('PAYLOAD (campi chiave)');
+      if (payload.paymentID)       LOG.kv('paymentID',       payload.paymentID);
+      if (payload.shopTransactionID) LOG.kv('shopTransactionID', payload.shopTransactionID);
+      if (payload.transactionResult) LOG.kv('transactionResult', payload.transactionResult);
+      if (payload.authorizationCode) LOG.kv('authorizationCode', payload.authorizationCode);
+      if (payload.bankTransactionID) LOG.kv('bankTransactionID',  payload.bankTransactionID);
+    }
+
+    LOG.sep();
+    LOG.line('AZIONE CONSIGLIATA');
+    if (status === 'COMPLETED')              LOG.line('→ Chiama payment/detail per conferma, poi redirect thank-you page', 'ok');
+    else if (status === 'FAILED')            LOG.line('→ Chiama payment/detail per dettaglio errore, poi redirect KO page', 'err');
+    else if (status === 'AUTHENTICATION_PENDING') LOG.line('→ Redirect obbligatorio per completare 3DS (viene eseguito automaticamente)', 'warn');
+    else if (status === 'EXPIRED')           LOG.line('→ Sessione scaduta. Genera un nuovo payment/create', 'err');
+
+    LOG.sep();
+    LOG.raw('response completo', response);
+    LOG.end();
+
+    // ── UI update ────────────────────────────────────────
+    const statusMap = {
+      COMPLETED:              { cls:'sok',  label:'COMPLETED ✓',            color:'var(--green)' },
+      FAILED:                 { cls:'serr', label:'FAILED ✗',               color:'var(--red)' },
+      EXPIRED:                { cls:'serr', label:'EXPIRED ✗',              color:'var(--red)' },
+      AUTHENTICATION_PENDING: { cls:'swrn', label:'AUTHENTICATION PENDING', color:'var(--yellow)' },
+      UNKNOWN:                { cls:'swrn', label:'UNKNOWN',                 color:'var(--yellow)' },
+    };
+    const sm = statusMap[status] || { cls:'swrn', label:status, color:'var(--yellow)' };
+
+    const errLine  = err?.code && err.code !== '0'
+      ? `\nerror.code  : ${err.code}\nerror.desc  : ${err.description ?? '—'}`
+      : '\nerror       : nessuno (code 0)';
+    const redirLine = redir
+      ? `\nredirect.method : ${redir.method ?? '—'}\nredirect.url    : ${redir.url ?? '—'}`
+      : '\nredirect    : non presente';
+
+    $('rout').innerHTML =
+      `<span class="${sm.cls}" style="font-weight:700">[${sm.label}]</span>`
+      + errLine + redirLine
+      + `\n\n<span style="color:var(--muted)">─── response completo ──────────────────────</span>\n`
+      + JSON.stringify(response, null, 2);
+
+    const pill = $('cb-status-pill');
+    if (pill) {
+      pill.style.display = 'inline-block';
+      pill.innerHTML = `<span style="font-family:'JetBrains Mono',monospace;font-size:10px;padding:2px 9px;border-radius:4px;background:rgba(0,0,0,.25);color:${sm.color};border:1px solid currentColor">${status}</span>`;
+    }
+
+    _pendingRedir = redir || null;
+
+    if (status === 'AUTHENTICATION_PENDING' && redir) {
+      showActionBar(
+        `⚡ AUTHENTICATION_PENDING — redirect 3DS obbligatorio (${redir.method}). Esecuzione automatica in 3s…`,
+        false, false
+      );
+      setTimeout(() => {
+        if (redir.method === 'POST') postRedir(redir.url, redir.data);
+        else window.location.href = redir.url;
+      }, 3000);
+    } else if ((status === 'COMPLETED' || status === 'FAILED') && redir?.url) {
+      showActionBar(
+        `${status === 'COMPLETED' ? '✓' : '✗'} ${status} — redirect disponibile: ${redir.url}`,
+        true, true
+      );
+    } else if (status === 'EXPIRED') {
+      showActionBar('Sessione EXPIRED — nessun redirect disponibile.', false, false);
+    } else {
+      const act = $('cb-actions');
+      if (act) act.style.display = 'none';
     }
   }
+
+  // ─── FABRICK ERROR EVENT ─────────────────────────────
+  // fbk-elements-error: emesso dal componente Fabrick quando
+  // non riesce a inizializzarsi o processa un errore interno.
+  // Cause comuni: token scaduto/invalido, mismatch pid/token/shop.
   window.addEventListener('fbk-elements-error', e => {
-    $('rout').innerHTML = `<span class="serr">[FABRICK ERROR]\n${JSON.stringify(e.detail,null,2)}</span>`;
-    console.error('[Fabrick Error]', e.detail);
+    const detail = e.detail || {};
+
+    LOG.group('fbk-elements-error — ERRORE COMPONENTE FABRICK', 'err');
+    LOG.sep();
+    LOG.line('Il componente Fabrick ha emesso un errore interno.', 'err');
+    LOG.sep();
+    LOG.kv('code',    detail.code    || '—', 'err');
+    LOG.kv('title',   detail.title   || '—', 'warn');
+    LOG.kv('message', detail.message || '—', 'info');
+    LOG.sep();
+    LOG.line('DIAGNOSI per code: ' + (detail.code || 'unknown'), 'warn');
+    LOG.diagnose(detail.code, detail.message);
+    LOG.sep();
+    LOG.line('VERIFICA');
+    LOG.kv('window[\'fbk-elements\'].shop settato prima del mount?', 'controlla ordine operazioni', 'warn');
+    LOG.kv('paymentToken fresco?',   'i token sandbox scadono in ~15 min', 'warn');
+    LOG.kv('paymentID ↔ token match?','devono provenire dalla stessa chiamata payment/create', 'warn');
+    LOG.raw('detail completo', detail);
+    LOG.end();
+
+    $('rout').innerHTML =
+      `<span class="serr" style="font-weight:700">[FABRICK ERROR — ${detail.code || 'unhandled'}]</span>`
+      + `\ntitle   : ${detail.title   || '—'}`
+      + `\nmessage : ${detail.message || '—'}`
+      + `\n\n<span style="color:var(--yellow)">─── diagnosi ──────────────────────────────</span>`
+      + `\nCausa più probabile: token scaduto o mismatch paymentID/token/shopLogin.`
+      + `\nGenera nuove credenziali con payment/create e riprova.`
+      + `\n\n<span style="color:var(--muted)">─── detail ────────────────────────────────</span>\n`
+      + JSON.stringify(detail, null, 2);
+
+    const pill = $('cb-status-pill');
+    if (pill) {
+      pill.style.display = 'inline-block';
+      pill.innerHTML = `<span style="font-family:'JetBrains Mono',monospace;font-size:10px;padding:2px 9px;border-radius:4px;background:rgba(239,68,68,.15);color:#EF4444;border:1px solid rgba(239,68,68,.35)">${detail.code || 'ERROR'}</span>`;
+    }
+    const act = $('cb-actions');
+    if (act) act.style.display = 'none';
+    console.error('[Fabrick Error]', detail);
   });
+
   function postRedir(url, data) {
     const f = document.createElement('form'); f.method='POST'; f.action=url;
     for(const[k,v] of Object.entries(data||{})){const i=document.createElement('input');i.type='hidden';i.name=k;i.value=v;f.appendChild(i);}
     document.body.appendChild(f); f.submit();
+  }
+
+  function showActionBar(label, showRedir, showSkip) {
+    const act = $('cb-actions');
+    if (!act) return;
+    act.style.display = 'flex';
+    const lbl = $('cb-action-label');
+    if (lbl) lbl.textContent = label;
+    const btnR = $('btn-redir-ok');
+    const btnS = $('btn-redir-skip');
+    if (btnR) btnR.style.display = showRedir ? 'inline-block' : 'none';
+    if (btnS) btnS.style.display = showSkip  ? 'inline-block' : 'none';
+  }
+
+  function doRedirect() {
+    if (!_pendingRedir?.url) return;
+    LOG.group('Redirect confermato dall\'utente', 'ok');
+    LOG.kv('method', _pendingRedir.method || 'GET');
+    LOG.kv('url',    _pendingRedir.url);
+    if (_pendingRedir.data) LOG.raw('data', _pendingRedir.data);
+    LOG.end();
+    if (_pendingRedir.method === 'POST') postRedir(_pendingRedir.url, _pendingRedir.data);
+    else window.location.href = _pendingRedir.url;
+  }
+
+  function dismissAction() {
+    const act = $('cb-actions');
+    if (act) act.style.display = 'none';
+    LOG.group('Redirect ignorato dall\'utente', 'warn');
+    LOG.line('Il redirect è stato scartato manualmente — sei rimasto sulla demo.');
+    LOG.raw('redirect disponibile (non seguito)', _pendingRedir);
+    LOG.end();
+    _pendingRedir = null;
   }
 
   // ─── UI HELPERS ──────────────────────────────────────
@@ -1290,6 +1851,37 @@
     const b  = $('cb-badge');
     b.textContent = on ? 'callback ON' : 'callback OFF';
     b.className   = 'cbbadge ' + (on ? 'cbon' : 'cboff');
+    // mostra overlay "callback disabilitata" se OFF
+    const overlay = $('cb-off-overlay');
+    const rout    = $('rout');
+    if (overlay) overlay.style.display = on ? 'none' : '';
+    if (rout)    rout.style.display    = on ? '' : 'none';
+  }
+
+  function showPendingBadge() {
+    const ids = ['o-apply','d-apply'];
+    ids.forEach(id => {
+      const b = $(id); if (!b) return;
+      if (b.dataset.pending) return;
+      b.dataset.pending = '1';
+      b.style.background = 'var(--border2)';
+      b.style.color = 'var(--text2)';
+      b.textContent = 'Applica (opzioni cambiate)';
+    });
+    const note = $('opts-pending-note');
+    if (note) note.style.display = '';
+  }
+
+  function clearPendingBadge() {
+    ['o-apply','d-apply'].forEach(id => {
+      const b = $(id); if (!b) return;
+      delete b.dataset.pending;
+      b.style.background = '';
+      b.style.color = '';
+      b.textContent = 'Applica';
+    });
+    const note = $('opts-pending-note');
+    if (note) note.style.display = 'none';
   }
 
   function flashBtn(id, msg, ok=false) {
@@ -1322,7 +1914,7 @@
     el.addEventListener('change', () => {
       const lblId = id==='o-cb' ? 'o-cb-lbl' : 'd-cb-lbl';
       $(lblId).textContent = el.checked ? 'ON' : 'OFF';
-      updateCbBadge();
+      updateCbBadge();  // aggiorna badge + overlay in tempo reale al toggle
     });
   });
 
