@@ -73,34 +73,37 @@
 
     /* ──────────── HERO ──────────── */
     .hero {
-      padding: 36px 0 32px;
-      display: flex; align-items: center; gap: 28px; flex-wrap: wrap;
+      padding: 44px 0 36px;
+      text-align: center;
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
     }
-    .hero-left { flex-shrink: 0; }
     .badge {
       display: inline-flex; align-items: center; gap: 7px;
       background: rgba(37,99,235,.1); color: var(--accent-l);
       border: 1px solid rgba(37,99,235,.3); border-radius: 99px;
       font-family: 'JetBrains Mono', monospace; font-size: 10px;
-      letter-spacing: .1em; padding: 4px 13px; margin-bottom: 12px;
+      letter-spacing: .1em; padding: 4px 14px; margin-bottom: 4px;
     }
     .bdot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: blink 1.8s infinite; flex-shrink: 0; }
-    .hero h1 { font-size: clamp(1.6rem, 3.5vw, 2.4rem); font-weight: 800; letter-spacing: -.03em; line-height: 1.1; }
-    .hero h1 em {
-      font-style: normal;
-      background: linear-gradient(135deg, #93C5FD 0%, #2563EB 100%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    .hero h1 {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 800; letter-spacing: -.03em; line-height: 1.1;
+      color: var(--text);
     }
-    .hero-right { flex: 1; min-width: 220px; }
-    .hero-right p { color: var(--text2); font-size: 13.5px; line-height: 1.65; }
+    .hero h1 em {
+      font-style: normal; color: var(--accent-l);
+    }
+    .hero-sub {
+      color: var(--text2); font-size: 14px; max-width: 480px; line-height: 1.6; margin-top: 2px;
+    }
     .hero-meta {
-      display: flex; align-items: center; gap: 10px; margin-top: 12px; flex-wrap: wrap;
+      display: flex; align-items: center; gap: 8px; margin-top: 6px; flex-wrap: wrap; justify-content: center;
     }
     .hero-meta-tag {
       display: inline-flex; align-items: center; gap: 5px;
       font-family: 'JetBrains Mono', monospace; font-size: 10px;
       color: var(--muted); background: var(--surface);
-      border: 1px solid var(--border); border-radius: 4px; padding: 3px 9px;
+      border: 1px solid var(--border); border-radius: 4px; padding: 3px 10px;
     }
 
     /* ──────────── BUTTONS ──────────── */
@@ -442,22 +445,18 @@
 
   <!-- ═══ HERO ═══ -->
   <header class="hero">
-    <div class="hero-left">
-      <div class="badge"><span class="bdot"></span>SANDBOX · Web Components Demo</div>
-      <h1>Fabrick Payment<br><em>Web Components</em></h1>
-    </div>
-    <div class="hero-right">
-      <p>Demo interattiva per tutti i componenti Fabrick: preview live, snippets commentati e analisi del modello di sessione.</p>
-      <div class="hero-meta">
-        <span class="hero-meta-tag">
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
-          Solo ambiente Sandbox
-        </span>
-        <span class="hero-meta-tag">
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-          fbk-elements.js · sandbox-web.axerve.com
-        </span>
-      </div>
+    <div class="badge"><span class="bdot"></span>SANDBOX · Web Components Demo</div>
+    <h1>Fabrick Payment <em>Web Components</em></h1>
+    <p class="hero-sub">Demo interattiva per tutti i componenti Fabrick: preview live, snippets commentati e analisi del modello di sessione.</p>
+    <div class="hero-meta">
+      <span class="hero-meta-tag">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+        Solo ambiente Sandbox
+      </span>
+      <span class="hero-meta-tag">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        fbk-elements.js · sandbox-web.axerve.com
+      </span>
     </div>
   </header>
 
@@ -487,7 +486,7 @@
         <div class="cc-title">Apple Pay</div>
         <span class="cc-tag">&lt;fbk-apple-pay&gt;</span>
       </div>
-      <div class="cc-desc">Visibile solo su Safari / iOS / macOS con almeno una carta nel Wallet Apple.</div>
+      <div class="cc-desc">Sempre visibile. Su Safari / iOS / macOS con Wallet configurato mostra il pulsante nativo; sugli altri browser Fabrick gestisce il flusso tramite QR code Apple Pay.</div>
     </div>
 
     <div class="comp-card" data-comp="gpay" onclick="selectComp('gpay',this)">
@@ -526,7 +525,7 @@
         <div class="cc-title">Carte + Apple Pay</div>
         <span class="cc-tag">2× token</span>
       </div>
-      <div class="cc-desc">fbk-apple-pay + fbk-card su stessa pagina. Sessioni separate.</div>
+      <div class="cc-desc">fbk-apple-pay (sempre visibile, QR code su browser non Safari) + fbk-card. Sessioni separate → 2 token.</div>
     </div>
 
     <div class="comp-card combo-card" data-comp="card-gpay" onclick="selectComp('card-gpay',this)">
@@ -546,7 +545,7 @@
         <div class="cc-title">Google + Apple Pay</div>
         <span class="cc-tag">2× token</span>
       </div>
-      <div class="cc-desc">fbk-google-pay + fbk-apple-pay affiancati. Nessuno è fallback dell'altro.</div>
+      <div class="cc-desc">fbk-google-pay (Chrome) + fbk-apple-pay (sempre visibile, QR code su browser non Safari). Sessioni separate → 2 token.</div>
     </div>
 
   </div>
@@ -1172,7 +1171,7 @@
       ].join('\n');
       case 'apay': return [
         imp,
-        tc('&lt;!-- Visibile SOLO su Safari / iOS / macOS con Wallet Apple --&gt;'),
+        tc('&lt;!-- fbk-apple-pay: sempre visibile.\n     Safari/iOS/macOS con Wallet → pulsante Apple Pay nativo\n     Altri browser → Fabrick gestisce il flusso QR code Apple Pay --&gt;'),
         `${tt('&lt;fbk-apple-pay')}`,
         `  ${ta('payment-id')}=${tv('{{ paymentID }}')} ${ta('payment-token')}=${tv('{{ paymentToken }}')}`,
         `  ${ta('button-style')}=${tv(r('o-apay-style')||'black')} ${ta('button-type')}=${tv(r('o-apay-type')||'buy')}${tt('&gt;&lt;/fbk-apple-pay&gt;')}`,
@@ -1188,7 +1187,7 @@
       ].join('\n');
       case 'full': return [
         imp,
-        tc('&lt;!-- all-in-one: Apple Pay → Safari/iOS/macOS · Google Pay → Chrome · Carta → sempre --&gt;'),
+        tc('&lt;!-- all-in-one: Apple Pay → sempre (QR code su browser non Safari) · Google Pay → Chrome · Carta → sempre --&gt;'),
         `${tt('&lt;fbk-card-wallet')}`,
         `  ${ta('payment-id')}=${tv('{{ paymentID }}')} ${ta('payment-token')}=${tv('{{ paymentToken }}')}`,
         `  ${ta('layout')}=${tv(r('o-full-layout')||'horizontal')} ${ta('optional-fields')}=${tv(r('o-full-opt')||'true')}`,
@@ -1221,7 +1220,7 @@
     switch (COMP) {
       case 'card-apay': return [
         imp, stratNote, '',
-        tc('&lt;!-- Sessione 1 → fbk-apple-pay · Sessione 2 → fbk-card --&gt;'),
+        tc('&lt;!-- Sessione 1 → fbk-apple-pay (sempre visibile: pulsante nativo su Safari, QR code sugli altri browser)\n     Sessione 2 → fbk-card --&gt;'),
         `${tt('&lt;div')} ${ta('style')}=${tv('display:flex;flex-direction:column;gap:12px')}${tt('&gt;')}`,
         `  ${tt('&lt;fbk-apple-pay')} ${ta('payment-id')}=${tv('{{ pid1 }}')} ${ta('payment-token')}=${tv('{{ token1 }}')}`,
         `    ${ta('button-style')}=${tv(r('u-capay-as')||'black')} ${ta('button-type')}=${tv(r('u-capay-at')||'buy')}${tt('&gt;&lt;/fbk-apple-pay&gt;')}`,
@@ -1241,7 +1240,7 @@
       ].join('\n');
       case 'gpay-apay': return [
         imp, stratNote, '',
-        tc('&lt;!-- Sessione 1 → fbk-apple-pay · Sessione 2 → fbk-google-pay --&gt;'),
+        tc('&lt;!-- Sessione 1 → fbk-apple-pay (sempre visibile: pulsante nativo su Safari, QR code sugli altri browser)\n     Sessione 2 → fbk-google-pay (richiede Chrome con GPay configurato) --&gt;'),
         `${tt('&lt;div')} ${ta('style')}=${tv('display:flex;flex-direction:column;gap:12px')}${tt('&gt;')}`,
         `  ${tt('&lt;fbk-apple-pay')} ${ta('payment-id')}=${tv('{{ pid1 }}')} ${ta('payment-token')}=${tv('{{ token1 }}')}`,
         `    ${ta('button-style')}=${tv(r('u-ga-as')||'black')} ${ta('button-type')}=${tv(r('u-ga-at')||'buy')}${tt('&gt;&lt;/fbk-apple-pay&gt;')}`,
