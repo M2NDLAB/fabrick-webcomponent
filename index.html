@@ -709,15 +709,10 @@
       <label class="active"><input type="radio" name="o-full-layout" value="horizontal" checked onchange="liveReload()"><span>horizontal</span></label>
       <label><input type="radio" name="o-full-layout" value="vertical" onchange="liveReload()"><span>vertical</span></label>
     </div></div>
-    <div class="og">
-      <span class="og-lbl">optional-fields
-        <span style="font-size:9px;color:var(--orange);margin-left:4px" title="fbk-card-wallet potrebbe non rispettare questo attributo. Se i campi compaiono sempre, è un comportamento gestito dal componente Fabrick.">⚠ vedi nota</span>
-      </span>
-      <div class="op">
-        <label><input type="radio" name="o-full-opt" value="false" onchange="liveReload()"><span>false</span></label>
-        <label class="active"><input type="radio" name="o-full-opt" value="true" checked onchange="liveReload()"><span>true</span></label>
-      </div>
-    </div>
+    <div class="og"><span class="og-lbl">optional-fields</span><div class="op">
+      <label><input type="radio" name="o-full-opt" value="false" onchange="liveReload()"><span>false</span></label>
+      <label class="active"><input type="radio" name="o-full-opt" value="true" checked onchange="liveReload()"><span>true</span></label>
+    </div></div>
     <div class="og"><span class="og-lbl">apple · style</span><div class="op">
       <label class="active"><input type="radio" name="o-full-astyle" value="black" checked onchange="liveReload()"><span>black</span></label>
       <label><input type="radio" name="o-full-astyle" value="white" onchange="liveReload()"><span>white</span></label>
@@ -820,14 +815,9 @@
   <div class="viewer" id="viewer">
     <div class="viewer-bar">
       <div class="vlabel"><span class="vdot"></span><span id="viewer-label">fbk-card · preview</span></div>
-      <div style="display:flex;align-items:center;gap:8px">
-        <span id="opts-pending-note" style="display:none;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--orange);letter-spacing:.05em">
-          ↑ clicca Applica per aggiornare
-        </span>
-        <div class="vtoggle">
-          <button class="vt active" onclick="setView('preview',this)">Preview</button>
-          <button class="vt" onclick="setView('code',this)">Code</button>
-        </div>
+      <div class="vtoggle">
+        <button class="vt active" onclick="setView('preview',this)">Preview</button>
+        <button class="vt" onclick="setView('code',this)">Code</button>
       </div>
     </div>
     <div class="face-preview">
@@ -1106,7 +1096,6 @@
     }
 
     APPLIED = true;
-    clearPendingBadge();
     updateCbBadge();
     $('snip').innerHTML = buildSnip();
     flashBtn(isCombo ? 'd-apply' : 'o-apply', 'Applicato', true);
@@ -1119,9 +1108,7 @@
   function liveReload() {
     $('snip').innerHTML = buildSnip();
     syncAllPills();
-    // NON re-inietta il componente per non cancellare i dati inseriti.
-    // Aggiorna solo lo snippet. L'utente clicca Applica per applicare le nuove opzioni.
-    if (APPLIED) showPendingBadge();
+    if (APPLIED && (!COMBOS.has(COMP) || STRAT === 'both')) injectSlot();
   }
 
   // ─── HTML BUILDERS ───────────────────────────────────
@@ -1303,32 +1290,6 @@
     const b  = $('cb-badge');
     b.textContent = on ? 'callback ON' : 'callback OFF';
     b.className   = 'cbbadge ' + (on ? 'cbon' : 'cboff');
-  }
-
-  function showPendingBadge() {
-    const ids = ['o-apply','d-apply'];
-    ids.forEach(id => {
-      const b = $(id); if (!b) return;
-      if (b.dataset.pending) return;
-      b.dataset.pending = '1';
-      b.style.background = 'var(--border2)';
-      b.style.color = 'var(--text2)';
-      b.textContent = 'Applica (opzioni cambiate)';
-    });
-    const note = $('opts-pending-note');
-    if (note) note.style.display = '';
-  }
-
-  function clearPendingBadge() {
-    ['o-apply','d-apply'].forEach(id => {
-      const b = $(id); if (!b) return;
-      delete b.dataset.pending;
-      b.style.background = '';
-      b.style.color = '';
-      b.textContent = 'Applica';
-    });
-    const note = $('opts-pending-note');
-    if (note) note.style.display = 'none';
   }
 
   function flashBtn(id, msg, ok=false) {
