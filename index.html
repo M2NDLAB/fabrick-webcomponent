@@ -1259,7 +1259,9 @@
     $('cb-modal-overlay').classList.remove('open');
     if (!_cbModalPendingRedir?.url) return;
     if (_cbModalPendingRedir.method === 'POST') postRedir(_cbModalPendingRedir.url, _cbModalPendingRedir.data);
-    else window.location.href = _cbModalPendingRedir.url;
+    //else window.location.href = _cbModalPendingRedir.url; /* Redirect in page */
+    else window.open(_cbModalPendingRedir.url, '_blank'); /* Redirect out page */
+
   }
 
   function cbModalDismiss() {
@@ -1403,12 +1405,13 @@
 
   function postRedir(url, data) {
     const f = document.createElement('form'); f.method='POST'; f.action=url;
+    f.target = '_blank'; /* */
     for(const[k,v] of Object.entries(data||{})){const i=document.createElement('input');i.type='hidden';i.name=k;i.value=v;f.appendChild(i);}
     document.body.appendChild(f); f.submit();
   }
 
   let _pendingRedir = null;
-  function doRedirect() { if(!_pendingRedir?.url)return; if(_pendingRedir.method==='POST')postRedir(_pendingRedir.url,_pendingRedir.data); else window.location.href=_pendingRedir.url; }
+  function doRedirect() { if(!_pendingRedir?.url)return; if(_pendingRedir.method==='POST')postRedir(_pendingRedir.url,_pendingRedir.data); else window.open(_pendingRedir.url, '_blank') /*Redirect out page*/} //else window.location.href=_pendingRedir.url;/*Redirect in page*/ } 
   function dismissAction() { const act=$('cb-actions'); if(act)act.style.display='none'; _pendingRedir=null; }
 
   function setView(view, btn) {
