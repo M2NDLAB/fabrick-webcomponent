@@ -71,271 +71,118 @@
       flex: 1;
     }
 
-    /* ──────────── HERO ──────────── */
-    .hero {
-      padding: 44px 0 36px;
-      text-align: center;
-      display: flex; flex-direction: column; align-items: center; gap: 10px;
-    }
-    .badge {
-      display: inline-flex; align-items: center; gap: 7px;
-      background: rgba(37,99,235,.1); color: var(--accent-l);
-      border: 1px solid rgba(37,99,235,.3); border-radius: 99px;
-      font-family: 'JetBrains Mono', monospace; font-size: 10px;
-      letter-spacing: .1em; padding: 4px 14px; margin-bottom: 4px;
-    }
+    /* HERO */
+    .hero { padding: 44px 0 36px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+    .badge { display: inline-flex; align-items: center; gap: 7px; background: rgba(37,99,235,.1); color: var(--accent-l); border: 1px solid rgba(37,99,235,.3); border-radius: 99px; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: .1em; padding: 4px 14px; margin-bottom: 4px; }
     .bdot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: blink 1.8s infinite; flex-shrink: 0; }
-    .hero h1 {
-      font-size: clamp(1.8rem, 4vw, 2.8rem);
-      font-weight: 800; letter-spacing: -.03em; line-height: 1.1;
-      color: var(--text);
-    }
-    .hero h1 em {
-      font-style: normal; color: var(--accent-l);
-    }
-    .hero-sub {
-      color: var(--text2); font-size: 14px; max-width: 480px; line-height: 1.6; margin-top: 2px;
-    }
-    .hero-meta {
-      display: flex; align-items: center; gap: 8px; margin-top: 6px; flex-wrap: wrap; justify-content: center;
-    }
-    .hero-meta-tag {
-      display: inline-flex; align-items: center; gap: 5px;
-      font-family: 'JetBrains Mono', monospace; font-size: 10px;
-      color: var(--muted); background: var(--surface);
-      border: 1px solid var(--border); border-radius: 4px; padding: 3px 10px;
-    }
+    .hero h1 { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; letter-spacing: -.03em; line-height: 1.1; color: var(--text); }
+    .hero h1 em { font-style: normal; color: var(--accent-l); }
+    .hero-sub { color: var(--text2); font-size: 14px; max-width: 480px; line-height: 1.6; margin-top: 2px; }
+    .hero-meta { display: flex; align-items: center; gap: 8px; margin-top: 6px; flex-wrap: wrap; justify-content: center; }
+    .hero-meta-tag { display: inline-flex; align-items: center; gap: 5px; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 3px 10px; }
 
-    /* ──────────── BUTTONS ──────────── */
-    .btn {
-      display: inline-flex; align-items: center; gap: 7px;
-      padding: 10px 20px; border-radius: var(--rsm);
-      font-family: 'Outfit', sans-serif; font-size: 13px; font-weight: 600;
-      cursor: pointer; transition: all .18s; text-decoration: none; border: none; white-space: nowrap;
-    }
+    /* BUTTONS */
+    .btn { display: inline-flex; align-items: center; gap: 7px; padding: 10px 20px; border-radius: var(--rsm); font-family: 'Outfit', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; transition: all .18s; text-decoration: none; border: none; white-space: nowrap; }
     .btn-primary { background: var(--accent); color: #fff; box-shadow: 0 3px 16px rgba(37,99,235,.3); }
     .btn-primary:hover { background: #1D4ED8; transform: translateY(-1px); box-shadow: 0 4px 22px rgba(37,99,235,.45); }
     .btn-ghost { background: rgba(255,255,255,.07); color: var(--text2); border: 1px solid rgba(255,255,255,.18); }
     .btn-ghost:hover { border-color: var(--accent-l); color: var(--accent-l); transform: translateY(-1px); }
 
-    /* ──────────── STEP HEADER ──────────── */
+    /* STEP HEADER */
     .step-hd { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
-    .step-num {
-      width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center;
-      font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 600;
-      background: var(--accent-g); border: 1px solid rgba(37,99,235,.35); color: var(--accent-l);
-    }
-    .step-hd h3 {
-      font-family: 'JetBrains Mono', monospace; font-size: 10px;
-      letter-spacing: .1em; text-transform: uppercase; color: var(--muted);
-    }
+    .step-num { width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 600; background: var(--accent-g); border: 1px solid rgba(37,99,235,.35); color: var(--accent-l); }
+    .step-hd h3 { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
 
-    /* ──────────── COMPONENT GRID ──────────── */
-    .comp-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-      margin-bottom: 28px;
-    }
+    /* COMPONENT GRID */
+    .comp-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 28px; }
     @media (max-width: 900px) { .comp-grid { grid-template-columns: repeat(2,1fr); } }
     @media (max-width: 500px) { .comp-grid { grid-template-columns: 1fr; } }
-
-    .comp-card {
-      background: var(--surface); border: 1.5px solid var(--border);
-      border-radius: var(--r); padding: 16px 18px;
-      cursor: pointer; transition: all .18s;
-      display: flex; flex-direction: column; gap: 9px;
-      position: relative; overflow: hidden;
-    }
-    .comp-card::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-      background: var(--accent); opacity: 0; transition: opacity .18s;
-    }
+    .comp-card { background: var(--surface); border: 1.5px solid var(--border); border-radius: var(--r); padding: 16px 18px; cursor: pointer; transition: all .18s; display: flex; flex-direction: column; gap: 9px; position: relative; overflow: hidden; }
+    .comp-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--accent); opacity: 0; transition: opacity .18s; }
     .comp-card:hover { border-color: var(--border2); transform: translateY(-2px); }
     .comp-card.selected { border-color: var(--accent); background: var(--surf2); box-shadow: 0 0 0 1px var(--accent), 0 4px 18px rgba(37,99,235,.14); }
     .comp-card.selected::before { opacity: 1; }
     .comp-card.combo-card::before { background: var(--orange); }
     .comp-card.combo-card.selected { border-color: var(--orange); box-shadow: 0 0 0 1px var(--orange), 0 4px 18px rgba(249,115,22,.12); }
-
-    .cc-abbr {
-      position: absolute; top: 11px; right: 11px;
-      font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 600;
-      color: var(--muted); background: var(--surf3);
-      border: 1px solid var(--border2); border-radius: 4px;
-      padding: 2px 7px; letter-spacing: .05em;
-      transition: opacity .15s;
-    }
+    .cc-abbr { position: absolute; top: 11px; right: 11px; font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 600; color: var(--muted); background: var(--surf3); border: 1px solid var(--border2); border-radius: 4px; padding: 2px 7px; letter-spacing: .05em; transition: opacity .15s; }
     .combo-card .cc-abbr { color: rgba(249,115,22,.6); border-color: rgba(249,115,22,.25); background: rgba(249,115,22,.05); }
     .comp-card.selected .cc-abbr { opacity: 0; pointer-events: none; }
     .cc-top { display: flex; flex-direction: column; gap: 5px; }
     .cc-title { font-size: 13px; font-weight: 700; color: var(--text); line-height: 1.2; }
-    .cc-tag {
-      font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--accent-l);
-      background: var(--accent-g); border: 1px solid rgba(37,99,235,.22);
-      border-radius: 4px; padding: 1px 6px; display: inline-block; margin-top: 3px;
-    }
+    .cc-tag { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--accent-l); background: var(--accent-g); border: 1px solid rgba(37,99,235,.22); border-radius: 4px; padding: 1px 6px; display: inline-block; margin-top: 3px; }
     .combo-card .cc-tag { color: var(--orange); background: rgba(249,115,22,.1); border-color: rgba(249,115,22,.22); }
     .cc-desc { font-size: 11.5px; color: var(--muted); line-height: 1.5; }
-    .cc-check {
-      position: absolute; top: 12px; right: 12px;
-      width: 18px; height: 18px; border-radius: 50%;
-      background: var(--accent); display: none; align-items: center; justify-content: center;
-    }
+    .cc-check { position: absolute; top: 12px; right: 12px; width: 18px; height: 18px; border-radius: 50%; background: var(--accent); display: none; align-items: center; justify-content: center; }
     .combo-card .cc-check { background: var(--orange); }
     .comp-card.selected .cc-check { display: flex; }
-
-    /* divider tra ufficiali e combo */
-    .grid-divider {
-      display: flex; align-items: center; gap: 12px;
-      margin: 18px 0 14px;
-    }
+    .grid-divider { display: flex; align-items: center; gap: 12px; margin: 18px 0 14px; }
     .grid-divider span { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: .08em; color: var(--muted); white-space: nowrap; }
     .grid-divider::before, .grid-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
-    /* ──────────── SESSION INFO BOX (collapsibile) ──────────── */
-    .sess-box {
-      background: rgba(249,115,22,.05);
-      border: 1px solid rgba(249,115,22,.22);
-      border-radius: var(--r);
-      margin-bottom: 22px;
-      overflow: hidden;
-    }
-    .sess-toggle {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 13px 18px; cursor: pointer;
-      user-select: none;
-    }
-    .sess-toggle h4 {
-      font-size: 13px; font-weight: 700; color: var(--orange);
-      display: flex; align-items: center; gap: 7px;
-    }
-    .sess-arrow {
-      width: 20px; height: 20px; border-radius: 4px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 11px; color: var(--orange);
-      transition: transform .2s;
-    }
+    /* SESSION INFO BOX */
+    .sess-box { background: rgba(249,115,22,.05); border: 1px solid rgba(249,115,22,.22); border-radius: var(--r); margin-bottom: 22px; overflow: hidden; }
+    .sess-toggle { display: flex; align-items: center; justify-content: space-between; padding: 13px 18px; cursor: pointer; user-select: none; }
+    .sess-toggle h4 { font-size: 13px; font-weight: 700; color: var(--orange); display: flex; align-items: center; gap: 7px; }
+    .sess-arrow { width: 20px; height: 20px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 11px; color: var(--orange); transition: transform .2s; }
     .sess-box.open .sess-arrow { transform: rotate(180deg); }
     .sess-body { display: none; padding: 0 18px 18px; }
     .sess-box.open .sess-body { display: block; }
     .sess-body p { font-size: 12.5px; color: var(--text2); line-height: 1.6; margin-bottom: 14px; }
     .sess-body p strong { color: var(--text); }
-    .sess-body p code {
-      font-family: 'JetBrains Mono', monospace; font-size: 11px;
-      color: var(--accent-l); background: var(--accent-g); padding: 1px 5px; border-radius: 3px;
-    }
-
+    .sess-body p code { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--accent-l); background: var(--accent-g); padding: 1px 5px; border-radius: 3px; }
     .ic3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-top: 14px; }
     @media (max-width: 700px) { .ic3 { grid-template-columns: 1fr; } }
-    .ic {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--rsm); padding: 14px 16px;
-    }
+    .ic { background: var(--surface); border: 1px solid var(--border); border-radius: var(--rsm); padding: 14px 16px; }
     .ic h5 { font-size: 11.5px; font-weight: 700; display: flex; align-items: center; gap: 5px; margin-bottom: 7px; }
     .ic p { font-size: 11.5px; color: var(--text2); line-height: 1.55; }
     .ic-r h5 { color: var(--red); } .ic-y h5 { color: var(--yellow); } .ic-g h5 { color: var(--green); }
-
     .strat-pills { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
-    .strat-pill {
-      padding: 9px 14px; border-radius: var(--rsm); border: 1px solid var(--border);
-      background: var(--surface); cursor: pointer; transition: all .15s;
-      display: flex; flex-direction: column; gap: 3px;
-    }
+    .strat-pill { padding: 9px 14px; border-radius: var(--rsm); border: 1px solid var(--border); background: var(--surface); cursor: pointer; transition: all .15s; display: flex; flex-direction: column; gap: 3px; }
     .strat-pill strong { font-size: 12px; color: var(--text2); }
     .strat-pill span { font-size: 10.5px; color: var(--muted); font-family: 'JetBrains Mono', monospace; }
     .strat-pill.active { border-color: var(--orange); background: rgba(249,115,22,.07); }
     .strat-pill.active strong { color: var(--orange); }
 
-    /* ──────────── CONFIG BOX ──────────── */
-    .config-box {
-      background: var(--surface); border: 1px solid var(--border);
-      border-left: 3px solid var(--accent);
-      border-radius: var(--r); padding: 20px 22px; margin-bottom: 24px;
-    }
+    /* CONFIG BOX */
+    .config-box { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: var(--r); padding: 20px 22px; margin-bottom: 24px; }
     .config-box.dual { border-left-color: var(--orange); }
-
     .cfg-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; }
     .cfg-field { display: flex; flex-direction: column; gap: 5px; }
-    .cfg-field label {
-      font-family: 'JetBrains Mono', monospace; font-size: 10px;
-      color: var(--muted); letter-spacing: .06em; text-transform: uppercase;
-    }
-    .cfg-field input {
-      background: var(--code); border: 1px solid var(--border2);
-      color: var(--text); border-radius: var(--rsm);
-      padding: 9px 12px; font-family: 'JetBrains Mono', monospace;
-      font-size: 12px; width: 210px; transition: border-color .18s, box-shadow .18s;
-    }
+    .cfg-field label { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: .06em; text-transform: uppercase; }
+    .cfg-field input { background: var(--code); border: 1px solid var(--border2); color: var(--text); border-radius: var(--rsm); padding: 9px 12px; font-family: 'JetBrains Mono', monospace; font-size: 12px; width: 210px; transition: border-color .18s, box-shadow .18s; }
     .cfg-field input.wide { width: 270px; }
     .cfg-field input::placeholder { color: var(--muted); opacity: .45; }
     .cfg-field input:focus { outline: none; border-color: var(--accent-l); box-shadow: 0 0 0 3px var(--accent-g); }
-
-    /* dual token rows */
     .dual-block { display: flex; flex-direction: column; gap: 14px; margin-bottom: 14px; }
-    .tok-row {
-      padding: 16px 18px; border: 1px solid var(--border);
-      border-radius: var(--rsm); background: rgba(255,255,255,.02);
-      display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end;
-      position: relative;
-    }
-    .tok-lbl {
-      position: absolute; top: 0; left: 14px; transform: translateY(-50%);
-      font-family: 'JetBrains Mono', monospace; font-size: 10px;
-      background: var(--surface); padding: 0 7px; letter-spacing: .06em;
-    }
+    .tok-row { padding: 16px 18px; border: 1px solid var(--border); border-radius: var(--rsm); background: rgba(255,255,255,.02); display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; position: relative; }
+    .tok-lbl { position: absolute; top: 0; left: 14px; transform: translateY(-50%); font-family: 'JetBrains Mono', monospace; font-size: 10px; background: var(--surface); padding: 0 7px; letter-spacing: .06em; }
     .tok1 .tok-lbl { color: var(--orange); }
     .tok2 .tok-lbl { color: var(--yellow); }
     .tok2 { border-color: rgba(249,115,22,.2); }
-
-    .cfg-controls {
-      display: flex; flex-wrap: wrap; gap: 12px; align-items: center;
-      margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border);
-    }
-    .cfg-lbl {
-      font-family: 'JetBrains Mono', monospace; font-size: 10px;
-      color: var(--muted); text-transform: uppercase; letter-spacing: .07em;
-    }
+    .cfg-controls { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); }
+    .cfg-lbl { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .07em; }
     .sw { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; user-select: none; }
     .sw input { display: none; }
-    .sw-track {
-      width: 36px; height: 20px; background: var(--border2);
-      border-radius: 10px; position: relative; transition: background .18s;
-    }
-    .sw-track::after {
-      content: ''; position: absolute; top: 3px; left: 3px;
-      width: 14px; height: 14px; border-radius: 50%; background: #fff; transition: transform .18s;
-    }
+    .sw-track { width: 36px; height: 20px; background: var(--border2); border-radius: 10px; position: relative; transition: background .18s; }
+    .sw-track::after { content: ''; position: absolute; top: 3px; left: 3px; width: 14px; height: 14px; border-radius: 50%; background: #fff; transition: transform .18s; }
     .sw input:checked ~ .sw-track { background: var(--green); }
     .sw input:checked ~ .sw-track::after { transform: translateX(16px); }
     .sw-val { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text2); min-width: 20px; }
     .cfg-ml { margin-left: auto; }
 
-    /* ──────────── OPTS BAR ──────────── */
-    .opts-bar {
-      display: flex; flex-wrap: wrap; gap: 14px;
-      padding: 12px 16px; margin-bottom: 18px;
-      background: var(--surface); border: 1px solid var(--border); border-radius: var(--rsm);
-    }
+    /* OPTS BAR */
+    .opts-bar { display: flex; flex-wrap: wrap; gap: 14px; padding: 12px 16px; margin-bottom: 18px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--rsm); }
     .og { display: flex; flex-direction: column; gap: 5px; }
     .og-lbl { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
     .op { display: flex; gap: 3px; flex-wrap: wrap; }
-    .op label {
-      display: inline-flex; align-items: center; padding: 4px 10px;
-      border-radius: 5px; border: 1px solid var(--border);
-      font-family: 'JetBrains Mono', monospace; font-size: 11px;
-      color: var(--text2); cursor: pointer; transition: all .13s; user-select: none;
-    }
+    .op label { display: inline-flex; align-items: center; padding: 4px 10px; border-radius: 5px; border: 1px solid var(--border); font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text2); cursor: pointer; transition: all .13s; user-select: none; }
     .op input[type=radio] { display: none; }
     .op label.active { background: var(--accent-g); border-color: rgba(37,99,235,.45); color: var(--accent-l); }
     .op label:hover:not(.active) { border-color: var(--border2); color: var(--text); }
 
-    /* ──────────── VIEWER ──────────── */
+    /* VIEWER */
     .viewer { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; margin-bottom: 14px; }
-    .viewer-bar {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 10px 14px; background: var(--surf2); border-bottom: 1px solid var(--border);
-    }
+    .viewer-bar { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: var(--surf2); border-bottom: 1px solid var(--border); }
     .vlabel { display: flex; align-items: center; gap: 7px; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: .07em; text-transform: uppercase; }
     .vdot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); }
     .viewer.code-mode .vdot { background: var(--accent-l); }
@@ -348,15 +195,24 @@
     .viewer.code-mode .face-code { display: block; }
     .pslot { width: 100%; min-height: 80px; display: flex; justify-content: center; align-items: flex-start; }
     .pslot > * { width: 100%; }
-    .ph {
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      min-height: 120px; border: 1.5px dashed var(--border2); border-radius: var(--rsm);
-      color: var(--muted); font-size: 13px; text-align: center; padding: 28px; gap: 10px; line-height: 1.5;
-    }
+    .ph { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 120px; border: 1.5px dashed var(--border2); border-radius: var(--rsm); color: var(--muted); font-size: 13px; text-align: center; padding: 28px; gap: 10px; line-height: 1.5; }
     .ph svg { opacity: .3; }
     .ph strong { color: var(--accent-l); font-weight: 600; }
 
-    /* code face */
+    /* ── ERROR BANNER (sostituisce il componente rotto) ── */
+    .err-banner { display: flex; flex-direction: column; gap: 10px; padding: 18px 20px; border: 1.5px solid rgba(239,68,68,.35); border-radius: var(--rsm); background: rgba(239,68,68,.06); color: var(--text2); font-size: 12.5px; line-height: 1.55; }
+    .err-banner-title { font-size: 13px; font-weight: 700; color: var(--red); display: flex; align-items: center; gap: 7px; font-family: 'JetBrains Mono', monospace; letter-spacing: .03em; }
+    .err-banner code { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--accent-l); background: var(--accent-g); padding: 1px 5px; border-radius: 3px; }
+    .err-banner-msg { font-size: 12.5px; color: var(--text2); }
+    .err-banner-msg strong { color: var(--text); }
+    .err-banner-hint { font-size: 11.5px; color: var(--muted); line-height: 1.65; padding-top: 10px; margin-top: 2px; border-top: 1px dashed rgba(239,68,68,.2); }
+    .err-banner-hint strong { color: var(--text2); }
+    .err-banner-actions { display: flex; gap: 8px; flex-wrap: wrap; padding-top: 4px; }
+    .err-banner-actions button { padding: 7px 14px; border-radius: 6px; border: 1px solid var(--border2); background: var(--surface); color: var(--text2); font-family: 'JetBrains Mono', monospace; font-size: 11px; cursor: pointer; transition: all .15s; }
+    .err-banner-actions button:hover { border-color: var(--accent-l); color: var(--accent-l); }
+    .err-banner-actions button.primary { border-color: rgba(37,99,235,.5); color: var(--accent-l); background: var(--accent-g); }
+    .err-banner-actions button.primary:hover { background: rgba(37,99,235,.25); }
+
     .code-head { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-bottom: 1px solid var(--border); background: var(--code); }
     .dots { display: flex; gap: 5px; }
     .dots span { width: 10px; height: 10px; border-radius: 50%; }
@@ -368,20 +224,19 @@
     .copybtn.ok { border-color: var(--green); color: var(--green); }
     pre { background: var(--code); padding: 16px 18px; overflow-x: auto; overflow-y: auto; max-height: 460px; font-family: 'JetBrains Mono', monospace; font-size: 12px; line-height: 1.8; color: var(--text2); }
 
-    /* syntax */
     .tc { color: #3D5275; font-style: italic; }
     .tt { color: #60A5FA; } .ta { color: #86EFAC; }
     .tv { color: #FDE68A; } .tk { color: #C084FC; }
     .tf { color: #38BDF8; } .ts { color: #FDE68A; }
     .tp { color: #64748B; }
 
-    /* ──────────── CHOICE OVERLAY ──────────── */
+    /* CHOICE OVERLAY */
     #choice-overlay { display: none; margin-bottom: 12px; }
     .choice-box { background: var(--surf2); border: 1px solid rgba(16,185,129,.25); border-radius: var(--r); padding: 14px 18px; }
     .choice-box p { font-size: 12px; color: var(--text2); margin-bottom: 10px; }
     .choice-box p strong { color: var(--green); }
 
-    /* ──────────── RESPONSE LOG ──────────── */
+    /* RESPONSE LOG */
     .rlog { background: var(--code); border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; margin-bottom: 4px; }
     .rlog-head { padding: 9px 14px; border-bottom: 1px solid var(--border); font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); display: flex; align-items: center; gap: 8px; }
     .ldot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); animation: blink 1.8s infinite; flex-shrink: 0; }
@@ -391,7 +246,7 @@
     .rout { padding: 12px 16px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--muted); min-height: 52px; white-space: pre-wrap; word-break: break-all; line-height: 1.65; }
     .sok { color: var(--green); } .serr { color: var(--red); } .swrn { color: var(--yellow); }
 
-    /* ──────────── INFO CARDS (official) ──────────── */
+    /* INFO CARDS */
     .info3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-top: 22px; }
     @media (max-width:700px) { .info3 { grid-template-columns: 1fr; } }
     .icard { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 15px 17px; }
@@ -400,155 +255,73 @@
     .icard code { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--accent-l); background: var(--accent-g); padding: 1px 5px; border-radius: 3px; }
     .icard-r h5 { color: var(--red); } .icard-o h5 { color: var(--orange); }
 
-    /* script src tag in code-head */
-    .snip-src {
-      font-family: 'JetBrains Mono', monospace; font-size: 10px;
-      color: var(--muted); display: flex; align-items: center; gap: 5px;
-      padding: 2px 8px; border-radius: 4px;
-      background: rgba(37,99,235,.08); border: 1px solid rgba(37,99,235,.2);
-    }
+    .snip-src { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); display: flex; align-items: center; gap: 5px; padding: 2px 8px; border-radius: 4px; background: rgba(37,99,235,.08); border: 1px solid rgba(37,99,235,.2); }
     .snip-src span { color: var(--accent-l); }
 
-    /* ──────────── FOOTER ──────────── */
-    .site-footer {
-      position: relative; z-index: 1;
-      border-top: 1px solid var(--border);
-      padding: 20px 24px;
-      display: flex; align-items: center; justify-content: space-between;
-      flex-wrap: wrap; gap: 14px;
-    }
+    /* FOOTER */
+    .site-footer { position: relative; z-index: 1; border-top: 1px solid var(--border); padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; }
     .footer-left { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); }
     .footer-left strong { color: var(--text2); font-weight: 600; }
     .footer-right { display: flex; gap: 8px; align-items: center; }
-    .footer-link {
-      display: inline-flex; align-items: center; gap: 6px;
-      padding: 7px 14px; border-radius: var(--rsm);
-      font-family: 'Outfit', sans-serif; font-size: 12px; font-weight: 600;
-      text-decoration: none; transition: all .18s; border: 1px solid var(--border2);
-      color: var(--text2); background: transparent;
-    }
+    .footer-link { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: var(--rsm); font-family: 'Outfit', sans-serif; font-size: 12px; font-weight: 600; text-decoration: none; transition: all .18s; border: 1px solid var(--border2); color: var(--text2); background: transparent; }
     .footer-link:hover { border-color: var(--accent-l); color: var(--accent-l); transform: translateY(-1px); }
     .footer-link.status:hover { border-color: var(--green); color: var(--green); }
 
-    /* ──────────── TOOLTIP ──────────── */
-    .tip {
-      position: relative;
-      display: inline-flex; align-items: center; justify-content: center;
-      width: 15px; height: 15px;
-      border-radius: 50%;
-      border: 1px solid var(--border2);
-      background: var(--surf2);
-      color: var(--muted);
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 9px; font-weight: 700;
-      cursor: default;
-      flex-shrink: 0;
-      transition: border-color .15s, color .15s;
-      vertical-align: middle;
-    }
+    /* TOOLTIP */
+    .tip { position: relative; display: inline-flex; align-items: center; justify-content: center; width: 15px; height: 15px; border-radius: 50%; border: 1px solid var(--border2); background: var(--surf2); color: var(--muted); font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 700; cursor: default; flex-shrink: 0; transition: border-color .15s, color .15s; vertical-align: middle; }
     .tip:hover { border-color: var(--accent-l); color: var(--accent-l); }
-    .tip::after {
-      content: attr(data-tip);
-      position: absolute;
-      left: 50%; top: calc(100% + 8px);
-      transform: translateX(-50%);
-      background: var(--surf3);
-      border: 1px solid var(--border2);
-      border-radius: var(--rsm);
-      padding: 9px 13px;
-      font-family: 'Outfit', sans-serif;
-      font-size: 12px; font-weight: 400;
-      line-height: 1.55;
-      color: var(--text2);
-      white-space: pre-line;        /* rispetta \n nel testo */
-      max-width: 300px;
-      min-width: 180px;
-      text-align: left;
-      pointer-events: none;
-      opacity: 0;
-      visibility: hidden;
-      z-index: 100;
-      box-shadow: 0 8px 24px rgba(0,0,0,.4);
-      transition: opacity .15s, visibility .15s;
-    }
-    /* freccia in alto */
-    .tip::before {
-      content: '';
-      position: absolute;
-      left: 50%; top: calc(100% + 3px);
-      transform: translateX(-50%);
-      border: 5px solid transparent;
-      border-bottom-color: var(--border2);
-      pointer-events: none;
-      opacity: 0; visibility: hidden;
-      transition: opacity .15s, visibility .15s;
-      z-index: 101;
-    }
+    .tip::after { content: attr(data-tip); position: absolute; left: 50%; top: calc(100% + 8px); transform: translateX(-50%); background: var(--surf3); border: 1px solid var(--border2); border-radius: var(--rsm); padding: 9px 13px; font-family: 'Outfit', sans-serif; font-size: 12px; font-weight: 400; line-height: 1.55; color: var(--text2); white-space: pre-line; max-width: 300px; min-width: 180px; text-align: left; pointer-events: none; opacity: 0; visibility: hidden; z-index: 100; box-shadow: 0 8px 24px rgba(0,0,0,.4); transition: opacity .15s, visibility .15s; }
+    .tip::before { content: ''; position: absolute; left: 50%; top: calc(100% + 3px); transform: translateX(-50%); border: 5px solid transparent; border-bottom-color: var(--border2); pointer-events: none; opacity: 0; visibility: hidden; transition: opacity .15s, visibility .15s; z-index: 101; }
     .tip:hover::after, .tip:hover::before { opacity: 1; visibility: visible; }
-    /* versione che si apre in alto (se il tooltip è in basso alla pagina) */
-    .tip.up::after {
-      top: auto; bottom: calc(100% + 8px);
-    }
-    .tip.up::before {
-      top: auto; bottom: calc(100% + 3px);
-      border-bottom-color: transparent;
-      border-top-color: var(--border2);
-    }
+    .tip.up::after { top: auto; bottom: calc(100% + 8px); }
+    .tip.up::before { top: auto; bottom: calc(100% + 3px); border-bottom-color: transparent; border-top-color: var(--border2); }
 
-    
-    /* ── OMIT PILL ── */
-    .op label.omit-lbl {
-      color: var(--muted); border-style: dashed;
-      border-color: var(--border);
-    }
-    .op label.omit-lbl.active {
-      background: rgba(239,68,68,.08);
-      border-color: rgba(239,68,68,.35);
-      color: var(--red);
-    }
+    .op label.omit-lbl { color: var(--muted); border-style: dashed; border-color: var(--border); }
+    .op label.omit-lbl.active { background: rgba(239,68,68,.08); border-color: rgba(239,68,68,.35); color: var(--red); }
     .op label.omit-lbl:hover:not(.active) { border-color: var(--border2); color: var(--text2); }
 
-    /* ── COMBO SESSION MODE ── */
-    .sess-mode {
-      display: flex; gap: 6px; margin-bottom: 16px;
-    }
-    .sm-btn {
-      flex: 1; display: flex; align-items: center; gap: 8px;
-      padding: 10px 14px; border-radius: var(--rsm);
-      border: 1px solid var(--border); background: var(--surf2);
-      cursor: pointer; transition: all .15s; user-select: none;
-    }
+    .sess-mode { display: flex; gap: 6px; margin-bottom: 16px; }
+    .sm-btn { flex: 1; display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: var(--rsm); border: 1px solid var(--border); background: var(--surf2); cursor: pointer; transition: all .15s; user-select: none; }
     .sm-btn input[type=radio] { display: none; }
-    .sm-btn .sm-ico {
-      width: 28px; height: 28px; border-radius: 6px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 13px; flex-shrink: 0;
-      background: var(--surf3); border: 1px solid var(--border2);
-      transition: all .15s;
-    }
+    .sm-btn .sm-ico { width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; background: var(--surf3); border: 1px solid var(--border2); transition: all .15s; }
     .sm-btn .sm-txt strong { font-size: 12px; color: var(--text2); display: block; font-weight: 700; }
     .sm-btn .sm-txt span   { font-size: 10px; color: var(--muted); font-family: 'JetBrains Mono', monospace; }
-    .sm-btn.active {
-      border-color: var(--accent);
-      background: var(--surf3);
-    }
+    .sm-btn.active { border-color: var(--accent); background: var(--surf3); }
     .sm-btn.active .sm-ico { background: var(--accent-g); border-color: rgba(37,99,235,.4); }
     .sm-btn.active .sm-txt strong { color: var(--text); }
+
+    /* MODAL */
+    .cb-modal-overlay { position: fixed; inset: 0; z-index: 1000; background: rgba(0,0,0,.7); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; padding: 24px; opacity: 0; visibility: hidden; transition: opacity .2s, visibility .2s; }
+    .cb-modal-overlay.open { opacity: 1; visibility: visible; }
+    .cb-modal { background: var(--surface); border: 1px solid var(--border2); border-radius: var(--r); width: 100%; max-width: 720px; max-height: 88vh; display: flex; flex-direction: column; animation: modalIn .2s ease; box-shadow: 0 24px 80px rgba(0,0,0,.6); }
+    @keyframes modalIn { from{transform:translateY(16px);opacity:0} to{transform:none;opacity:1} }
+    .cb-modal-header { display: flex; align-items: center; gap: 10px; padding: 16px 20px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+    .cb-modal-header h3 { font-size: 13px; font-weight: 700; flex: 1; color: var(--text); }
+    .cb-modal-status { font-family: 'JetBrains Mono', monospace; font-size: 11px; padding: 3px 10px; border-radius: 4px; border: 1px solid currentColor; background: rgba(0,0,0,.2); }
+    .cb-modal-body { overflow-y: auto; flex: 1; }
+    .cb-modal-section { padding: 14px 20px; border-bottom: 1px solid var(--border); }
+    .cb-modal-section:last-child { border-bottom: none; }
+    .cb-modal-section-title { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+    .cb-redir-box { background: var(--surf3); border: 1px solid var(--border2); border-radius: var(--rsm); padding: 10px 14px; font-family: 'JetBrains Mono', monospace; font-size: 11px; word-break: break-all; line-height: 1.6; color: var(--text2); }
+    .cb-redir-method { display: inline-block; padding: 1px 7px; border-radius: 3px; font-size: 10px; font-weight: 700; margin-right: 8px; background: rgba(245,158,11,.12); color: var(--yellow); border: 1px solid rgba(245,158,11,.3); }
+    .cb-redir-url { color: var(--accent-l); }
+    .cb-redir-note { margin-top: 8px; font-size: 11.5px; color: var(--text2); line-height: 1.6; }
+    .cb-json-pre { background: var(--code); border-radius: var(--rsm); padding: 12px 14px; margin: 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text2); line-height: 1.65; overflow-x: auto; max-height: 280px; overflow-y: auto; white-space: pre; }
+    .cb-modal-footer { display: flex; gap: 10px; padding: 14px 20px; border-top: 1px solid var(--border); flex-shrink: 0; flex-wrap: wrap; align-items: center; }
+    .cb-timer-bar { height: 3px; background: var(--border); border-radius: 99px; overflow: hidden; margin: 0 20px; flex-shrink: 0; }
+    .cb-timer-fill { height: 100%; background: var(--yellow); width: 100%; transform-origin: left; }
 
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.2} }
     @keyframes fade { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
     .fadein { animation: fade .25s ease; }
 
-    @media (max-width:600px) {
-      .cfg-field input, .cfg-field input.wide { width: 100%; }
-    }
+    @media (max-width:600px) { .cfg-field input, .cfg-field input.wide { width: 100%; } }
   </style>
 </head>
 
 <body>
 <div class="wrap">
-
-  <!-- ═══ HERO ═══ -->
+  <!-- HERO -->
   <header class="hero">
     <div class="badge"><span class="bdot"></span>SANDBOX · Web Components Demo</div>
     <h1>Fabrick Payment <em>Web Components</em></h1>
@@ -565,7 +338,7 @@
     </div>
   </header>
 
-  <!-- ═══ STEP 1: SELEZIONE COMPONENTE ═══ -->
+  <!-- STEP 1 -->
   <div class="step-hd" style="margin-top:8px">
     <span class="step-num">1</span>
     <h3>Seleziona componente</h3>
@@ -573,51 +346,32 @@
   </div>
 
   <div class="comp-grid">
-
-    <!-- UFFICIALI -->
     <div class="comp-card selected" data-comp="card" onclick="selectComp('card',this)">
       <div class="cc-check"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg></div>
       <div class="cc-abbr">CB</div>
-      <div class="cc-top">
-        <div class="cc-title">Solo Carte</div>
-        <span class="cc-tag">&lt;fbk-card&gt;</span>
-      </div>
+      <div class="cc-top"><div class="cc-title">Solo Carte</div><span class="cc-tag">&lt;fbk-card&gt;</span></div>
       <div class="cc-desc">Form carta di credito/debito. Numero, scadenza, CVV e opzionalmente nome acquirente (per 3DS).</div>
     </div>
-
     <div class="comp-card" data-comp="apay" onclick="selectComp('apay',this)">
       <div class="cc-check"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg></div>
       <div class="cc-abbr">AP</div>
-      <div class="cc-top">
-        <div class="cc-title">Apple Pay</div>
-        <span class="cc-tag">&lt;fbk-apple-pay&gt;</span>
-      </div>
+      <div class="cc-top"><div class="cc-title">Apple Pay</div><span class="cc-tag">&lt;fbk-apple-pay&gt;</span></div>
       <div class="cc-desc">Sempre visibile. Su Safari / iOS / macOS con Wallet configurato mostra il pulsante nativo; sugli altri browser Fabrick gestisce il flusso tramite QR code Apple Pay.</div>
     </div>
-
     <div class="comp-card" data-comp="gpay" onclick="selectComp('gpay',this)">
       <div class="cc-check"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg></div>
       <div class="cc-abbr">G</div>
-      <div class="cc-top">
-        <div class="cc-title">Google Pay</div>
-        <span class="cc-tag">&lt;fbk-google-pay&gt;</span>
-      </div>
+      <div class="cc-top"><div class="cc-title">Google Pay</div><span class="cc-tag">&lt;fbk-google-pay&gt;</span></div>
       <div class="cc-desc">Richiede Chrome desktop o Android con almeno una carta Google Pay salvata.</div>
     </div>
-
     <div class="comp-card" data-comp="full" onclick="selectComp('full',this)">
       <div class="cc-check"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg></div>
       <div class="cc-abbr">ALL</div>
-      <div class="cc-top">
-        <div class="cc-title">All-in-one</div>
-        <span class="cc-tag">&lt;fbk-card-wallet&gt;</span>
-      </div>
+      <div class="cc-top"><div class="cc-title">All-in-one</div><span class="cc-tag">&lt;fbk-card-wallet&gt;</span></div>
       <div class="cc-desc">Componente ufficiale all-in-one: adatta Apple Pay, Google Pay e carta al device automaticamente.</div>
     </div>
-
   </div>
 
-  <!-- divider -->
   <div class="grid-divider">
     <span>combinazioni non ufficiali
       <span class="tip" data-tip="Non sono componenti Fabrick nativi ma due componenti affiancati dal tuo codice. Ogni componente ha la propria sessione di pagamento → servono due paymentToken distinti. Se l'utente ne completa uno, l'altro rimane in stato pending: devi gestire tu la mutua esclusione lato tuo.">i</span>
@@ -625,40 +379,27 @@
   </div>
 
   <div class="comp-grid" style="grid-template-columns:repeat(3,1fr)">
-
     <div class="comp-card combo-card" data-comp="card-apay" onclick="selectComp('card-apay',this)">
       <div class="cc-check"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg></div>
       <div class="cc-abbr">C+A</div>
-      <div class="cc-top">
-        <div class="cc-title">Carte + Apple Pay</div>
-        <span class="cc-tag">2× token</span>
-      </div>
+      <div class="cc-top"><div class="cc-title">Carte + Apple Pay</div><span class="cc-tag">2× token</span></div>
       <div class="cc-desc">fbk-apple-pay (sempre visibile, QR code su browser non Safari) + fbk-card. Sessioni separate → 2 token.</div>
     </div>
-
     <div class="comp-card combo-card" data-comp="card-gpay" onclick="selectComp('card-gpay',this)">
       <div class="cc-check"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg></div>
       <div class="cc-abbr">C+G</div>
-      <div class="cc-top">
-        <div class="cc-title">Carte + Google Pay</div>
-        <span class="cc-tag">2× token</span>
-      </div>
+      <div class="cc-top"><div class="cc-title">Carte + Google Pay</div><span class="cc-tag">2× token</span></div>
       <div class="cc-desc">fbk-google-pay + fbk-card su stessa pagina. Sessioni separate.</div>
     </div>
-
     <div class="comp-card combo-card" data-comp="gpay-apay" onclick="selectComp('gpay-apay',this)">
       <div class="cc-check"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg></div>
       <div class="cc-abbr">G+A</div>
-      <div class="cc-top">
-        <div class="cc-title">Google + Apple Pay</div>
-        <span class="cc-tag">2× token</span>
-      </div>
+      <div class="cc-top"><div class="cc-title">Google + Apple Pay</div><span class="cc-tag">2× token</span></div>
       <div class="cc-desc">fbk-google-pay (Chrome) + fbk-apple-pay (sempre visibile, QR code su browser non Safari). Sessioni separate → 2 token.</div>
     </div>
-
   </div>
 
-  <!-- ═══ SESSION ARCHITECTURE BOX (collapsibile, default chiuso) ═══ -->
+  <!-- SESSION ARCHITECTURE BOX -->
   <div class="sess-box" id="sess-box" style="display:none">
     <div class="sess-toggle" onclick="toggleSess()">
       <h4>
@@ -670,69 +411,39 @@
     <div class="sess-body">
       <p>Il modello Fabrick è <strong>1 payment-id = 1 sessione di pagamento</strong>. Con più componenti sulla stessa pagina:</p>
       <div class="ic3">
-        <div class="ic ic-r">
-          <h5>✗ Stesso token per entrambi</h5>
-          <p>Entrambi si avviano in parallelo sulla stessa sessione → conflitto, doppio loading, comportamento imprevedibile.</p>
-        </div>
-        <div class="ic ic-y">
-          <h5>⚠ Token diversi</h5>
-          <p>Due sessioni indipendenti non sincronizzate. Se l'utente completa una, l'altra rimane pending. <strong>Devi gestire tu la mutua esclusione.</strong></p>
-        </div>
-        <div class="ic ic-g">
-          <h5>✓ Strategia corretta</h5>
-          <p>Mostra prima la scelta del metodo, poi carica <em>un solo</em> componente. Oppure usa <code>&lt;fbk-card-wallet&gt;</code>.</p>
-        </div>
+        <div class="ic ic-r"><h5>✗ Stesso token per entrambi</h5><p>Entrambi si avviano in parallelo sulla stessa sessione → conflitto, doppio loading, comportamento imprevedibile.</p></div>
+        <div class="ic ic-y"><h5>⚠ Token diversi</h5><p>Due sessioni indipendenti non sincronizzate. Se l'utente completa una, l'altra rimane pending. <strong>Devi gestire tu la mutua esclusione.</strong></p></div>
+        <div class="ic ic-g"><h5>✓ Strategia corretta</h5><p>Mostra prima la scelta del metodo, poi carica <em>un solo</em> componente. Oppure usa <code>&lt;fbk-card-wallet&gt;</code>.</p></div>
       </div>
       <div class="strat-pills">
-        <div class="strat-pill active" data-strat="both" onclick="setStrat(this)">
-          <strong>🔬 Entrambi attivi</strong>
-          <span>testing / visualizzazione</span>
-        </div>
-        <div class="strat-pill" data-strat="choice" onclick="setStrat(this)">
-          <strong>✓ Scelta utente</strong>
-          <span>un solo componente per volta</span>
-        </div>
+        <div class="strat-pill active" data-strat="both" onclick="setStrat(this)"><strong>🔬 Entrambi attivi</strong><span>testing / visualizzazione</span></div>
+        <div class="strat-pill" data-strat="choice" onclick="setStrat(this)"><strong>✓ Scelta utente</strong><span>un solo componente per volta</span></div>
       </div>
     </div>
   </div>
 
-  <!-- ═══ STEP 2: CONFIGURAZIONE ═══ -->
+  <!-- STEP 2 -->
   <div class="step-hd">
     <span class="step-num">2</span>
     <h3>Configurazione</h3>
-    <span class="tip" data-tip="Shop Login: identificativo del tuo negozio su Fabrick (es. GESPAY12345).\nPayment ID + Payment Token: ottenuti dalla chiamata POST payment/create sul tuo backend. Sono monouso e scadono in ~15 min in sandbox.\nNon usare le credenziali di default: sono placeholder, non funzionano.">i</span>
+    <span class="tip" data-tip="Shop Login: identificativo del tuo negozio su Fabrick (es. GESPAY12345).\nPayment ID + Payment Token: ottenuti dalla chiamata POST payment/create sul tuo backend. Sono monouso e scadono in ~15 min in sandbox.">i</span>
   </div>
 
-  <!-- CONFIG SINGOLA (componenti ufficiali) -->
   <div class="config-box" id="cfg-single">
     <div class="cfg-row">
-      <div class="cfg-field">
-        <label>Shop Login</label>
-        <input id="o-shop" type="text" placeholder="GESPAY12345" value="GESPAY12345"/>
-      </div>
-      <div class="cfg-field">
-        <label>Payment ID</label>
-        <input id="o-pid" type="text" placeholder="12345678910" value="12345678910"/>
-      </div>
-      <div class="cfg-field">
-        <label>Payment Token</label>
-        <input id="o-token" type="text" class="wide" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" value="1234ea321-aaaa-bbbb-cccc-752ca0b8cb5b"/>
-      </div>
+      <div class="cfg-field"><label>Shop Login</label><input id="o-shop" type="text" placeholder="GESPAY12345"/></div>
+      <div class="cfg-field"><label>Payment ID</label><input id="o-pid" type="text" placeholder="paymentID da payment/create"/></div>
+      <div class="cfg-field"><label>Payment Token</label><input id="o-token" type="text" class="wide" placeholder="paymentToken (formato UUID)"/></div>
     </div>
     <div class="cfg-controls">
       <span class="cfg-lbl">Callback</span>
       <span class="tip" data-tip="ON: Fabrick chiama la tua funzione JS con l'oggetto response. Nessun redirect automatico — gestisci tu.\nOFF: Fabrick redirecta automaticamente all'urlBack configurata sul portale Fabrick. Non ricevi l'oggetto response in JS.">i</span>
       <label class="sw"><input type="checkbox" id="o-cb" checked><div class="sw-track"></div><span class="sw-val" id="o-cb-lbl">ON</span></label>
-      <div class="cfg-ml">
-        <button class="btn btn-primary" id="o-apply" onclick="applyConfig()">Applica</button>
-      </div>
+      <div class="cfg-ml"><button class="btn btn-primary" id="o-apply" onclick="applyConfig()">Applica</button></div>
     </div>
   </div>
 
-  <!-- CONFIG DOPPIA (combo) -->
   <div class="config-box dual" id="cfg-dual" style="display:none">
-
-    <!-- Modalità sessione -->
     <div style="margin-bottom:16px">
       <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;display:flex;align-items:center;gap:6px">
         Modalità sessione
@@ -742,60 +453,32 @@
         <label class="sm-btn" id="sm-single-btn" onclick="setSessionMode('single')">
           <input type="radio" name="d-sess-mode" value="single"/>
           <div class="sm-ico">1×</div>
-          <div class="sm-txt">
-            <strong>Sessione singola</strong>
-            <span>stesso pid/token per entrambi ⚠</span>
-          </div>
+          <div class="sm-txt"><strong>Sessione singola</strong><span>stesso pid/token per entrambi ⚠</span></div>
         </label>
         <label class="sm-btn active" id="sm-dual-btn" onclick="setSessionMode('dual')">
           <input type="radio" name="d-sess-mode" value="dual" checked/>
           <div class="sm-ico">2×</div>
-          <div class="sm-txt">
-            <strong>Sessioni separate</strong>
-            <span>token distinti (consigliato)</span>
-          </div>
+          <div class="sm-txt"><strong>Sessioni separate</strong><span>token distinti (consigliato)</span></div>
         </label>
       </div>
     </div>
-
-    <!-- Row singola (visibile in modalità single) -->
     <div id="d-single-row" style="display:none">
       <div class="tok-row tok1" style="border-color:var(--border)">
         <span class="tok-lbl" style="color:var(--accent-l)" id="tok-single-lbl">ENTRAMBI I COMPONENTI · stessa sessione ⚠</span>
-        <div class="cfg-field">
-          <label>Shop Login</label>
-          <input id="d-shop-s" type="text" placeholder="GESPAY12345" value="GESPAY12345"/>
-        </div>
-        <div class="cfg-field">
-          <label>Payment ID</label>
-          <input id="d-pid-s" type="text" placeholder="paymentId (condiviso)"/>
-        </div>
-        <div class="cfg-field">
-          <label>Payment Token</label>
-          <input id="d-token-s" type="text" class="wide" placeholder="token (condiviso)"/>
-        </div>
+        <div class="cfg-field"><label>Shop Login</label><input id="d-shop-s" type="text" placeholder="GESPAY12345"/></div>
+        <div class="cfg-field"><label>Payment ID</label><input id="d-pid-s" type="text" placeholder="paymentId (condiviso)"/></div>
+        <div class="cfg-field"><label>Payment Token</label><input id="d-token-s" type="text" class="wide" placeholder="token (condiviso)"/></div>
       </div>
       <div style="margin-top:10px;padding:10px 14px;background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.2);border-radius:var(--rsm);font-size:11.5px;color:#FCA5A5;line-height:1.55">
         ⚠ Stessa sessione per entrambi i componenti: entrambi si avvieranno in parallelo sulla stessa sessione Fabrick → conflitto, doppio loading, comportamento imprevedibile. Usa solo per testare questo scenario.
       </div>
     </div>
-
-    <!-- Rows doppie (visibile in modalità dual) -->
     <div id="d-dual-rows" class="dual-block">
       <div class="tok-row tok1">
         <span class="tok-lbl" id="tok1-lbl">SESSIONE 1 · fbk-apple-pay</span>
-        <div class="cfg-field">
-          <label>Shop Login</label>
-          <input id="d-shop" type="text" placeholder="GESPAY12345" value="GESPAY12345"/>
-        </div>
-        <div class="cfg-field">
-          <label>Payment ID (1)</label>
-          <input id="d-pid1" type="text" placeholder="paymentId sessione 1"/>
-        </div>
-        <div class="cfg-field">
-          <label>Payment Token (1)</label>
-          <input id="d-token1" type="text" class="wide" placeholder="token sessione 1"/>
-        </div>
+        <div class="cfg-field"><label>Shop Login</label><input id="d-shop" type="text" placeholder="GESPAY12345"/></div>
+        <div class="cfg-field"><label>Payment ID (1)</label><input id="d-pid1" type="text" placeholder="paymentId sessione 1"/></div>
+        <div class="cfg-field"><label>Payment Token (1)</label><input id="d-token1" type="text" class="wide" placeholder="token sessione 1"/></div>
       </div>
       <div class="tok-row tok2">
         <span class="tok-lbl" id="tok2-lbl" style="color:var(--yellow)">SESSIONE 2 · fbk-card</span>
@@ -805,28 +488,19 @@
           </label>
           <input id="d-shop2" type="text" placeholder="default: shop sessione 1"/>
         </div>
-        <div class="cfg-field">
-          <label>Payment ID (2)</label>
-          <input id="d-pid2" type="text" placeholder="paymentId sessione 2"/>
-        </div>
-        <div class="cfg-field">
-          <label>Payment Token (2)</label>
-          <input id="d-token2" type="text" class="wide" placeholder="token sessione 2"/>
-        </div>
+        <div class="cfg-field"><label>Payment ID (2)</label><input id="d-pid2" type="text" placeholder="paymentId sessione 2"/></div>
+        <div class="cfg-field"><label>Payment Token (2)</label><input id="d-token2" type="text" class="wide" placeholder="token sessione 2"/></div>
       </div>
     </div>
-
     <div class="cfg-controls">
       <span class="cfg-lbl">Callback</span>
       <span class="tip up" data-tip="ON: Fabrick chiama la tua funzione JS con l'oggetto response. Nessun redirect automatico — gestisci tu.\nOFF: Fabrick redirecta automaticamente all'urlBack configurata sul portale Fabrick. Non ricevi l'oggetto response in JS.">i</span>
       <label class="sw"><input type="checkbox" id="d-cb" checked><div class="sw-track"></div><span class="sw-val" id="d-cb-lbl">ON</span></label>
-      <div class="cfg-ml">
-        <button class="btn btn-primary" id="d-apply" onclick="applyConfig()">Applica</button>
-      </div>
+      <div class="cfg-ml"><button class="btn btn-primary" id="d-apply" onclick="applyConfig()">Applica</button></div>
     </div>
   </div>
 
-  <!-- ═══ STEP 3: OPZIONI ═══ -->
+  <!-- STEP 3 -->
   <div class="step-hd">
     <span class="step-num">3</span>
     <h3>Opzioni componente</h3>
@@ -837,12 +511,12 @@
     <div class="og"><span class="og-lbl">layout</span><div class="op">
       <label class="active"><input type="radio" name="o-card-layout" value="horizontal" checked onchange="liveReload()"><span>horizontal</span></label>
       <label><input type="radio" name="o-card-layout" value="vertical" onchange="liveReload()"><span>vertical</span></label>
-          <label class="omit-lbl"><input type="radio" name="o-card-layout" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
+      <label class="omit-lbl"><input type="radio" name="o-card-layout" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
     </div></div>
     <div class="og"><span class="og-lbl">optional-fields (nome/cognome 3DS) <span class="tip" data-tip="true: aggiunge i campi Nome e Cognome al form carta. Utile per le transazioni 3DS che richiedono i dati del titolare per l'autenticazione. false: form minimo (solo numero carta, scadenza, CVV).">i</span></span><div class="op">
       <label><input type="radio" name="o-card-opt" value="false" onchange="liveReload()"><span>false</span></label>
       <label class="active"><input type="radio" name="o-card-opt" value="true" checked onchange="liveReload()"><span>true</span></label>
-          <label class="omit-lbl"><input type="radio" name="o-card-opt" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
+      <label class="omit-lbl"><input type="radio" name="o-card-opt" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
     </div></div>
   </div>
 
@@ -851,13 +525,13 @@
       <label class="active"><input type="radio" name="o-apay-style" value="black" checked onchange="liveReload()"><span>black</span></label>
       <label><input type="radio" name="o-apay-style" value="white" onchange="liveReload()"><span>white</span></label>
       <label><input type="radio" name="o-apay-style" value="white-outline" onchange="liveReload()"><span>white-outline</span></label>
-          <label class="omit-lbl"><input type="radio" name="o-apay-style" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
+      <label class="omit-lbl"><input type="radio" name="o-apay-style" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
     </div></div>
     <div class="og"><span class="og-lbl">button-type</span><div class="op">
       <label><input type="radio" name="o-apay-type" value="plain" onchange="liveReload()"><span>plain</span></label>
       <label class="active"><input type="radio" name="o-apay-type" value="buy" checked onchange="liveReload()"><span>buy</span></label>
       <label><input type="radio" name="o-apay-type" value="pay" onchange="liveReload()"><span>pay</span></label>
-          <label class="omit-lbl"><input type="radio" name="o-apay-type" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
+      <label class="omit-lbl"><input type="radio" name="o-apay-type" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
     </div></div>
   </div>
 
@@ -865,13 +539,13 @@
     <div class="og"><span class="og-lbl">button-style</span><div class="op">
       <label class="active"><input type="radio" name="o-gpay-style" value="black" checked onchange="liveReload()"><span>black</span></label>
       <label><input type="radio" name="o-gpay-style" value="white" onchange="liveReload()"><span>white</span></label>
-          <label class="omit-lbl"><input type="radio" name="o-gpay-style" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
+      <label class="omit-lbl"><input type="radio" name="o-gpay-style" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
     </div></div>
     <div class="og"><span class="og-lbl">button-type</span><div class="op">
       <label><input type="radio" name="o-gpay-type" value="plain" onchange="liveReload()"><span>plain</span></label>
       <label class="active"><input type="radio" name="o-gpay-type" value="buy" checked onchange="liveReload()"><span>buy</span></label>
       <label><input type="radio" name="o-gpay-type" value="pay" onchange="liveReload()"><span>pay</span></label>
-          <label class="omit-lbl"><input type="radio" name="o-gpay-type" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
+      <label class="omit-lbl"><input type="radio" name="o-gpay-type" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
     </div></div>
   </div>
 
@@ -879,66 +553,63 @@
     <div class="og"><span class="og-lbl">layout</span><div class="op">
       <label class="active"><input type="radio" name="o-full-layout" value="horizontal" checked onchange="liveReload()"><span>horizontal</span></label>
       <label><input type="radio" name="o-full-layout" value="vertical" onchange="liveReload()"><span>vertical</span></label>
-          <label class="omit-lbl"><input type="radio" name="o-full-layout" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
+      <label class="omit-lbl"><input type="radio" name="o-full-layout" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
     </div></div>
     <div class="og">
-      <span class="og-lbl">optional-fields
-        <span style="font-size:9px;color:var(--orange);margin-left:4px" title="fbk-card-wallet potrebbe non rispettare questo attributo. Se i campi compaiono sempre, è un comportamento gestito dal componente Fabrick.">⚠ vedi nota</span>
-      </span>
+      <span class="og-lbl">optional-fields <span style="font-size:9px;color:var(--orange);margin-left:4px" title="fbk-card-wallet potrebbe non rispettare questo attributo.">⚠ vedi nota</span></span>
       <div class="op">
         <label><input type="radio" name="o-full-opt" value="false" onchange="liveReload()"><span>false</span></label>
         <label class="active"><input type="radio" name="o-full-opt" value="true" checked onchange="liveReload()"><span>true</span></label>
-          <label class="omit-lbl"><input type="radio" name="o-full-opt" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
+        <label class="omit-lbl"><input type="radio" name="o-full-opt" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
       </div>
     </div>
     <div class="og"><span class="og-lbl">apple · style</span><div class="op">
       <label class="active"><input type="radio" name="o-full-astyle" value="black" checked onchange="liveReload()"><span>black</span></label>
       <label><input type="radio" name="o-full-astyle" value="white" onchange="liveReload()"><span>white</span></label>
       <label><input type="radio" name="o-full-astyle" value="white-outline" onchange="liveReload()"><span>white-outline</span></label>
-          <label class="omit-lbl"><input type="radio" name="o-full-astyle" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
+      <label class="omit-lbl"><input type="radio" name="o-full-astyle" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
     </div></div>
     <div class="og"><span class="og-lbl">apple · type</span><div class="op">
       <label><input type="radio" name="o-full-atype" value="plain" onchange="liveReload()"><span>plain</span></label>
       <label class="active"><input type="radio" name="o-full-atype" value="buy" checked onchange="liveReload()"><span>buy</span></label>
       <label><input type="radio" name="o-full-atype" value="pay" onchange="liveReload()"><span>pay</span></label>
-          <label class="omit-lbl"><input type="radio" name="o-full-atype" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
+      <label class="omit-lbl"><input type="radio" name="o-full-atype" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
     </div></div>
     <div class="og"><span class="og-lbl">google · style</span><div class="op">
       <label class="active"><input type="radio" name="o-full-gstyle" value="black" checked onchange="liveReload()"><span>black</span></label>
       <label><input type="radio" name="o-full-gstyle" value="white" onchange="liveReload()"><span>white</span></label>
-          <label class="omit-lbl"><input type="radio" name="o-full-gstyle" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
+      <label class="omit-lbl"><input type="radio" name="o-full-gstyle" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
     </div></div>
     <div class="og"><span class="og-lbl">google · type</span><div class="op">
       <label><input type="radio" name="o-full-gtype" value="plain" onchange="liveReload()"><span>plain</span></label>
       <label class="active"><input type="radio" name="o-full-gtype" value="buy" checked onchange="liveReload()"><span>buy</span></label>
       <label><input type="radio" name="o-full-gtype" value="pay" onchange="liveReload()"><span>pay</span></label>
-          <label class="omit-lbl"><input type="radio" name="o-full-gtype" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
+      <label class="omit-lbl"><input type="radio" name="o-full-gtype" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
     </div></div>
   </div>
 
-  <!-- combo opts -->
   <div id="opts-card-apay" class="opts-bar" style="display:none">
     <div class="og"><span class="og-lbl">apple · style</span><div class="op">
       <label class="active"><input type="radio" name="u-capay-as" value="black" checked onchange="liveReload()"><span>black</span></label>
       <label><input type="radio" name="u-capay-as" value="white" onchange="liveReload()"><span>white</span></label>
       <label><input type="radio" name="u-capay-as" value="white-outline" onchange="liveReload()"><span>white-outline</span></label>
-          <label class="omit-lbl"><input type="radio" name="u-capay-as" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
+      <label class="omit-lbl"><input type="radio" name="u-capay-as" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
     </div></div>
     <div class="og"><span class="og-lbl">apple · type</span><div class="op">
       <label><input type="radio" name="u-capay-at" value="plain" onchange="liveReload()"><span>plain</span></label>
       <label class="active"><input type="radio" name="u-capay-at" value="buy" checked onchange="liveReload()"><span>buy</span></label>
       <label><input type="radio" name="u-capay-at" value="pay" onchange="liveReload()"><span>pay</span></label>
-          <label class="omit-lbl"><input type="radio" name="u-capay-at" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
+      <label class="omit-lbl"><input type="radio" name="u-capay-at" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
     </div></div>
     <div class="og"><span class="og-lbl">card · layout</span><div class="op">
       <label class="active"><input type="radio" name="u-capay-lay" value="horizontal" checked onchange="liveReload()"><span>horizontal</span></label>
       <label><input type="radio" name="u-capay-lay" value="vertical" onchange="liveReload()"><span>vertical</span></label>
-          <label class="omit-lbl"><input type="radio" name="u-capay-lay" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
+      <label class="omit-lbl"><input type="radio" name="u-capay-lay" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
     </div></div>
     <div class="og"><span class="og-lbl">card · optional-fields</span><div class="op">
       <label class="active"><input type="radio" name="u-capay-opt" value="false" checked onchange="liveReload()"><span>false</span></label>
       <label><input type="radio" name="u-capay-opt" value="true" onchange="liveReload()"><span>true</span></label>
-          <label class="omit-lbl"><input type="radio" name="u-capay-opt" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
+      <label class="omit-lbl"><input type="radio" name="u-capay-opt" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
     </div></div>
   </div>
 
@@ -946,23 +617,23 @@
     <div class="og"><span class="og-lbl">google · style</span><div class="op">
       <label class="active"><input type="radio" name="u-cgpay-gs" value="black" checked onchange="liveReload()"><span>black</span></label>
       <label><input type="radio" name="u-cgpay-gs" value="white" onchange="liveReload()"><span>white</span></label>
-          <label class="omit-lbl"><input type="radio" name="u-cgpay-gs" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
+      <label class="omit-lbl"><input type="radio" name="u-cgpay-gs" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
     </div></div>
     <div class="og"><span class="og-lbl">google · type</span><div class="op">
       <label><input type="radio" name="u-cgpay-gt" value="plain" onchange="liveReload()"><span>plain</span></label>
       <label class="active"><input type="radio" name="u-cgpay-gt" value="buy" checked onchange="liveReload()"><span>buy</span></label>
       <label><input type="radio" name="u-cgpay-gt" value="pay" onchange="liveReload()"><span>pay</span></label>
-          <label class="omit-lbl"><input type="radio" name="u-cgpay-gt" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
+      <label class="omit-lbl"><input type="radio" name="u-cgpay-gt" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
     </div></div>
     <div class="og"><span class="og-lbl">card · layout</span><div class="op">
       <label class="active"><input type="radio" name="u-cgpay-lay" value="horizontal" checked onchange="liveReload()"><span>horizontal</span></label>
       <label><input type="radio" name="u-cgpay-lay" value="vertical" onchange="liveReload()"><span>vertical</span></label>
-          <label class="omit-lbl"><input type="radio" name="u-cgpay-lay" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
+      <label class="omit-lbl"><input type="radio" name="u-cgpay-lay" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
     </div></div>
     <div class="og"><span class="og-lbl">card · optional-fields</span><div class="op">
       <label class="active"><input type="radio" name="u-cgpay-opt" value="false" checked onchange="liveReload()"><span>false</span></label>
       <label><input type="radio" name="u-cgpay-opt" value="true" onchange="liveReload()"><span>true</span></label>
-          <label class="omit-lbl"><input type="radio" name="u-cgpay-opt" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
+      <label class="omit-lbl"><input type="radio" name="u-cgpay-opt" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
     </div></div>
   </div>
 
@@ -971,35 +642,34 @@
       <label class="active"><input type="radio" name="u-ga-as" value="black" checked onchange="liveReload()"><span>black</span></label>
       <label><input type="radio" name="u-ga-as" value="white" onchange="liveReload()"><span>white</span></label>
       <label><input type="radio" name="u-ga-as" value="white-outline" onchange="liveReload()"><span>white-outline</span></label>
-          <label class="omit-lbl"><input type="radio" name="u-ga-as" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
+      <label class="omit-lbl"><input type="radio" name="u-ga-as" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
     </div></div>
     <div class="og"><span class="og-lbl">apple · type</span><div class="op">
       <label><input type="radio" name="u-ga-at" value="plain" onchange="liveReload()"><span>plain</span></label>
       <label class="active"><input type="radio" name="u-ga-at" value="buy" checked onchange="liveReload()"><span>buy</span></label>
       <label><input type="radio" name="u-ga-at" value="pay" onchange="liveReload()"><span>pay</span></label>
-          <label class="omit-lbl"><input type="radio" name="u-ga-at" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
+      <label class="omit-lbl"><input type="radio" name="u-ga-at" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
     </div></div>
     <div class="og"><span class="og-lbl">google · style</span><div class="op">
       <label class="active"><input type="radio" name="u-ga-gs" value="black" checked onchange="liveReload()"><span>black</span></label>
       <label><input type="radio" name="u-ga-gs" value="white" onchange="liveReload()"><span>white</span></label>
-          <label class="omit-lbl"><input type="radio" name="u-ga-gs" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
+      <label class="omit-lbl"><input type="radio" name="u-ga-gs" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
     </div></div>
     <div class="og"><span class="og-lbl">google · type</span><div class="op">
       <label><input type="radio" name="u-ga-gt" value="plain" onchange="liveReload()"><span>plain</span></label>
       <label class="active"><input type="radio" name="u-ga-gt" value="buy" checked onchange="liveReload()"><span>buy</span></label>
       <label><input type="radio" name="u-ga-gt" value="pay" onchange="liveReload()"><span>pay</span></label>
-          <label class="omit-lbl"><input type="radio" name="u-ga-gt" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
+      <label class="omit-lbl"><input type="radio" name="u-ga-gt" value="__omit__" onchange="liveReload()"><span>— omit</span></label>
     </div></div>
   </div>
 
-  <!-- ═══ STEP 4: PREVIEW + CODE ═══ -->
+  <!-- STEP 4 -->
   <div class="step-hd">
     <span class="step-num">4</span>
     <h3>Preview &amp; codice</h3>
-    <span class="tip" data-tip="Preview: il componente Fabrick reale, connesso al sandbox. Inserisce dati veri per testare il flusso.\nCode: lo snippet da integrare nel tuo progetto, aggiornato in base alle opzioni selezionate. Il bottone copy copia il testo grezzo.">i</span>
+    <span class="tip" data-tip="Preview: il componente Fabrick reale, connesso al sandbox.\nCode: lo snippet da integrare nel tuo progetto, aggiornato in base alle opzioni selezionate.">i</span>
   </div>
 
-  <!-- choice overlay (strategia scelta utente) -->
   <div id="choice-overlay">
     <div class="choice-box">
       <p><strong>Strategia scelta utente:</strong> seleziona il metodo — verrà caricato solo quel componente con il token corrispondente.</p>
@@ -1011,9 +681,7 @@
     <div class="viewer-bar">
       <div class="vlabel"><span class="vdot"></span><span id="viewer-label">fbk-card · preview</span></div>
       <div style="display:flex;align-items:center;gap:8px">
-        <span id="opts-pending-note" style="display:none;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--orange);letter-spacing:.05em">
-          ↑ clicca Applica per aggiornare
-        </span>
+        <span id="opts-pending-note" style="display:none;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--orange);letter-spacing:.05em">↑ clicca Applica per aggiornare</span>
         <div class="vtoggle">
           <button class="vt active" onclick="setView('preview',this)">Preview</button>
           <button class="vt" onclick="setView('code',this)">Code</button>
@@ -1034,7 +702,7 @@
         <div class="snip-src">
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
           <span>sandbox-web.axerve.com</span> · fbk-elements.js
-          <span class="tip" data-tip="Script Fabrick da includere nel &lt;head&gt; una sola volta. In produzione sostituire con:\nhttps://web.axerve.com/orchestra/checkout/assets/elements/fbk-elements.js\nDeve essere caricato PRIMA di settare window['fbk-elements'] e PRIMA di inserire i custom elements nel DOM.">i</span>
+          <span class="tip" data-tip="Script Fabrick da includere nel &lt;head&gt; una sola volta. In produzione sostituire con:\nhttps://web.axerve.com/orchestra/checkout/assets/elements/fbk-elements.js">i</span>
         </div>
         <div class="cr">
           <span class="clang" id="snip-label">snippet</span>
@@ -1045,35 +713,24 @@
     </div>
   </div>
 
-  <!-- ═══ STEP 5: RESPONSE LOG ═══ -->
+  <!-- STEP 5 -->
   <div class="step-hd">
     <span class="step-num">5</span>
     <h3>Risposta callback</h3>
-    <span class="tip up" data-tip="Con callBackObj ON: questa sezione mostra la risposta ricevuta da Fabrick in tempo reale. Puoi scegliere se seguire il redirect o restare qui per debug.\nCon callBackObj OFF: Fabrick redirecta automaticamente — questa sezione non riceverà nulla.">i</span>
+    <span class="tip up" data-tip="Con callBackObj ON: questa sezione mostra la risposta ricevuta da Fabrick.\nCon callBackObj OFF: Fabrick redirecta automaticamente — questa sezione non riceverà nulla.">i</span>
   </div>
 
-  <!-- Spiegazione callback vs redirect -->
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
-
-    <!-- CON callback -->
     <div style="padding:14px 16px;background:rgba(16,185,129,.06);border:1px solid rgba(16,185,129,.2);border-radius:var(--rsm)">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--green);margin-bottom:8px">
-        ✓ Con callBackObj (modalità attuale)
-      </div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--green);margin-bottom:8px">✓ Con callBackObj (modalità attuale)</div>
       <div style="font-size:12px;color:var(--text2);line-height:1.65">
         Fabrick chiama la tua funzione con <code style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent-l);background:var(--accent-g);padding:1px 4px;border-radius:3px">response</code> e <strong style="color:var(--text)">non fa nulla d'altro</strong>.<br>
-        L'oggetto torna <strong style="color:var(--green)">sempre</strong>, per ogni stato:
-        COMPLETED, FAILED, EXPIRED, AUTHENTICATION_PENDING.<br>
-        Il redirect è <strong style="color:var(--text)">completamente tuo</strong>.
-        In produzione chiami <code style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent-l);background:var(--accent-g);padding:1px 4px;border-radius:3px">payment/detail</code> e poi redirecti.
+        L'oggetto torna <strong style="color:var(--green)">sempre</strong>, per ogni stato: COMPLETED, FAILED, EXPIRED, AUTHENTICATION_PENDING.<br>
+        Un <strong style="color:var(--text)">modal</strong> mostra la response completa e chiede conferma prima di eseguire qualsiasi redirect.
       </div>
     </div>
-
-    <!-- SENZA callback -->
     <div style="padding:14px 16px;background:rgba(245,158,11,.05);border:1px solid rgba(245,158,11,.2);border-radius:var(--rsm)">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--yellow);margin-bottom:8px">
-        ⚠ Senza callBackObj (redirect automatico)
-      </div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--yellow);margin-bottom:8px">⚠ Senza callBackObj (redirect automatico)</div>
       <div style="font-size:12px;color:var(--text2);line-height:1.65">
         Fabrick fa redirect automatico all'<strong style="color:var(--text)">urlBack</strong> configurata sul portale.<br>
         Ricevi: <code style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--yellow)">?a=SHOP&Status=OK&paymentID=xxx&paymentToken=xxx</code><br>
@@ -1081,15 +738,13 @@
         Poi chiami <code style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent-l);background:var(--accent-g);padding:1px 4px;border-radius:3px">payment/detail</code> lato server con il paymentToken dell'URL.
       </div>
     </div>
-
   </div>
 
-  <!-- Eccezione 3DS sempre presente -->
   <div style="padding:10px 14px;margin-bottom:12px;background:rgba(37,99,235,.05);border:1px solid rgba(37,99,235,.2);border-radius:var(--rsm);font-size:12px;color:var(--text2);display:flex;gap:8px;align-items:flex-start">
     <span style="color:var(--accent-l);flex-shrink:0;font-size:14px">ℹ</span>
     <span>
       <strong style="color:var(--text)">Eccezione — AUTHENTICATION_PENDING (3DS):</strong>
-      il redirect avviene sempre, con o senza callBackObj. È tecnico e obbligatorio per completare l'autenticazione 3D Secure. Dopo il 3DS il buyer torna sul tuo sito e Fabrick richiama la callback (o redirecta automaticamente) con l'esito finale.
+      il redirect avviene sempre, con o senza callBackObj. È tecnico e obbligatorio per completare l'autenticazione 3D Secure. Il modal mostra un countdown di 10s prima dell'auto-redirect — puoi cliccare "Rimani qui" per annullarlo e restare in debug.
     </span>
   </div>
 
@@ -1100,75 +755,38 @@
       <span id="cb-status-pill" style="margin-left:auto;display:none"></span>
       <span class="cbbadge cbon" id="cb-badge">callback ON</span>
     </div>
-    <!-- Overlay callback OFF: sostituisce l'intera area log -->
     <div id="cb-off-overlay" style="display:none;padding:20px 18px;text-align:center;border-bottom:1px solid var(--border)">
       <div style="font-size:13px;font-weight:700;color:var(--yellow);margin-bottom:8px">Callback disabilitata</div>
       <div style="font-size:12px;color:var(--text2);line-height:1.65;max-width:520px;margin:0 auto">
-        Con <code style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--red);background:rgba(239,68,68,.08);padding:1px 5px;border-radius:3px">callBackObj</code> assente, Fabrick fa redirect automatico alla
-        <strong style="color:var(--text)">urlBack configurata sul portale</strong>.<br>
-        Nessuna funzione JS viene chiamata. Questo log non riceverà nessun dato.<br>
-        Il browser cambierà pagina prima che tu possa vedere qualcosa qui.
+        Con <code style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--red);background:rgba(239,68,68,.08);padding:1px 5px;border-radius:3px">callBackObj</code> assente, Fabrick fa redirect automatico alla <strong style="color:var(--text)">urlBack configurata sul portale</strong>.<br>
+        Nessuna funzione JS viene chiamata. Questo log non riceverà nessun dato.
       </div>
     </div>
-    <!-- Action bar (visibile solo con callback ON) -->
     <div id="cb-actions" style="display:none;padding:10px 14px;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:8px;align-items:center;background:rgba(0,0,0,.15)">
-      <span id="cb-action-label" style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);flex:1">
-        In attesa di un'azione…
-      </span>
-      <button id="btn-redir-ok" onclick="doRedirect()"
-        style="display:none;padding:6px 14px;border-radius:6px;border:1px solid rgba(16,185,129,.35);background:rgba(16,185,129,.1);color:#10B981;font-family:'JetBrains Mono',monospace;font-size:11px;cursor:pointer;transition:all .15s"
-        onmouseover="this.style.background='rgba(16,185,129,.2)'" onmouseout="this.style.background='rgba(16,185,129,.1)'">
-        ↗ Segui redirect (come farebbe produzione)
-      </button>
-      <button id="btn-redir-skip"
-        style="display:none;padding:6px 14px;border-radius:6px;border:1px solid var(--border2);background:var(--surface);color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:11px;cursor:pointer;transition:all .15s"
-        onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--muted)'"
-        onclick="dismissAction()">
-        ✕ Rimani qui (debug)
-      </button>
+      <span id="cb-action-label" style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);flex:1">In attesa di un'azione…</span>
+      <button id="btn-redir-ok" onclick="doRedirect()" style="display:none;padding:6px 14px;border-radius:6px;border:1px solid rgba(16,185,129,.35);background:rgba(16,185,129,.1);color:#10B981;font-family:'JetBrains Mono',monospace;font-size:11px;cursor:pointer">↗ Segui redirect</button>
+      <button id="btn-redir-skip" style="display:none;padding:6px 14px;border-radius:6px;border:1px solid var(--border2);background:var(--surface);color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:11px;cursor:pointer" onclick="dismissAction()">✕ Rimani qui</button>
     </div>
     <div class="rout" id="rout">In attesa di una risposta dal Web Component…</div>
   </div>
 
-  <!-- info cards: ufficiali -->
   <div class="info3" id="info-official" style="margin-top:22px">
-    <div class="icard icard-g">
-      <h5>✓ Sessione singola</h5>
-      <p>Un <code>payment-id</code> = una sessione. Nessun conflitto tra componenti.</p>
-    </div>
-    <div class="icard icard-b">
-      <h5>↩ Callback vs Redirect</h5>
-      <p>Con <code>callBackObj</code>: Fabrick chiama la tua funzione e <strong>tu gestisci il redirect</strong>. Senza: redirect automatico all'URL configurato sul portale.</p>
-    </div>
-    <div class="icard">
-      <h5>⚙ Card Wallet tip</h5>
-      <p>Preferisci <code>&lt;fbk-card-wallet&gt;</code> per offrire più metodi su un'unica sessione: gestisce automaticamente la disponibilità per device e browser.</p>
-    </div>
+    <div class="icard"><h5>✓ Sessione singola</h5><p>Un <code>payment-id</code> = una sessione. Nessun conflitto tra componenti.</p></div>
+    <div class="icard"><h5>↩ Callback vs Redirect</h5><p>Con <code>callBackObj</code>: Fabrick chiama la tua funzione e il modal ti mostra la response prima di qualsiasi redirect. Senza: redirect automatico.</p></div>
+    <div class="icard"><h5>⚙ Card Wallet tip</h5><p>Preferisci <code>&lt;fbk-card-wallet&gt;</code> per offrire più metodi su un'unica sessione: gestisce automaticamente la disponibilità per device e browser.</p></div>
   </div>
 
-  <!-- info cards: combo non ufficiali (default nascosto) -->
   <div class="info3" id="info-combo" style="margin-top:22px;display:none">
-    <div class="icard ic-r" style="border-color:rgba(239,68,68,.25)">
-      <h5 style="color:var(--red)">✗ Stesso token = conflitto</h5>
-      <p>Se entrambi i componenti usano lo stesso <code>payment-id</code>, si avviano in parallelo sulla stessa sessione → doppio loading e comportamento imprevedibile.</p>
-    </div>
-    <div class="icard" style="border-color:rgba(245,158,11,.25)">
-      <h5 style="color:var(--yellow)">⚠ Token diversi = sessioni separate</h5>
-      <p>Due sessioni indipendenti non sincronizzate. Se l'utente completa una, l'altra rimane <code>pending</code>. <strong>Devi gestire tu la mutua esclusione.</strong></p>
-    </div>
-    <div class="icard" style="border-color:rgba(16,185,129,.2)">
-      <h5 style="color:var(--green)">✓ Strategia produzione</h5>
-      <p>Mostra prima la scelta del metodo (pulsanti/icone), poi carica <em>un solo</em> componente. Oppure usa il componente ufficiale <code>&lt;fbk-card-wallet&gt;</code>.</p>
-    </div>
+    <div class="icard" style="border-color:rgba(239,68,68,.25)"><h5 style="color:var(--red)">✗ Stesso token = conflitto</h5><p>Se entrambi i componenti usano lo stesso <code>payment-id</code>, si avviano in parallelo sulla stessa sessione → doppio loading e comportamento imprevedibile.</p></div>
+    <div class="icard" style="border-color:rgba(245,158,11,.25)"><h5 style="color:var(--yellow)">⚠ Token diversi = sessioni separate</h5><p>Due sessioni indipendenti non sincronizzate. Se l'utente completa una, l'altra rimane <code>pending</code>. <strong>Devi gestire tu la mutua esclusione.</strong></p></div>
+    <div class="icard" style="border-color:rgba(16,185,129,.2)"><h5 style="color:var(--green)">✓ Strategia produzione</h5><p>Mostra prima la scelta del metodo, poi carica <em>un solo</em> componente. Oppure usa il componente ufficiale <code>&lt;fbk-card-wallet&gt;</code>.</p></div>
   </div>
 
 </div><!-- /wrap -->
 
-<!-- ═══ FOOTER ═══ -->
+<!-- FOOTER -->
 <footer class="site-footer">
-  <div class="footer-left">
-    Processed by <strong>M2NDLAB</strong> via Fabrick &nbsp;·&nbsp; Sandbox environment
-  </div>
+  <div class="footer-left">Processed by <strong>M2NDLAB</strong> via Fabrick &nbsp;·&nbsp; Sandbox environment</div>
   <div class="footer-right">
     <a href="https://github.com/M2NDLAB/fabrick-webcomponent" class="footer-link" target="_blank" rel="noopener noreferrer">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.342-3.369-1.342-.454-1.155-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.031 1.531 1.031.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.268 2.75 1.026A9.578 9.578 0 0112 6.836a9.59 9.59 0 012.504.337c1.909-1.294 2.747-1.026 2.747-1.026.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
@@ -1185,46 +803,88 @@
   </div>
 </footer>
 
-<!-- ═══════════════════ JS ═══════════════════ -->
+<!-- CALLBACK MODAL -->
+<div class="cb-modal-overlay" id="cb-modal-overlay">
+  <div class="cb-modal">
+    <div class="cb-modal-header">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      <h3>Callback ricevuta — conferma azione</h3>
+      <span class="cb-modal-status" id="cb-modal-status-badge"></span>
+    </div>
+    <div class="cb-timer-bar"><div class="cb-timer-fill" id="cb-timer-fill"></div></div>
+    <div class="cb-modal-body">
+      <div class="cb-modal-section" id="cb-modal-redir-section" style="display:none">
+        <div class="cb-modal-section-title">Redirect richiesto da Fabrick</div>
+        <div class="cb-redir-box">
+          <span class="cb-redir-method" id="cb-modal-redir-method">GET</span>
+          <span class="cb-redir-url" id="cb-modal-redir-url"></span>
+        </div>
+        <div class="cb-redir-note" id="cb-modal-redir-note"></div>
+      </div>
+      <div class="cb-modal-section">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+          <div class="cb-modal-section-title" style="margin-bottom:0">Response JSON completo</div>
+          <button
+            style="padding:3px 10px;border-radius:4px;border:1px solid var(--border2);background:transparent;color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:10px;cursor:pointer;transition:all .13s"
+            onmouseover="this.style.borderColor='var(--accent-l)';this.style.color='var(--accent-l)'"
+            onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--muted)'"
+            onclick="navigator.clipboard.writeText(document.getElementById('cb-modal-json').textContent).then(()=>{this.textContent='copied ✓';setTimeout(()=>this.textContent='copy json',1500)})">
+            copy json
+          </button>
+        </div>
+        <pre class="cb-json-pre" id="cb-modal-json"></pre>
+      </div>
+    </div>
+    <div class="cb-modal-footer">
+      <button class="btn btn-primary" id="cb-modal-btn-go" onclick="cbModalConfirm(false)" style="display:none">
+        ↗ Segui redirect
+      </button>
+      <button class="btn btn-ghost" onclick="cbModalDismiss()">
+        ✕ Rimani qui (debug)
+      </button>
+      <span id="cb-modal-countdown" style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);margin-left:auto"></span>
+    </div>
+  </div>
+</div>
+
 <script>
-  // ─── STATO ───────────────────────────────────────────
+  // ─────────────────────────────────────────────────────────────
+  //  STATE GLOBALE
+  //  ───────────────
+  //  COMP      = componente selezionato (card|apay|gpay|full|card-apay|card-gpay|gpay-apay)
+  //  STRAT     = strategia per combo non ufficiali (both = entrambi attivi / choice = scelta utente)
+  //  APPLIED   = true dopo il primo Applica, governa le transizioni di stato
+  //  SESS_MODE = single (stesso token) | dual (token separati) — solo per combo
+  //  O / D / DS = bucket credenziali per single-official / dual-separate / dual-single
+  // ─────────────────────────────────────────────────────────────
   const OFFICIAL = new Set(['card','apay','gpay','full']);
   const COMBOS   = new Set(['card-apay','card-gpay','gpay-apay']);
 
-  let COMP    = 'card';
+  let COMP      = 'card';
   let STRAT     = 'both';
   let APPLIED   = false;
-  let SESS_MODE = 'dual'; // 'single' | 'dual' — modalità sessione per combo
+  let SESS_MODE = 'dual';
 
-  let O = { shop:'', pid:'', token:'' };
-  let D = { shop:'', shop2:'', pid1:'', tok1:'', pid2:'', tok2:'' };
-  // singola sessione combo
+  let O  = { shop:'', pid:'', token:'' };
+  let D  = { shop:'', shop2:'', pid1:'', tok1:'', pid2:'', tok2:'' };
   let DS = { shop:'', pid:'', tok:'' };
 
-  // ─── HELPERS ─────────────────────────────────────────
   const $ = id => document.getElementById(id);
-  // r(): legge il radio checked; se valore è __omit__ restituisce null
-  const r = n => {
-    const e = document.querySelector(`input[name="${n}"]:checked`);
-    if (!e) return null;
-    return e.value === '__omit__' ? null : e.value;
-  };
-  // attr(): genera stringa attributo HTML; se val è null lo omette (testa il default Fabrick)
+  const r = n => { const e = document.querySelector(`input[name="${n}"]:checked`); if (!e) return null; return e.value === '__omit__' ? null : e.value; };
   const attr = (name, val) => val !== null && val !== undefined ? ` ${name}="${val}"` : '';
-  const attrSnip = (name, val) => val !== null && val !== undefined
-    ? `\n  ${ta(name)}=${tv(val)}` : `\n  ${tc(`<!-- ${name} omesso → default Fabrick -->`)}`;
 
-  // setSessionMode
   function setSessionMode(mode) {
     SESS_MODE = mode;
-    document.getElementById('d-single-row').style.display  = mode === 'single' ? '' : 'none';
-    document.getElementById('d-dual-rows').style.display   = mode === 'dual'   ? '' : 'none';
+    document.getElementById('d-single-row').style.display = mode === 'single' ? '' : 'none';
+    document.getElementById('d-dual-rows').style.display  = mode === 'dual'   ? '' : 'none';
     document.getElementById('sm-single-btn').classList.toggle('active', mode === 'single');
     document.getElementById('sm-dual-btn').classList.toggle('active',   mode === 'dual');
     $('snip').innerHTML = buildSnip();
   }
 
-  // syntax helpers
+  // token helpers per highlighting manuale
   const tc = s => `<span class="tc">${s}</span>`;
   const tt = s => `<span class="tt">${s}</span>`;
   const ta = s => `<span class="ta">${s}</span>`;
@@ -1244,226 +904,136 @@
     ].join('\n');
   }
 
-  // ─── SELEZIONE COMPONENTE ────────────────────────────
   function selectComp(comp, el) {
-    COMP = comp;
-    APPLIED = false;
-
-    // visual
+    COMP = comp; APPLIED = false;
     document.querySelectorAll('.comp-card').forEach(c => c.classList.remove('selected'));
     el.classList.add('selected');
-
     const isCombo = COMBOS.has(comp);
-
-    // config section
-    $('cfg-single').style.display = isCombo ? 'none' : '';
-    $('cfg-dual').style.display   = isCombo ? '' : 'none';
-
-    // session box: mostra solo per combo
-    $('sess-box').style.display = isCombo ? '' : 'none';
-
-    // info cards: ufficiali vs combo
+    $('cfg-single').style.display    = isCombo ? 'none' : '';
+    $('cfg-dual').style.display      = isCombo ? '' : 'none';
+    $('sess-box').style.display      = isCombo ? '' : 'none';
     $('info-official').style.display = isCombo ? 'none' : '';
     $('info-combo').style.display    = isCombo ? '' : 'none';
-
-    // choice overlay: solo combo + strat=choice
     $('choice-overlay').style.display = (isCombo && STRAT === 'choice') ? '' : 'none';
-
-    // opts bars
     const allOpts = ['card','apay','gpay','full','card-apay','card-gpay','gpay-apay'];
-    allOpts.forEach(c => {
-      const el = $('opts-'+c);
-      if (el) el.style.display = c === comp ? '' : 'none';
-    });
-
-    // dual labels
+    allOpts.forEach(c => { const e = $('opts-'+c); if (e) e.style.display = c === comp ? '' : 'none'; });
     if (isCombo) {
-      const lblMap = {
-        'card-apay': ['SESSIONE 1 · fbk-apple-pay', 'SESSIONE 2 · fbk-card'],
-        'card-gpay': ['SESSIONE 1 · fbk-google-pay', 'SESSIONE 2 · fbk-card'],
-        'gpay-apay': ['SESSIONE 1 · fbk-apple-pay',  'SESSIONE 2 · fbk-google-pay'],
-      };
+      const lblMap = { 'card-apay':['SESSIONE 1 · fbk-apple-pay','SESSIONE 2 · fbk-card'], 'card-gpay':['SESSIONE 1 · fbk-google-pay','SESSIONE 2 · fbk-card'], 'gpay-apay':['SESSIONE 1 · fbk-apple-pay','SESSIONE 2 · fbk-google-pay'] };
       const [l1,l2] = lblMap[comp] || ['SESSIONE 1','SESSIONE 2'];
       $('tok1-lbl').textContent = l1; $('tok2-lbl').textContent = l2;
       if (STRAT === 'choice') buildChoiceButtons();
     }
-
-    // viewer label
     const lm = { card:'fbk-card', apay:'fbk-apple-pay', gpay:'fbk-google-pay', full:'fbk-card-wallet', 'card-apay':'combo', 'card-gpay':'combo', 'gpay-apay':'combo' };
     $('viewer-label').textContent = (lm[comp]||comp) + ' · preview';
     $('snip-label').textContent   = (lm[comp]||comp) + ' · snippet';
-
-    // reset slot placeholder
     $('slot').innerHTML = `<div class="ph"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>Configura le credenziali e clicca <strong>Applica</strong></div>`;
-
-    // update snippet
     $('snip').innerHTML = buildSnip();
     syncAllPills();
   }
 
-  // ─── SESSION BOX TOGGLE ──────────────────────────────
-  function toggleSess() {
-    $('sess-box').classList.toggle('open');
-  }
+  function toggleSess() { $('sess-box').classList.toggle('open'); }
 
-  // ─── STRATEGY ────────────────────────────────────────
   function setStrat(el) {
     STRAT = el.dataset.strat;
     document.querySelectorAll('.strat-pill').forEach(p => p.classList.remove('active'));
     el.classList.add('active');
     $('choice-overlay').style.display = STRAT === 'choice' ? '' : 'none';
     if (STRAT === 'choice') buildChoiceButtons();
-    if (APPLIED) {
-      if (STRAT === 'both') injectSlot();
-      else $('slot').innerHTML = '<div class="ph">Scegli il metodo sopra</div>';
-    }
+    if (APPLIED) { if (STRAT === 'both') injectSlot(); else $('slot').innerHTML = '<div class="ph">Scegli il metodo sopra</div>'; }
     $('snip').innerHTML = buildSnip();
   }
 
   function buildChoiceButtons() {
-    const btnMap = {
-      'card-apay': [{ label:'Apple Pay', key:'apay', sess:1 }, { label:'Carta di credito', key:'card', sess:2 }],
-      'card-gpay': [{ label:'Google Pay', key:'gpay', sess:1 }, { label:'Carta di credito', key:'card', sess:2 }],
-      'gpay-apay': [{ label:'Apple Pay', key:'apay', sess:1 }, { label:'Google Pay', key:'gpay', sess:2 }],
-    };
+    const btnMap = { 'card-apay':[{label:'Apple Pay',key:'apay',sess:1},{label:'Carta di credito',key:'card',sess:2}], 'card-gpay':[{label:'Google Pay',key:'gpay',sess:1},{label:'Carta di credito',key:'card',sess:2}], 'gpay-apay':[{label:'Apple Pay',key:'apay',sess:1},{label:'Google Pay',key:'gpay',sess:2}] };
     const btns = btnMap[COMP] || [];
-    $('choice-btns').innerHTML = btns.map(b =>
-      `<button class="btn btn-ghost" style="font-size:13px" onclick="choiceLoad(${b.sess},'${b.key}')">${b.label}</button>`
-    ).join('');
+    $('choice-btns').innerHTML = btns.map(b => `<button class="btn btn-ghost" style="font-size:13px" onclick="choiceLoad(${b.sess},'${b.key}')">${b.label}</button>`).join('');
   }
 
   function choiceLoad(sess, key) {
     if (!D.pid1 || !D.tok1) { alert('Clicca Applica prima di scegliere.'); return; }
-    const pid   = sess === 1 ? D.pid1 : D.pid2;
-    const token = sess === 1 ? D.tok1 : D.tok2;
-    const shop  = (sess === 2 && D.shop2) ? D.shop2 : D.shop;
-    const cbOn  = $('d-cb').checked;
-    window['fbk-elements'] = cbOn
-      ? { shop, callBackObj: e => onCb(e) }
-      : { shop };
-    const h = {
-      card: `<fbk-card style="width:100%" payment-id="${pid}" payment-token="${token}" layout="horizontal" optional-fields="false"></fbk-card>`,
-      apay: `<fbk-apple-pay style="width:100%" payment-id="${pid}" payment-token="${token}" button-style="black" button-type="buy"></fbk-apple-pay>`,
-      gpay: `<fbk-google-pay style="width:100%" payment-id="${pid}" payment-token="${token}" button-style="black" button-type="buy"></fbk-google-pay>`,
-    };
+    const pid = sess===1 ? D.pid1 : D.pid2; const token = sess===1 ? D.tok1 : D.tok2; const shop = (sess===2 && D.shop2) ? D.shop2 : D.shop;
+    const cbOn = $('d-cb').checked;
+    window['fbk-elements'] = cbOn ? { shop, callBackObj: e => onCb(e) } : { shop };
+    const h = { card:`<fbk-card style="width:100%" payment-id="${pid}" payment-token="${token}" layout="horizontal" optional-fields="false"></fbk-card>`, apay:`<fbk-apple-pay style="width:100%" payment-id="${pid}" payment-token="${token}" button-style="black" button-type="buy"></fbk-apple-pay>`, gpay:`<fbk-google-pay style="width:100%" payment-id="${pid}" payment-token="${token}" button-style="black" button-type="buy"></fbk-google-pay>` };
     $('slot').innerHTML = h[key] || '';
   }
 
-  // ─── APPLY CONFIG ────────────────────────────────────
+  // ─────────────────────────────────────────────────────────────
+  //  applyConfig: legge i campi, popola i bucket (O/D/DS), setta
+  //  window['fbk-elements'] PRIMA di rimontare il componente.
+  //
+  //  FIX: in modalità combo single-session lo shop va letto da DS,
+  //  non da D — D resta vuoto quando l'utente sceglie "sessione
+  //  singola" perché le relative input sono nascoste e mai popolate.
+  // ─────────────────────────────────────────────────────────────
   function applyConfig() {
     const isCombo = COMBOS.has(COMP);
-
     if (isCombo) {
       if (SESS_MODE === 'single') {
-        DS.shop = ($('d-shop-s')?.value || '').trim();
-        DS.pid  = ($('d-pid-s')?.value  || '').trim();
-        DS.tok  = ($('d-token-s')?.value|| '').trim();
+        DS.shop = ($('d-shop-s')?.value||'').trim(); DS.pid = ($('d-pid-s')?.value||'').trim(); DS.tok = ($('d-token-s')?.value||'').trim();
         if (!DS.shop || !DS.pid || !DS.tok) { flashBtn('d-apply','Campi mancanti'); return; }
       } else {
-        D.shop  = $('d-shop').value.trim();
-        D.shop2 = $('d-shop2').value.trim();
-        D.pid1  = $('d-pid1').value.trim();
-        D.tok1  = $('d-token1').value.trim();
-        D.pid2  = $('d-pid2').value.trim();
-        D.tok2  = $('d-token2').value.trim();
+        D.shop=$('d-shop').value.trim(); D.shop2=$('d-shop2').value.trim(); D.pid1=$('d-pid1').value.trim(); D.tok1=$('d-token1').value.trim(); D.pid2=$('d-pid2').value.trim(); D.tok2=$('d-token2').value.trim();
         if (!D.shop || !D.pid1 || !D.tok1 || !D.pid2 || !D.tok2) { flashBtn('d-apply','Campi mancanti'); return; }
       }
     } else {
-      O.shop  = $('o-shop').value.trim();
-      O.pid   = $('o-pid').value.trim();
-      O.token = $('o-token').value.trim();
-      if (!O.shop || !O.pid || !O.token) {
-        flashBtn('o-apply','Campi mancanti'); return;
-      }
+      O.shop=$('o-shop').value.trim(); O.pid=$('o-pid').value.trim(); O.token=$('o-token').value.trim();
+      if (!O.shop || !O.pid || !O.token) { flashBtn('o-apply','Campi mancanti'); return; }
     }
-
     const cbId = isCombo ? 'd-cb' : 'o-cb';
     const cbOn = $(cbId).checked;
-    const shop = isCombo ? D.shop : O.shop;
+    // FIX selettore shop: rispetta SESS_MODE in combo (DS vs D)
+    const shop = isCombo
+      ? (SESS_MODE === 'single' ? DS.shop : D.shop)
+      : O.shop;
+    window['fbk-elements'] = cbOn ? { shop, callBackObj: e => onCb(e) } : { shop };
 
-    window['fbk-elements'] = cbOn
-      ? { shop, callBackObj: e => onCb(e) }
-      : { shop };
-
-    // ── Log di configurazione ─────────────────────────────
-    LOG.group('Configurazione applicata — window[\'fbk-elements\'] settato', 'ok');
+    LOG.group("Configurazione applicata — window['fbk-elements'] settato", 'ok');
     LOG.kv('shop', shop);
-    LOG.kv('callBackObj', cbOn
-      ? '✓ presente — Fabrick chiamerà la tua funzione, NESSUN redirect automatico'
-      : '✗ assente — Fabrick farà redirect automatico alla urlBack del portale',
-      cbOn ? 'ok' : 'warn');
+    LOG.kv('callBackObj', cbOn ? '✓ presente — Fabrick chiamerà la tua funzione, NESSUN redirect automatico' : '✗ assente — Fabrick farà redirect automatico alla urlBack del portale', cbOn ? 'ok' : 'warn');
     if (isCombo) {
       LOG.sep();
-      LOG.line('COMBO — sessioni separate', 'warn');
-      LOG.kv('pid sessione 1', D.pid1);
-      LOG.kv('pid sessione 2', D.pid2);
-      LOG.kv('shop sessione 2', D.shop2 || D.shop + ' (ereditato)');
+      LOG.line('COMBO — '+(SESS_MODE==='single'?'SESSIONE SINGOLA ⚠':'sessioni separate'), 'warn');
+      if (SESS_MODE==='single') {
+        LOG.kv('pid (condiviso)', DS.pid);
+        LOG.kv('token (condiviso)', DS.tok ? DS.tok.slice(0,12)+'…' : '—');
+      } else {
+        LOG.kv('pid sessione 1', D.pid1);
+        LOG.kv('pid sessione 2', D.pid2);
+        LOG.kv('shop sessione 2', D.shop2 || D.shop+' (ereditato)');
+      }
     } else {
-      LOG.sep();
-      LOG.kv('paymentID',    O.pid);
-      LOG.kv('paymentToken', O.token ? O.token.slice(0,12) + '…(troncato)' : '—');
+      LOG.sep(); LOG.kv('paymentID', O.pid); LOG.kv('paymentToken', O.token ? O.token.slice(0,12)+'…(troncato)' : '—');
     }
     LOG.sep();
-    LOG.line('✓ window[\'fbk-elements\'] settato PRIMA del mount — ordine corretto.', 'ok');
-    if (!cbOn) LOG.line('→ Senza callback: il response object NON arriverà in JS. Gestisci l\'esito server-side via payment/detail.', 'warn');
+    LOG.line("✓ window['fbk-elements'] settato PRIMA del mount — ordine corretto.", 'ok');
+    if (!cbOn) LOG.line("→ Senza callback: il response object NON arriverà in JS. Gestisci l'esito server-side via payment/detail.", 'warn');
     LOG.end();
 
-    // ── Verifica comportamentale (non bloccante) ────────
     VERIFY.mountOrder(cbOn, shop);
-
-    if (!isCombo || STRAT === 'both') {
-      injectSlot();
-    } else {
-      $('slot').innerHTML = '<div class="ph">Scegli il metodo sopra</div>';
-      buildChoiceButtons();
-    }
-
-    APPLIED = true;
-    clearPendingBadge();
-    updateCbBadge();
-
-    // ── Verifica combo sessions se applicabile ──────────
+    if (!isCombo || STRAT === 'both') { injectSlot(); } else { $('slot').innerHTML = '<div class="ph">Scegli il metodo sopra</div>'; buildChoiceButtons(); }
+    APPLIED = true; clearPendingBadge(); updateCbBadge();
     if (isCombo) {
-      const p1 = SESS_MODE === 'single' ? DS.pid : D.pid1;
-      const t1 = SESS_MODE === 'single' ? DS.tok : D.tok1;
-      const p2 = SESS_MODE === 'single' ? DS.pid : D.pid2;
-      const t2 = SESS_MODE === 'single' ? DS.tok : D.tok2;
+      const p1 = SESS_MODE==='single' ? DS.pid : D.pid1; const t1 = SESS_MODE==='single' ? DS.tok : D.tok1;
+      const p2 = SESS_MODE==='single' ? DS.pid : D.pid2; const t2 = SESS_MODE==='single' ? DS.tok : D.tok2;
       VERIFY.comboSessions(COMP, SESS_MODE, p1, t1, p2, t2);
     }
     $('snip').innerHTML = buildSnip();
     flashBtn(isCombo ? 'd-apply' : 'o-apply', 'Applicato', true);
   }
 
-  function injectSlot() {
-    $('slot').innerHTML = buildHTML();
-  }
+  function injectSlot() { $('slot').innerHTML = buildHTML(); }
 
   function liveReload() {
-    $('snip').innerHTML = buildSnip();
-    syncAllPills();
-    // NON re-inietta il componente per non cancellare i dati inseriti.
-    // Aggiorna solo lo snippet. L'utente clicca Applica per applicare le nuove opzioni.
+    $('snip').innerHTML = buildSnip(); syncAllPills();
     if (APPLIED) {
       showPendingBadge();
-      // Verifica attributi omessi
-      const allNames = {
-        card:      ['o-card-layout','o-card-opt'],
-        apay:      ['o-apay-style','o-apay-type'],
-        gpay:      ['o-gpay-style','o-gpay-type'],
-        full:      ['o-full-layout','o-full-opt','o-full-astyle','o-full-atype','o-full-gstyle','o-full-gtype'],
-        'card-apay':['u-capay-as','u-capay-at','u-capay-lay','u-capay-opt'],
-        'card-gpay':['u-cgpay-gs','u-cgpay-gt','u-cgpay-lay','u-cgpay-opt'],
-        'gpay-apay':['u-ga-as','u-ga-at','u-ga-gs','u-ga-gt'],
-      };
-      const omitted = (allNames[COMP]||[]).filter(n => {
-        const el = document.querySelector(`input[name="${n}"]:checked`);
-        return el && el.value === '__omit__';
-      });
+      const allNames = { card:['o-card-layout','o-card-opt'], apay:['o-apay-style','o-apay-type'], gpay:['o-gpay-style','o-gpay-type'], full:['o-full-layout','o-full-opt','o-full-astyle','o-full-atype','o-full-gstyle','o-full-gtype'], 'card-apay':['u-capay-as','u-capay-at','u-capay-lay','u-capay-opt'], 'card-gpay':['u-cgpay-gs','u-cgpay-gt','u-cgpay-lay','u-cgpay-opt'], 'gpay-apay':['u-ga-as','u-ga-at','u-ga-gs','u-ga-gt'] };
+      const omitted = (allNames[COMP]||[]).filter(n => { const el = document.querySelector(`input[name="${n}"]:checked`); return el && el.value==='__omit__'; });
       if (omitted.length) VERIFY.omittedAttributes(COMP, omitted);
     }
   }
 
-  // ─── HTML BUILDERS ───────────────────────────────────
   function buildHTML() {
     const isCombo = COMBOS.has(COMP);
     if (!isCombo) {
@@ -1474,11 +1044,8 @@
         case 'full': return `<fbk-card-wallet style="width:100%" payment-id="${O.pid}" payment-token="${O.token}"${attr('layout',r('o-full-layout'))}${attr('optional-fields',r('o-full-opt'))}${attr('apple-button-style',r('o-full-astyle'))}${attr('apple-button-type',r('o-full-atype'))}${attr('google-button-style',r('o-full-gstyle'))}${attr('google-button-type',r('o-full-gtype'))}></fbk-card-wallet>`;
       }
     } else {
-      // credenziali in base a SESS_MODE
-      const pid1  = SESS_MODE === 'single' ? DS.pid  : D.pid1;
-      const tok1  = SESS_MODE === 'single' ? DS.tok  : D.tok1;
-      const pid2  = SESS_MODE === 'single' ? DS.pid  : D.pid2;
-      const tok2  = SESS_MODE === 'single' ? DS.tok  : D.tok2;
+      const pid1 = SESS_MODE==='single' ? DS.pid : D.pid1; const tok1 = SESS_MODE==='single' ? DS.tok : D.tok1;
+      const pid2 = SESS_MODE==='single' ? DS.pid : D.pid2; const tok2 = SESS_MODE==='single' ? DS.tok : D.tok2;
       switch (COMP) {
         case 'card-apay': return `<div style="display:flex;flex-direction:column;gap:12px;width:100%"><fbk-apple-pay style="width:100%" payment-id="${pid1}" payment-token="${tok1}"${attr('button-style',r('u-capay-as'))}${attr('button-type',r('u-capay-at'))}></fbk-apple-pay><fbk-card style="width:100%" payment-id="${pid2}" payment-token="${tok2}"${attr('layout',r('u-capay-lay'))}${attr('optional-fields',r('u-capay-opt'))}></fbk-card></div>`;
         case 'card-gpay': return `<div style="display:flex;flex-direction:column;gap:12px;width:100%"><fbk-google-pay style="width:100%" payment-id="${pid1}" payment-token="${tok1}"${attr('button-style',r('u-cgpay-gs'))}${attr('button-type',r('u-cgpay-gt'))}></fbk-google-pay><fbk-card style="width:100%" payment-id="${pid2}" payment-token="${tok2}"${attr('layout',r('u-cgpay-lay'))}${attr('optional-fields',r('u-cgpay-opt'))}></fbk-card></div>`;
@@ -1488,12 +1055,13 @@
     return '';
   }
 
-  // ─── SNIPPET BUILDERS ────────────────────────────────
   function buildSnip() {
     const isCombo = COMBOS.has(COMP);
-    const cbOn = isCombo ? ($('d-cb') && $('d-cb').checked) : ($('o-cb') && $('o-cb').checked);
-    const shop = isCombo ? (D.shop||'GESPAY12345') : (O.shop||'GESPAY12345');
-
+    const cbOn = isCombo ? ($('d-cb')&&$('d-cb').checked) : ($('o-cb')&&$('o-cb').checked);
+    // FIX parallelo allo shop-selector di applyConfig
+    const shop = isCombo
+      ? (SESS_MODE==='single' ? (DS.shop||'GESPAY12345') : (D.shop||'GESPAY12345'))
+      : (O.shop||'GESPAY12345');
     if (!isCombo) return buildOfficialSnip(shop, cbOn);
     return buildComboSnip(shop, cbOn);
   }
@@ -1510,174 +1078,58 @@
   function buildOfficialSnip(shop, cbOn) {
     const conf = fbkConf(shop, cbOn);
     const imp  = scriptImport();
-    // helper: genera riga attributo o commento se omesso
-    const as = (name, val) => val !== null
-      ? `\n  ${ta(name)}=${tv(val)}`
-      : `\n  ${tc(`<!-- ${name}: omesso → default Fabrick -->`)}`;
+    const as = (name, val) => val !== null ? `\n  ${ta(name)}=${tv(val)}` : `\n  ${tc(`<!-- ${name}: omesso → default Fabrick -->`)}`;
     switch (COMP) {
-      case 'card': return [
-        imp,
-        tc('&lt;!-- 2. Inserisci il componente dove vuoi nel body --&gt;'),
-        `${tt('&lt;fbk-card')}`,
-        `  ${ta('payment-id')}=${tv('{{ paymentID }}')} ${ta('payment-token')}=${tv('{{ paymentToken }}')}` +
-        as('layout', r('o-card-layout')) + as('optional-fields', r('o-card-opt')) + tt('&gt;&lt;/fbk-card&gt;'),
-        '', conf, '',
-        tc('// flowStatus: COMPLETED | FAILED | AUTHENTICATION_PENDING | EXPIRED'),
-        `${tp('function')} ${tf('myCallbackFunction')}${tp('(res) {')}`,
-        `  ${tp('const')} ${tp('{')} flowStatus, redirect ${tp('}')} ${tp('=')} res${tp('.')}payload${tp(';')}`,
-        `  ${tp('if')} ${tp('(')}flowStatus ${tp('===')} ${ts('"COMPLETED"')}${tp(')')} window${tp('.')}location${tp('.')}href ${tp('=')} redirect${tp('.')}url${tp(';')}`,
-        `  ${tp('else if')} ${tp('(')}flowStatus ${tp('===')} ${ts('"FAILED"')}${tp(')')} ${tf('showError')}${tp('(res.error.description);')}`,
-        `${tp('}')}`,
-      ].join('\n');
-      case 'apay': return [
-        imp,
-        tc('&lt;!-- fbk-apple-pay: sempre visibile.\n     Safari/iOS/macOS con Wallet → pulsante Apple Pay nativo\n     Altri browser → Fabrick gestisce il flusso QR code Apple Pay --&gt;'),
-        `${tt('&lt;fbk-apple-pay')}`,
-        `  ${ta('payment-id')}=${tv('{{ paymentID }}')} ${ta('payment-token')}=${tv('{{ paymentToken }}')}` +
-        as('button-style', r('o-apay-style')) + as('button-type', r('o-apay-type')) + tt('&gt;&lt;/fbk-apple-pay&gt;'),
-        '', conf,
-      ].join('\n');
-      case 'gpay': return [
-        imp,
-        tc('&lt;!-- Visibile SOLO su Chrome con Google Pay configurato --&gt;'),
-        `${tt('&lt;fbk-google-pay')}`,
-        `  ${ta('payment-id')}=${tv('{{ paymentID }}')} ${ta('payment-token')}=${tv('{{ paymentToken }}')}` +
-        as('button-style', r('o-gpay-style')) + as('button-type', r('o-gpay-type')) + tt('&gt;&lt;/fbk-google-pay&gt;'),
-        '', conf,
-      ].join('\n');
-      case 'full': return [
-        imp,
-        tc('&lt;!-- all-in-one: Apple Pay → sempre (QR code su browser non Safari) · Google Pay → Chrome · Carta → sempre --&gt;'),
-        `${tt('&lt;fbk-card-wallet')}`,
-        `  ${ta('payment-id')}=${tv('{{ paymentID }}')} ${ta('payment-token')}=${tv('{{ paymentToken }}')}` +
-        as('layout', r('o-full-layout')) + as('optional-fields', r('o-full-opt')) +
-        as('apple-button-style', r('o-full-astyle')) + as('apple-button-type', r('o-full-atype')) +
-        as('google-button-style', r('o-full-gstyle')) + as('google-button-type', r('o-full-gtype')) + tt('&gt;'),
-        `${tt('&lt;/fbk-card-wallet&gt;')}`,
-        '', conf, '',
-        `${tp('function')} ${tf('myCallbackFunction')}${tp('(res) {')}`,
-        `  ${tp('const')} ${tp('{')} flowStatus, redirect ${tp('}')} ${tp('=')} res${tp('.')}payload${tp(';')}`,
-        `  ${tp('if')} ${tp('(')}flowStatus ${tp('===')} ${ts('"COMPLETED"')}${tp(')')} window${tp('.')}location${tp('.')}href ${tp('=')} redirect${tp('.')}url${tp(';')}`,
-        `  ${tp('else if')} ${tp('(')}flowStatus ${tp('===')} ${ts('"FAILED"')}${tp(')')} ${tf('showError')}${tp('(res.error.description);')}`,
-        `  ${tp('else if')} ${tp('(')}flowStatus ${tp('===')} ${ts('"AUTHENTICATION_PENDING"')}${tp(')')} {`,
-        `    redirect${tp('.')}method ${tp('===')} ${ts('"POST"')} ${tp('?')} ${tf('postForm')}${tp('(redirect.url, redirect.data)')} ${tp(':')} window${tp('.')}location${tp('.')}href ${tp('=')} redirect${tp('.')}url${tp(';')}`,
-        `  ${tp('}')}`,
-        `${tp('}')}`,
-      ].join('\n');
+      case 'card': return [imp, tc('&lt;!-- 2. Inserisci il componente dove vuoi nel body --&gt;'), `${tt('&lt;fbk-card')}`, `  ${ta('payment-id')}=${tv('{{ paymentID }}')} ${ta('payment-token')}=${tv('{{ paymentToken }}')}` + as('layout',r('o-card-layout')) + as('optional-fields',r('o-card-opt')) + tt('&gt;&lt;/fbk-card&gt;'), '', conf, '', tc('// flowStatus: COMPLETED | FAILED | AUTHENTICATION_PENDING | EXPIRED'), `${tp('function')} ${tf('myCallbackFunction')}${tp('(res) {')}`, `  ${tp('const')} ${tp('{')} flowStatus, redirect ${tp('}')} ${tp('=')} res${tp('.')}payload${tp(';')}`, `  ${tp('if')} ${tp('(')}flowStatus ${tp('===')} ${ts('"COMPLETED"')}${tp(')')} window${tp('.')}location${tp('.')}href ${tp('=')} redirect${tp('.')}url${tp(';')}`, `  ${tp('else if')} ${tp('(')}flowStatus ${tp('===')} ${ts('"FAILED"')}${tp(')')} ${tf('showError')}${tp('(res.error.description);')}`, `${tp('}')}`,].join('\n');
+      case 'apay': return [imp, tc('&lt;!-- fbk-apple-pay: sempre visibile.\n     Safari/iOS/macOS con Wallet → pulsante Apple Pay nativo\n     Altri browser → Fabrick gestisce il flusso QR code Apple Pay --&gt;'), `${tt('&lt;fbk-apple-pay')}`, `  ${ta('payment-id')}=${tv('{{ paymentID }}')} ${ta('payment-token')}=${tv('{{ paymentToken }}')}` + as('button-style',r('o-apay-style')) + as('button-type',r('o-apay-type')) + tt('&gt;&lt;/fbk-apple-pay&gt;'), '', conf,].join('\n');
+      case 'gpay': return [imp, tc('&lt;!-- Visibile SOLO su Chrome con Google Pay configurato --&gt;'), `${tt('&lt;fbk-google-pay')}`, `  ${ta('payment-id')}=${tv('{{ paymentID }}')} ${ta('payment-token')}=${tv('{{ paymentToken }}')}` + as('button-style',r('o-gpay-style')) + as('button-type',r('o-gpay-type')) + tt('&gt;&lt;/fbk-google-pay&gt;'), '', conf,].join('\n');
+      case 'full': return [imp, tc('&lt;!-- all-in-one --&gt;'), `${tt('&lt;fbk-card-wallet')}`, `  ${ta('payment-id')}=${tv('{{ paymentID }}')} ${ta('payment-token')}=${tv('{{ paymentToken }}')}` + as('layout',r('o-full-layout')) + as('optional-fields',r('o-full-opt')) + as('apple-button-style',r('o-full-astyle')) + as('apple-button-type',r('o-full-atype')) + as('google-button-style',r('o-full-gstyle')) + as('google-button-type',r('o-full-gtype')) + tt('&gt;'), `${tt('&lt;/fbk-card-wallet&gt;')}`, '', conf,].join('\n');
     }
     return '';
   }
 
   function buildComboSnip(shop, cbOn) {
     const imp = scriptImport();
-    const as = (name, val) => val !== null
-      ? `\n    ${ta(name)}=${tv(val)}`
-      : `\n    ${tc(`<!-- ${name}: omesso → default Fabrick -->`)}`;
-
-    const sessModeNote = SESS_MODE === 'single'
-      ? tc('// ⚠ SESSIONE SINGOLA: stesso pid/token per entrambi i componenti.\n// Entrambi si avvieranno sulla stessa sessione → conflitto.\n// Usa solo per testare il comportamento Fabrick in questo scenario.\n')
-      : (STRAT === 'choice'
-        ? tc('// STRATEGIA: scelta utente — carica 1 componente alla volta.\n')
-        : tc('// ATTENZIONE: due sessioni separate. Se l\'utente completa una, l\'altra rimane pending.\n// Gestisci tu la mutua esclusione. In produzione usa "scelta utente" o fbk-card-wallet.\n'));
-
+    const as = (name, val) => val !== null ? `\n    ${ta(name)}=${tv(val)}` : `\n    ${tc(`<!-- ${name}: omesso → default Fabrick -->`)}`;
+    const sessModeNote = SESS_MODE==='single' ? tc('// ⚠ SESSIONE SINGOLA: stesso pid/token per entrambi i componenti.\n// Usa solo per testare il comportamento Fabrick in questo scenario.\n') : (STRAT==='choice' ? tc('// STRATEGIA: scelta utente — carica 1 componente alla volta.\n') : tc("// ATTENZIONE: due sessioni separate. Se l'utente completa una, l'altra rimane pending.\n"));
     const conf = fbkConf(shop, cbOn);
-    const pid1Var  = SESS_MODE === 'single' ? '{{ pid }}'   : '{{ pid1 }}';
-    const tok1Var  = SESS_MODE === 'single' ? '{{ token }}' : '{{ token1 }}';
-    const pid2Var  = SESS_MODE === 'single' ? '{{ pid }}'   : '{{ pid2 }}';
-    const tok2Var  = SESS_MODE === 'single' ? '{{ token }}' : '{{ token2 }}';
-    const note2 = SESS_MODE === 'dual'
-      ? tc(`// Shop sessione 2: "${D.shop2 || D.shop || 'GESPAY12345'}" (${D.shop2 ? 'specifico' : 'ereditato da sessione 1'})`)
-      : '';
-
+    const pid1Var = SESS_MODE==='single' ? '{{ pid }}'   : '{{ pid1 }}'; const tok1Var = SESS_MODE==='single' ? '{{ token }}' : '{{ token1 }}';
+    const pid2Var = SESS_MODE==='single' ? '{{ pid }}'   : '{{ pid2 }}'; const tok2Var = SESS_MODE==='single' ? '{{ token }}' : '{{ token2 }}';
+    const note2 = SESS_MODE==='dual' ? tc(`// Shop sessione 2: "${D.shop2||D.shop||'GESPAY12345'}" (${D.shop2?'specifico':'ereditato da sessione 1'})`) : '';
     switch (COMP) {
-      case 'card-apay': return [
-        imp, sessModeNote, '',
-        tc('&lt;!-- Sessione 1 → fbk-apple-pay · Sessione 2 → fbk-card --&gt;'),
-        `${tt('&lt;div')} ${ta('style')}=${tv('display:flex;flex-direction:column;gap:12px')}${tt('&gt;')}`,
-        `  ${tt('&lt;fbk-apple-pay')} ${ta('payment-id')}=${tv(pid1Var)} ${ta('payment-token')}=${tv(tok1Var)}` +
-        as('button-style', r('u-capay-as')) + as('button-type', r('u-capay-at')) + tt('&gt;&lt;/fbk-apple-pay&gt;'),
-        `  ${tt('&lt;fbk-card')} ${ta('payment-id')}=${tv(pid2Var)} ${ta('payment-token')}=${tv(tok2Var)}` +
-        as('layout', r('u-capay-lay')) + as('optional-fields', r('u-capay-opt')) + tt('&gt;&lt;/fbk-card&gt;'),
-        `${tt('&lt;/div&gt;')}`, '', note2, conf,
-      ].filter(Boolean).join('\n');
-      case 'card-gpay': return [
-        imp, sessModeNote, '',
-        tc('&lt;!-- Sessione 1 → fbk-google-pay · Sessione 2 → fbk-card --&gt;'),
-        `${tt('&lt;div')} ${ta('style')}=${tv('display:flex;flex-direction:column;gap:12px')}${tt('&gt;')}`,
-        `  ${tt('&lt;fbk-google-pay')} ${ta('payment-id')}=${tv(pid1Var)} ${ta('payment-token')}=${tv(tok1Var)}` +
-        as('button-style', r('u-cgpay-gs')) + as('button-type', r('u-cgpay-gt')) + tt('&gt;&lt;/fbk-google-pay&gt;'),
-        `  ${tt('&lt;fbk-card')} ${ta('payment-id')}=${tv(pid2Var)} ${ta('payment-token')}=${tv(tok2Var)}` +
-        as('layout', r('u-cgpay-lay')) + as('optional-fields', r('u-cgpay-opt')) + tt('&gt;&lt;/fbk-card&gt;'),
-        `${tt('&lt;/div&gt;')}`, '', note2, conf,
-      ].filter(Boolean).join('\n');
-      case 'gpay-apay': return [
-        imp, sessModeNote, '',
-        tc('&lt;!-- Sessione 1 → fbk-apple-pay · Sessione 2 → fbk-google-pay --&gt;'),
-        `${tt('&lt;div')} ${ta('style')}=${tv('display:flex;flex-direction:column;gap:12px')}${tt('&gt;')}`,
-        `  ${tt('&lt;fbk-apple-pay')} ${ta('payment-id')}=${tv(pid1Var)} ${ta('payment-token')}=${tv(tok1Var)}` +
-        as('button-style', r('u-ga-as')) + as('button-type', r('u-ga-at')) + tt('&gt;&lt;/fbk-apple-pay&gt;'),
-        `  ${tt('&lt;fbk-google-pay')} ${ta('payment-id')}=${tv(pid2Var)} ${ta('payment-token')}=${tv(tok2Var)}` +
-        as('button-style', r('u-ga-gs')) + as('button-type', r('u-ga-gt')) + tt('&gt;&lt;/fbk-google-pay&gt;'),
-        `${tt('&lt;/div&gt;')}`, '', note2, conf,
-      ].filter(Boolean).join('\n');
+      case 'card-apay': return [imp, sessModeNote, '', tc('&lt;!-- Sessione 1 → fbk-apple-pay · Sessione 2 → fbk-card --&gt;'), `${tt('&lt;div')} ${ta('style')}=${tv('display:flex;flex-direction:column;gap:12px')}${tt('&gt;')}`, `  ${tt('&lt;fbk-apple-pay')} ${ta('payment-id')}=${tv(pid1Var)} ${ta('payment-token')}=${tv(tok1Var)}` + as('button-style',r('u-capay-as')) + as('button-type',r('u-capay-at')) + tt('&gt;&lt;/fbk-apple-pay&gt;'), `  ${tt('&lt;fbk-card')} ${ta('payment-id')}=${tv(pid2Var)} ${ta('payment-token')}=${tv(tok2Var)}` + as('layout',r('u-capay-lay')) + as('optional-fields',r('u-capay-opt')) + tt('&gt;&lt;/fbk-card&gt;'), `${tt('&lt;/div&gt;')}`, '', note2, conf].filter(Boolean).join('\n');
+      case 'card-gpay': return [imp, sessModeNote, '', tc('&lt;!-- Sessione 1 → fbk-google-pay · Sessione 2 → fbk-card --&gt;'), `${tt('&lt;div')} ${ta('style')}=${tv('display:flex;flex-direction:column;gap:12px')}${tt('&gt;')}`, `  ${tt('&lt;fbk-google-pay')} ${ta('payment-id')}=${tv(pid1Var)} ${ta('payment-token')}=${tv(tok1Var)}` + as('button-style',r('u-cgpay-gs')) + as('button-type',r('u-cgpay-gt')) + tt('&gt;&lt;/fbk-google-pay&gt;'), `  ${tt('&lt;fbk-card')} ${ta('payment-id')}=${tv(pid2Var)} ${ta('payment-token')}=${tv(tok2Var)}` + as('layout',r('u-cgpay-lay')) + as('optional-fields',r('u-cgpay-opt')) + tt('&gt;&lt;/fbk-card&gt;'), `${tt('&lt;/div&gt;')}`, '', note2, conf].filter(Boolean).join('\n');
+      case 'gpay-apay': return [imp, sessModeNote, '', tc('&lt;!-- Sessione 1 → fbk-apple-pay · Sessione 2 → fbk-google-pay --&gt;'), `${tt('&lt;div')} ${ta('style')}=${tv('display:flex;flex-direction:column;gap:12px')}${tt('&gt;')}`, `  ${tt('&lt;fbk-apple-pay')} ${ta('payment-id')}=${tv(pid1Var)} ${ta('payment-token')}=${tv(tok1Var)}` + as('button-style',r('u-ga-as')) + as('button-type',r('u-ga-at')) + tt('&gt;&lt;/fbk-apple-pay&gt;'), `  ${tt('&lt;fbk-google-pay')} ${ta('payment-id')}=${tv(pid2Var)} ${ta('payment-token')}=${tv(tok2Var)}` + as('button-style',r('u-ga-gs')) + as('button-type',r('u-ga-gt')) + tt('&gt;&lt;/fbk-google-pay&gt;'), `${tt('&lt;/div&gt;')}`, '', note2, conf].filter(Boolean).join('\n');
     }
     return '';
   }
 
-  // ─── DEBUG LOGGER ────────────────────────────────────
-  // Log strutturato indipendente dall'UI. Sempre attivo.
+  // ─────────────────────────────────────────────────────────────
+  //  LOGGER strutturato — tutto in console.groupCollapsed per
+  //  tenere pulito il flusso di debug.
+  // ─────────────────────────────────────────────────────────────
   const LOG = {
     _prefix: '[Fabrick Demo]',
-    _style: {
-      title:   'color:#60A5FA;font-weight:700;font-size:12px',
-      info:    'color:#8FA3C8;font-size:11px',
-      ok:      'color:#10B981;font-weight:600',
-      warn:    'color:#F59E0B;font-weight:600',
-      err:     'color:#EF4444;font-weight:700',
-      muted:   'color:#4A6080;font-size:10px',
-      key:     'color:#86EFAC;font-weight:600',
-      val:     'color:#FDE68A',
-      tag:     'background:#1E2F4A;color:#60A5FA;padding:1px 6px;border-radius:3px;font-size:10px',
-      check:   'color:#10B981;font-size:11px',
-      fail:    'color:#EF4444;font-size:11px',
-    },
-    group(title, color='title') {
-      console.groupCollapsed(`%c${this._prefix} ${title}`, this._style[color]);
-    },
+    _style: { title:'color:#60A5FA;font-weight:700;font-size:12px', info:'color:#8FA3C8;font-size:11px', ok:'color:#10B981;font-weight:600', warn:'color:#F59E0B;font-weight:600', err:'color:#EF4444;font-weight:700', muted:'color:#4A6080;font-size:10px', key:'color:#86EFAC;font-weight:600', val:'color:#FDE68A', check:'color:#10B981;font-size:11px', fail:'color:#EF4444;font-size:11px' },
+    group(title, color='title') { console.groupCollapsed(`%c${this._prefix} ${title}`, this._style[color]); },
     end() { console.groupEnd(); },
-    kv(key, val, style='val') {
-      console.log(`%c  ${key}:%c ${val}`, this._style.key, this._style[style]||this._style.val);
-    },
-    line(msg, style='info') {
-      console.log(`%c  ${msg}`, this._style[style]);
-    },
-    sep() {
-      console.log('%c  ─────────────────────────────────────────', this._style.muted);
-    },
-    raw(label, obj) {
-      console.log(`%c  ${label}:`, this._style.muted, obj);
-    },
-    check(label, pass, expected='', actual='') {
-      const s = pass ? 'check' : 'fail';
-      const icon = pass ? '✓' : '✗';
-      console.log(`%c  ${icon} ${label}`, this._style[s]);
-      if (!pass && (expected || actual)) {
-        console.log(`%c    atteso:  ${expected}`, this._style.muted);
-        console.log(`%c    trovato: ${actual}`, this._style.fail);
-      }
-    },
+    kv(key, val, style='val') { console.log(`%c  ${key}:%c ${val}`, this._style.key, this._style[style]||this._style.val); },
+    line(msg, style='info') { console.log(`%c  ${msg}`, this._style[style]); },
+    sep() { console.log('%c  ─────────────────────────────────────────', this._style.muted); },
+    raw(label, obj) { console.log(`%c  ${label}:`, this._style.muted, obj); },
+    check(label, pass, expected='', actual='') { const s=pass?'check':'fail'; const icon=pass?'✓':'✗'; console.log(`%c  ${icon} ${label}`, this._style[s]); if (!pass&&(expected||actual)) { console.log(`%c    atteso:  ${expected}`, this._style.muted); console.log(`%c    trovato: ${actual}`, this._style.fail); } },
     diagnose(code, message) {
       const known = {
         'unhandled': [
-          'Il token è scaduto o già consumato (TTL sandbox ~15 min)',
-          'Il paymentID non corrisponde al paymentToken',
-          'Lo shopLogin non corrisponde alla coppia pid/token',
-          'La sessione è già stata completata o annullata',
-          'Il token è stato creato per un ambiente diverso (prod vs sandbox)',
+          "Il sub-componente Click2Pay (Visa) non riesce a inizializzarsi — vedi stack 'catchClickToPayError' / 'subscribeForRetry' in console",
+          "Permissions-Policy 'payment' e 'publickey-credentials-get' non abilitate — GitHub Pages non permette di settare header HTTP custom",
+          "SPC (Secure Payment Confirmation) non supportato dal browser / dall'iframe Visa sandbox.auth.visa.com irraggiungibile",
+          "Il token è scaduto o già consumato (TTL sandbox ~15 min)",
+          "Il paymentID non corrisponde al paymentToken",
         ],
-        'invalid_token': ['Token malformato o non parsabile'],
-        'expired': ['Sessione scaduta — genera un nuovo payment/create'],
-        'unauthorized': ['ShopLogin non autorizzato per questo paymentID'],
+        'invalid_token':['Token malformato o non parsabile'],
+        'expired':['Sessione scaduta — genera un nuovo payment/create'],
+        'unauthorized':['ShopLogin non autorizzato per questo paymentID']
       };
       const hints = known[code] || ['Errore non classificato — controlla la console network per la risposta raw'];
       console.log('%c  Possibili cause:', this._style.warn);
@@ -1686,328 +1138,268 @@
     }
   };
 
-  // ─── VERIFY – log di verifica comportamentali (non bloccanti) ────────
-  // Stampano aspettativa vs realtà per ogni scenario chiave.
-  // Copiare il gruppo dalla console in caso di bug.
+  // ─────────────────────────────────────────────────────────────
+  //  VERIFY: self-check su ordine di mount, struttura response,
+  //  configurazione combo, attributi omessi. Tutti i messaggi
+  //  finiscono nel logger strutturato.
+  // ─────────────────────────────────────────────────────────────
   const VERIFY = {
-
-    // Verifica che window['fbk-elements'] sia stato configurato correttamente
-    // prima del mount del componente.
     mountOrder(cbOn, shop) {
       LOG.group('VERIFY · Mount order & configurazione', 'title');
-      LOG.check(
-        "window['fbk-elements'] settato prima di innerHTML",
-        true, // se siamo qui, è già stato settato — il check è per documentazione
-        'window["fbk-elements"] = {...} PRIMA di slot.innerHTML',
-        'OK — garantito dal flusso applyConfig()'
-      );
-      LOG.check(
-        'shop non vuoto',
-        !!shop,
-        'stringa non vuota',
-        shop || '(vuoto)'
-      );
-      LOG.check(
-        'callBackObj: comportamento atteso',
-        true,
-        cbOn
-          ? 'Fabrick chiamerà onCb(response) — NESSUN redirect automatico'
-          : 'Fabrick farà redirect automatico → questa console non vedrà nulla dopo il pagamento',
-        cbOn ? '✓ callback presente' : '⚠ callback assente'
-      );
-      if (!cbOn) {
-        LOG.line('→ Senza callback: dopo il pagamento il browser cambierà URL.', 'warn');
-        LOG.line('  Riceverai: ?a=SHOP&Status=OK&paymentID=xxx&paymentToken=xxx', 'muted');
-        LOG.line('  Poi lato server chiama GET payment/detail/{paymentID} con header PaymentToken.', 'muted');
-      }
+      LOG.check("window['fbk-elements'] settato prima di innerHTML", true, 'window["fbk-elements"] = {...} PRIMA di slot.innerHTML', 'OK — garantito dal flusso applyConfig()');
+      LOG.check('shop non vuoto', !!shop, 'stringa non vuota', shop||'(vuoto)');
+      LOG.check('callBackObj: comportamento atteso', true, cbOn ? 'Fabrick chiamerà onCb(response) — NESSUN redirect automatico' : 'Fabrick farà redirect automatico', cbOn ? '✓ callback presente' : '⚠ callback assente');
       LOG.end();
     },
-
-    // Verifica la struttura della response ricevuta dalla callback.
-    // Confronta con la struttura attesa dalla doc Fabrick.
     responseStructure(response) {
       LOG.group('VERIFY · Struttura response callback', 'title');
       LOG.sep();
-      const p = response?.payload;
-      const e = response?.error;
-      LOG.check('response.error esiste',     'error' in (response||{}),       'campo "error"',   Object.keys(response||{}).join(', '));
-      LOG.check('response.payload esiste',   'payload' in (response||{}),     'campo "payload"', Object.keys(response||{}).join(', '));
-      LOG.check('payload.flowStatus esiste', !!p?.flowStatus,                 'string',          String(p?.flowStatus));
-      LOG.check('flowStatus è valore noto',
-        ['COMPLETED','FAILED','AUTHENTICATION_PENDING','EXPIRED'].includes(p?.flowStatus),
-        'COMPLETED|FAILED|AUTHENTICATION_PENDING|EXPIRED',
-        p?.flowStatus || '(assente)'
-      );
-      LOG.check('payload.redirect esiste', 'redirect' in (p||{}),  'campo "redirect"', p ? Object.keys(p).join(', ') : '(no payload)');
-      if (p?.redirect) {
-        LOG.check('redirect.method è GET o POST',
-          ['GET','POST'].includes(p.redirect?.method),
-          'GET|POST',
-          p.redirect?.method || '(assente)'
-        );
-        LOG.check('redirect.url non vuota', !!p.redirect?.url, 'URL string', p.redirect?.url || '(vuota)');
-      }
-      LOG.sep();
-
-      // Verifica comportamento atteso per flowStatus
-      const status = p?.flowStatus;
-      LOG.line('COMPORTAMENTO ATTESO per ' + (status || 'UNKNOWN'), 'title');
-      if (status === 'COMPLETED') {
-        LOG.check('Redirect verso thank-you page', !!p?.redirect?.url,
-          'redirect.url popolata', p?.redirect?.url || '(assente)');
-        LOG.line('→ In produzione: chiama payment/detail per conferma, poi redirect.', 'ok');
-        LOG.line('→ Non dare per scontato il COMPLETED: verifica sempre payment/detail.', 'warn');
-      } else if (status === 'FAILED') {
-        LOG.line('→ Transazione rifiutata. error.code e error.description contengono il motivo.', 'err');
-        LOG.check('error.code presente',       !!e?.code,        'string', e?.code||'(assente)');
-        LOG.check('error.description presente', !!e?.description, 'string', e?.description||'(assente)');
-        LOG.line('→ In produzione: mostra messaggio di errore, NON redirectare automaticamente.', 'warn');
-      } else if (status === 'AUTHENTICATION_PENDING') {
-        LOG.line('→ 3DS richiesto. Il redirect è OBBLIGATORIO per completare l\'autenticazione.', 'warn');
-        LOG.check('redirect.method è POST (tipico per 3DS)',
-          p?.redirect?.method === 'POST',
-          'POST', p?.redirect?.method || '(assente)');
-        LOG.line('→ Dopo il 3DS il buyer torna sul tuo sito e Fabrick richiama la callback.', 'info');
-      } else if (status === 'EXPIRED') {
-        LOG.line('→ Sessione scaduta per timeout. Non è possibile procedere.', 'err');
-        LOG.line('→ In produzione: mostra messaggio e permetti di riavviare il checkout.', 'warn');
-      }
+      const p=response?.payload; const e=response?.error;
+      LOG.check('response.error esiste',   'error' in (response||{}),   'campo "error"',   Object.keys(response||{}).join(', '));
+      LOG.check('response.payload esiste', 'payload' in (response||{}), 'campo "payload"', Object.keys(response||{}).join(', '));
+      LOG.check('payload.flowStatus esiste', !!p?.flowStatus, 'string', String(p?.flowStatus));
+      LOG.check('flowStatus è valore noto', ['COMPLETED','FAILED','AUTHENTICATION_PENDING','EXPIRED'].includes(p?.flowStatus), 'COMPLETED|FAILED|AUTHENTICATION_PENDING|EXPIRED', p?.flowStatus||'(assente)');
       LOG.raw('response completo', response);
       LOG.end();
     },
-
-    // Verifica la configurazione combo (sessioni separate).
     comboSessions(comp, sessMode, pid1, tok1, pid2, tok2) {
       LOG.group('VERIFY · Combo — configurazione sessioni', 'warn');
-      LOG.kv('componente', comp);
-      LOG.kv('sessMode',   sessMode);
-      LOG.sep();
-      if (sessMode === 'single') {
-        LOG.check('Sessione SINGOLA (⚠ conflitto atteso)',
-          pid1 === pid2 && tok1 === tok2,
-          'pid1 === pid2 e tok1 === tok2',
-          pid1 === pid2 ? 'sì (corretto per test conflitto)' : 'no (diverse, inatteso)'
-        );
-        LOG.line('→ Entrambi i componenti useranno la stessa sessione Fabrick.', 'warn');
-        LOG.line('→ Comportamento atteso: doppio loading, possibile errore "unhandled".', 'warn');
-      } else {
-        LOG.check('pid1 ≠ pid2 (sessioni indipendenti)', pid1 !== pid2, 'valori diversi',
-          pid1 === pid2 ? '⚠ UGUALI — conflitto garantito!' : 'OK — diversi');
-        LOG.check('tok1 ≠ tok2', tok1 !== tok2, 'valori diversi',
-          tok1 === tok2 ? '⚠ UGUALI — stesso token per entrambi!' : 'OK — diversi');
-        LOG.line('→ Due sessioni separate. Se l\'utente completa una, l\'altra rimane PENDING.', 'info');
-        LOG.line('→ Devi gestire tu la mutua esclusione (disabilita uno dopo che l\'altro completa).', 'warn');
-      }
+      LOG.kv('componente', comp); LOG.kv('sessMode', sessMode); LOG.sep();
+      if (sessMode==='single') { LOG.check('Sessione SINGOLA (⚠ conflitto atteso)', pid1===pid2&&tok1===tok2, 'pid1===pid2 e tok1===tok2', pid1===pid2?'sì (corretto per test conflitto)':'no (diverse, inatteso)'); }
+      else { LOG.check('pid1 ≠ pid2 (sessioni indipendenti)', pid1!==pid2, 'valori diversi', pid1===pid2?'⚠ UGUALI — conflitto garantito!':'OK — diversi'); LOG.check('tok1 ≠ tok2', tok1!==tok2, 'valori diversi', tok1===tok2?'⚠ UGUALI!':'OK — diversi'); }
       LOG.end();
     },
-
-    // Verifica che gli attributi omessi producano il comportamento Fabrick di default.
     omittedAttributes(comp, omitted) {
       if (!omitted.length) return;
-      LOG.group(`VERIFY · Attributi omessi (test default Fabrick) — ${comp}`, 'warn');
-      omitted.forEach(a => {
-        LOG.line(`${a}: omesso → Fabrick userà il suo valore di default`, 'warn');
-      });
-      LOG.line('→ Osserva il componente nel preview per verificare il comportamento Fabrick.', 'info');
-      LOG.line('→ Se il componente non si comporta come atteso, l\'attributo potrebbe essere obbligatorio.', 'muted');
+      LOG.group(`VERIFY · Attributi omessi — ${comp}`, 'warn');
+      omitted.forEach(a => LOG.line(`${a}: omesso → Fabrick userà default`, 'warn'));
       LOG.end();
     },
-
-    // Stampa il digest completo dello stato della demo (utile da copiare in caso di bug).
     stateSnapshot() {
       LOG.group('VERIFY · Snapshot stato demo', 'title');
-      LOG.kv('COMP',       COMP);
-      LOG.kv('STRAT',      STRAT);
-      LOG.kv('SESS_MODE',  SESS_MODE);
-      LOG.kv('APPLIED',    String(APPLIED));
-      LOG.sep();
-      LOG.kv('O.shop',  O.shop  || '(vuoto)');
-      LOG.kv('O.pid',   O.pid   || '(vuoto)');
-      LOG.kv('O.token', O.token ? O.token.slice(0,12)+'…' : '(vuoto)');
-      LOG.sep();
-      LOG.kv('D.shop',   D.shop  || '(vuoto)');
-      LOG.kv('D.pid1',   D.pid1  || '(vuoto)');
-      LOG.kv('D.tok1',   D.tok1  ? D.tok1.slice(0,12)+'…'  : '(vuoto)');
-      LOG.kv('D.pid2',   D.pid2  || '(vuoto)');
-      LOG.kv('D.tok2',   D.tok2  ? D.tok2.slice(0,12)+'…'  : '(vuoto)');
-      LOG.kv('D.shop2',  D.shop2 || '(ereditato da D.shop)');
-      LOG.sep();
-      LOG.kv('DS.shop',  DS.shop  || '(vuoto)');
-      LOG.kv('DS.pid',   DS.pid   || '(vuoto)');
-      LOG.kv('DS.tok',   DS.tok   ? DS.tok.slice(0,12)+'…'  : '(vuoto)');
-      LOG.sep();
-      LOG.kv("window['fbk-elements']",
-        JSON.stringify({ shop: window['fbk-elements']?.shop, callBackObj: window['fbk-elements']?.callBackObj ? '[Function]' : undefined })
-      );
+      LOG.kv('COMP', COMP); LOG.kv('STRAT', STRAT); LOG.kv('SESS_MODE', SESS_MODE); LOG.kv('APPLIED', String(APPLIED));
       LOG.end();
-    },
+    }
   };
 
-  // Banner di avvio — stampato una sola volta al caricamento della pagina
   (function startupBanner() {
     console.log('%c╔══════════════════════════════════════════════════════╗', 'color:#2563EB');
     console.log('%c  Fabrick Web Components Demo — Debug Console', 'color:#60A5FA;font-weight:700;font-size:13px');
     console.log('%c  Tutti i log sono raggruppati e collassabili.', 'color:#8FA3C8;font-size:11px');
-    console.log('%c  Incolla un gruppo espanso per ottenere supporto.', 'color:#8FA3C8;font-size:11px');
     console.log('%c╚══════════════════════════════════════════════════════╝', 'color:#2563EB');
-    console.log('%c  Comandi utili:', 'color:#4A6080');
     console.log('%c  VERIFY.stateSnapshot()  → stampa lo stato completo della demo', 'color:#4A6080');
-    console.log('%c  SDK sandbox: sandbox-web.axerve.com/orchestra/checkout/assets/elements/fbk-elements.js', 'color:#3D5275;font-size:10px');
   })();
 
-  function onCb(response) {
-    const status = response?.payload?.flowStatus ?? 'UNKNOWN';
-    const err    = response?.error;
-    const redir  = response?.payload?.redirect;
-    const payload = response?.payload;
+  // ─────────────────────────────────────────────────────────────
+  //  CALLBACK MODAL: mostra response + eventuale redirect prima
+  //  di seguirlo (tranne 3DS che parte auto dopo 10s).
+  // ─────────────────────────────────────────────────────────────
+  let _cbModalTimer        = null;
+  let _cbModalPendingRedir = null;
 
-    // ── Log strutturato ──────────────────────────────────
-    const statusStyle = {
-      COMPLETED: 'ok', FAILED: 'err', EXPIRED: 'err',
-      AUTHENTICATION_PENDING: 'warn', UNKNOWN: 'warn'
-    };
-    LOG.group(`callBackObj ricevuta — ${status}`, statusStyle[status] || 'warn');
-
-    // Verifica struttura (non bloccante)
-    VERIFY.responseStructure(response);
-    LOG.sep();
-
-    LOG.line('FLOW STATUS', 'title');
-    LOG.kv('flowStatus', status, statusStyle[status] || 'warn');
-
-    if (err && (err.code || err.description)) {
-      LOG.sep();
-      LOG.line('ERROR', 'err');
-      LOG.kv('code',        err.code        || '—');
-      LOG.kv('description', err.description || '—');
-    }
-
-    if (redir) {
-      LOG.sep();
-      LOG.line('REDIRECT');
-      LOG.kv('method', redir.method || '—');
-      LOG.kv('url',    redir.url    || '—');
-      if (redir.data) LOG.raw('data', redir.data);
-    }
-
-    if (payload) {
-      LOG.sep();
-      LOG.line('PAYLOAD (campi chiave)');
-      if (payload.paymentID)       LOG.kv('paymentID',       payload.paymentID);
-      if (payload.shopTransactionID) LOG.kv('shopTransactionID', payload.shopTransactionID);
-      if (payload.transactionResult) LOG.kv('transactionResult', payload.transactionResult);
-      if (payload.authorizationCode) LOG.kv('authorizationCode', payload.authorizationCode);
-      if (payload.bankTransactionID) LOG.kv('bankTransactionID',  payload.bankTransactionID);
-    }
-
-    LOG.sep();
-    LOG.line('AZIONE CONSIGLIATA');
-    if (status === 'COMPLETED')              LOG.line('→ Chiama payment/detail per conferma, poi redirect thank-you page', 'ok');
-    else if (status === 'FAILED')            LOG.line('→ Chiama payment/detail per dettaglio errore, poi redirect KO page', 'err');
-    else if (status === 'AUTHENTICATION_PENDING') LOG.line('→ Redirect obbligatorio per completare 3DS (viene eseguito automaticamente)', 'warn');
-    else if (status === 'EXPIRED')           LOG.line('→ Sessione scaduta. Genera un nuovo payment/create', 'err');
-
-    LOG.sep();
-    LOG.raw('response completo', response);
-    LOG.end();
-
-    // ── UI update ────────────────────────────────────────
+  function showCbModal(status, redir, response) {
+    _cbModalPendingRedir = redir || null;
     const statusMap = {
-      COMPLETED:              { cls:'sok',  label:'COMPLETED ✓',            color:'var(--green)' },
-      FAILED:                 { cls:'serr', label:'FAILED ✗',               color:'var(--red)' },
-      EXPIRED:                { cls:'serr', label:'EXPIRED ✗',              color:'var(--red)' },
-      AUTHENTICATION_PENDING: { cls:'swrn', label:'AUTHENTICATION PENDING', color:'var(--yellow)' },
-      UNKNOWN:                { cls:'swrn', label:'UNKNOWN',                 color:'var(--yellow)' },
+      COMPLETED: { color:'#10B981', label:'COMPLETED ✓' },
+      FAILED: { color:'#EF4444', label:'FAILED ✗' },
+      EXPIRED: { color:'#EF4444', label:'EXPIRED ✗' },
+      AUTHENTICATION_PENDING: { color:'#F59E0B', label:'AUTHENTICATION PENDING' },
+      UNKNOWN: { color:'#8098C0', label:'UNKNOWN' },
     };
-    const sm = statusMap[status] || { cls:'swrn', label:status, color:'var(--yellow)' };
-
-    const errLine  = err?.code && err.code !== '0'
-      ? `\nerror.code  : ${err.code}\nerror.desc  : ${err.description ?? '—'}`
-      : '\nerror       : nessuno (code 0)';
-    const redirLine = redir
-      ? `\nredirect.method : ${redir.method ?? '—'}\nredirect.url    : ${redir.url ?? '—'}`
-      : '\nredirect    : non presente';
-
-    $('rout').innerHTML =
-      `<span class="${sm.cls}" style="font-weight:700">[${sm.label}]</span>`
-      + errLine + redirLine
-      + `\n\n<span style="color:var(--muted)">─── response completo ──────────────────────</span>\n`
-      + JSON.stringify(response, null, 2);
-
-    const pill = $('cb-status-pill');
-    if (pill) {
-      pill.style.display = 'inline-block';
-      pill.innerHTML = `<span style="font-family:'JetBrains Mono',monospace;font-size:10px;padding:2px 9px;border-radius:4px;background:rgba(0,0,0,.25);color:${sm.color};border:1px solid currentColor">${status}</span>`;
-    }
-
-    _pendingRedir = redir || null;
-
-    if (status === 'AUTHENTICATION_PENDING' && redir) {
-      showActionBar(
-        `⚡ AUTHENTICATION_PENDING — redirect 3DS obbligatorio (${redir.method}). Esecuzione automatica in 3s…`,
-        false, false
-      );
-      setTimeout(() => {
-        if (redir.method === 'POST') postRedir(redir.url, redir.data);
-        else window.location.href = redir.url;
-      }, 3000);
-    } else if ((status === 'COMPLETED' || status === 'FAILED') && redir?.url) {
-      showActionBar(
-        `${status === 'COMPLETED' ? '✓' : '✗'} ${status} — redirect disponibile: ${redir.url}`,
-        true, true
-      );
-    } else if (status === 'EXPIRED') {
-      showActionBar('Sessione EXPIRED — nessun redirect disponibile.', false, false);
+    const sm = statusMap[status] || { color:'#8098C0', label:status };
+    const badge = $('cb-modal-status-badge');
+    badge.textContent = sm.label;
+    badge.style.color = sm.color;
+    badge.style.borderColor = sm.color;
+    $('cb-modal-json').textContent = JSON.stringify(response, null, 2);
+    const redirSection = $('cb-modal-redir-section');
+    const btnGo = $('cb-modal-btn-go');
+    if (redir?.url) {
+      redirSection.style.display = '';
+      $('cb-modal-redir-method').textContent = redir.method || 'GET';
+      $('cb-modal-redir-url').textContent    = redir.url;
+      const notes = {
+        AUTHENTICATION_PENDING: "⚡ Redirect obbligatorio per completare l'autenticazione 3D Secure.",
+        COMPLETED: '✓ Pagamento completato.',
+        FAILED: '✗ Transazione rifiutata.',
+      };
+      $('cb-modal-redir-note').textContent = notes[status] || '';
+      btnGo.style.display = 'inline-flex';
     } else {
-      const act = $('cb-actions');
-      if (act) act.style.display = 'none';
+      redirSection.style.display = 'none';
+      btnGo.style.display = 'none';
     }
+    const countdown = $('cb-modal-countdown');
+    const timerFill = $('cb-timer-fill');
+    if (_cbModalTimer) { clearInterval(_cbModalTimer); _cbModalTimer = null; }
+    if (status === 'AUTHENTICATION_PENDING' && redir?.url) {
+      let secs = 10;
+      countdown.textContent = `Auto-redirect 3DS in ${secs}s…`;
+      timerFill.style.transition = 'none';
+      timerFill.style.width = '100%';
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        timerFill.style.transition = `width ${secs}s linear`;
+        timerFill.style.width = '0%';
+      }));
+      _cbModalTimer = setInterval(() => {
+        secs--;
+        if (secs <= 0) { clearInterval(_cbModalTimer); _cbModalTimer = null; countdown.textContent = 'Redirect in corso…'; cbModalConfirm(true); }
+        else { countdown.textContent = `Auto-redirect 3DS in ${secs}s…`; }
+      }, 1000);
+    } else {
+      countdown.textContent = '';
+      timerFill.style.transition = 'none';
+      timerFill.style.width = '0%';
+    }
+    $('cb-modal-overlay').classList.add('open');
   }
 
-  // ─── FABRICK ERROR EVENT ─────────────────────────────
-  // fbk-elements-error: emesso dal componente Fabrick quando
-  // non riesce a inizializzarsi o processa un errore interno.
-  // Cause comuni: token scaduto/invalido, mismatch pid/token/shop.
+  function cbModalConfirm(auto = false) {
+    if (_cbModalTimer) { clearInterval(_cbModalTimer); _cbModalTimer = null; }
+    $('cb-modal-overlay').classList.remove('open');
+    if (!_cbModalPendingRedir?.url) return;
+    if (_cbModalPendingRedir.method === 'POST') postRedir(_cbModalPendingRedir.url, _cbModalPendingRedir.data);
+    else window.location.href = _cbModalPendingRedir.url;
+  }
+
+  function cbModalDismiss() {
+    if (_cbModalTimer) { clearInterval(_cbModalTimer); _cbModalTimer = null; }
+    $('cb-modal-overlay').classList.remove('open');
+    _cbModalPendingRedir = null;
+  }
+
+  function onCb(response) {
+    const status  = response?.payload?.flowStatus ?? 'UNKNOWN';
+    const err     = response?.error;
+    const redir   = response?.payload?.redirect;
+    const statusStyle = { COMPLETED:'ok', FAILED:'err', EXPIRED:'err', AUTHENTICATION_PENDING:'warn', UNKNOWN:'warn' };
+    LOG.group(`callBackObj ricevuta — ${status}`, statusStyle[status] || 'warn');
+    VERIFY.responseStructure(response);
+    LOG.end();
+    const statusMap = {
+      COMPLETED: { cls:'sok', label:'COMPLETED ✓', color:'var(--green)' },
+      FAILED: { cls:'serr', label:'FAILED ✗', color:'var(--red)' },
+      EXPIRED: { cls:'serr', label:'EXPIRED ✗', color:'var(--red)' },
+      AUTHENTICATION_PENDING: { cls:'swrn', label:'AUTHENTICATION PENDING', color:'var(--yellow)' },
+      UNKNOWN: { cls:'swrn', label:'UNKNOWN', color:'var(--yellow)' },
+    };
+    const sm = statusMap[status] || { cls:'swrn', label:status, color:'var(--yellow)' };
+    const errLine  = err?.code && err.code !== '0' ? `\nerror.code  : ${err.code}\nerror.desc  : ${err.description??'—'}` : '\nerror       : nessuno (code 0)';
+    const redirLine = redir ? `\nredirect.method : ${redir.method??'—'}\nredirect.url    : ${redir.url??'—'}` : '\nredirect    : non presente';
+    $('rout').innerHTML = `<span class="${sm.cls}" style="font-weight:700">[${sm.label}]</span>` + errLine + redirLine + `\n\n<span style="color:var(--muted)">─── response completo ───</span>\n` + JSON.stringify(response, null, 2);
+    const pill = $('cb-status-pill');
+    if (pill) { pill.style.display = 'inline-block'; pill.innerHTML = `<span style="font-family:'JetBrains Mono',monospace;font-size:10px;padding:2px 9px;border-radius:4px;background:rgba(0,0,0,.25);color:${sm.color};border:1px solid currentColor">${status}</span>`; }
+    const act = $('cb-actions'); if (act) act.style.display = 'none';
+    showCbModal(status, redir, response);
+  }
+
+  // ─────────────────────────────────────────────────────────────
+  //  FABRICK ERROR EVENT — fix primario al sintomo "torna a loading"
+  //
+  //  Il problema osservato: quando il sub-componente Click2Pay (Visa)
+  //  dentro <fbk-card> fallisce a inizializzarsi (tipicamente per
+  //  Permissions-Policy 'payment' non abilitata, che su GitHub Pages
+  //  non si può settare), Fabrick emette `fbk-elements-error` MA
+  //  entra in un retry loop interno (visibile nello stack con
+  //  `subscribeForRetry` / `catchClickToPayError`) che mantiene il
+  //  componente in stato di loading perpetuo.
+  //
+  //  Fix: intercettiamo l'errore e SOSTITUIAMO il custom element nel
+  //  DOM con un banner informativo. Togliere il componente dal DOM
+  //  interrompe il retry loop.
+  // ─────────────────────────────────────────────────────────────
   window.addEventListener('fbk-elements-error', e => {
     const detail = e.detail || {};
-
     LOG.group('fbk-elements-error — ERRORE COMPONENTE FABRICK', 'err');
-    LOG.sep();
-    LOG.line('Il componente Fabrick ha emesso un errore interno.', 'err');
-    LOG.sep();
-    LOG.kv('code',    detail.code    || '—', 'err');
-    LOG.kv('title',   detail.title   || '—', 'warn');
-    LOG.kv('message', detail.message || '—', 'info');
-    LOG.sep();
-    LOG.line('DIAGNOSI per code: ' + (detail.code || 'unknown'), 'warn');
+    LOG.kv('code',    detail.code   ||'—', 'err');
+    LOG.kv('title',   detail.title  ||'—', 'warn');
+    LOG.kv('message', detail.message||'—', 'info');
+    LOG.line('DIAGNOSI per code: '+(detail.code||'unknown'), 'warn');
     LOG.diagnose(detail.code, detail.message);
-    LOG.sep();
-    LOG.line('VERIFICA');
-    LOG.kv('window[\'fbk-elements\'].shop settato prima del mount?', 'controlla ordine operazioni', 'warn');
-    LOG.kv('paymentToken fresco?',   'i token sandbox scadono in ~15 min', 'warn');
-    LOG.kv('paymentID ↔ token match?','devono provenire dalla stessa chiamata payment/create', 'warn');
     LOG.raw('detail completo', detail);
     LOG.end();
 
-    $('rout').innerHTML =
-      `<span class="serr" style="font-weight:700">[FABRICK ERROR — ${detail.code || 'unhandled'}]</span>`
-      + `\ntitle   : ${detail.title   || '—'}`
-      + `\nmessage : ${detail.message || '—'}`
-      + `\n\n<span style="color:var(--yellow)">─── diagnosi ──────────────────────────────</span>`
-      + `\nCausa più probabile: token scaduto o mismatch paymentID/token/shopLogin.`
-      + `\nGenera nuove credenziali con payment/create e riprova.`
-      + `\n\n<span style="color:var(--muted)">─── detail ────────────────────────────────</span>\n`
-      + JSON.stringify(detail, null, 2);
+    // Aggiorna il log risposta in pagina
+    $('rout').innerHTML = `<span class="serr" style="font-weight:700">[FABRICK ERROR — ${detail.code||'unhandled'}]</span>` +
+      `\ntitle   : ${detail.title||'—'}` +
+      `\nmessage : ${detail.message||'—'}` +
+      `\n\nComponente sostituito nello slot con banner diagnostico.\n\n` +
+      JSON.stringify(detail, null, 2);
 
     const pill = $('cb-status-pill');
     if (pill) {
       pill.style.display = 'inline-block';
-      pill.innerHTML = `<span style="font-family:'JetBrains Mono',monospace;font-size:10px;padding:2px 9px;border-radius:4px;background:rgba(239,68,68,.15);color:#EF4444;border:1px solid rgba(239,68,68,.35)">${detail.code || 'ERROR'}</span>`;
+      pill.innerHTML = `<span style="font-family:'JetBrains Mono',monospace;font-size:10px;padding:2px 9px;border-radius:4px;background:rgba(239,68,68,.15);color:#EF4444;border:1px solid rgba(239,68,68,.35)">${detail.code||'ERROR'}</span>`;
     }
-    const act = $('cb-actions');
-    if (act) act.style.display = 'none';
+    const act = $('cb-actions'); if (act) act.style.display = 'none';
     console.error('[Fabrick Error]', detail);
+
+    // ── SOSTITUZIONE DEL COMPONENTE ROTTO ──
+    // srcEl è il custom element Fabrick che ha emesso l'errore.
+    // Lo sostituiamo con un .err-banner informativo: toglierlo dal
+    // DOM interrompe il retry loop interno di Fabrick.
+    const srcEl = e.target;
+    if (srcEl && srcEl.tagName && typeof srcEl.tagName === 'string'
+        && srcEl.tagName.toLowerCase().startsWith('fbk-')) {
+      const tag = srcEl.tagName.toLowerCase();
+      const isClick2PayLike = (detail.code === 'unhandled');
+
+      // Hint specifico per il caso Click2Pay / Permissions-Policy
+      const hintHtml = isClick2PayLike
+        ? `<div class="err-banner-hint">
+            <strong>Causa più probabile:</strong> il sub-componente <code>Click2Pay</code> (Visa) dentro <code>${tag}</code>
+            non riesce a inizializzarsi.<br><br>
+            <strong>Cause frequenti:</strong><br>
+            • <code>Permissions-Policy: payment</code> e <code>publickey-credentials-get</code> non abilitate sull'host.
+              Queste feature richiedono un <strong>header HTTP</strong> (non un meta tag) e <strong>GitHub Pages non permette di settarlo</strong>.<br>
+            • SPC (Secure Payment Confirmation) non supportato dal browser corrente.<br>
+            • Device fingerprinting verso <code>sandbox.auth.visa.com</code> irraggiungibile / in timeout.<br>
+            • Token scaduto o già consumato (TTL sandbox ~15 min).<br><br>
+            <strong>Workaround pratici:</strong><br>
+            • Passa a <code>&lt;fbk-apple-pay&gt;</code> o <code>&lt;fbk-google-pay&gt;</code> — non dipendono da Click2Pay.<br>
+            • Per far funzionare davvero <code>fbk-card</code> in sandbox, servi la pagina da un host con header HTTP custom
+              (Cloudflare Pages con <code>_headers</code>, nginx, Vercel) aggiungendo:<br>
+            <code>Permissions-Policy: payment=*, publickey-credentials-get=*</code>
+           </div>`
+        : `<div class="err-banner-hint">
+            Il componente ha emesso un errore e Fabrick è entrato in retry loop interno.
+            Controlla la console per la diagnosi estesa.
+           </div>`;
+
+      // Bottoni: Riprova (ri-esegue applyConfig → rimonta) + se è
+      // fbk-card, shortcut per saltare a Apple/Google Pay che non
+      // soffrono del problema Click2Pay.
+      const switchButtons = (tag === 'fbk-card')
+        ? `<button onclick="__switchTo('apay')">→ Passa a Apple Pay</button>
+           <button onclick="__switchTo('gpay')">→ Passa a Google Pay</button>`
+        : '';
+
+      const banner = document.createElement('div');
+      banner.className = 'err-banner fadein';
+      banner.innerHTML = `
+        <div class="err-banner-title">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          ${tag} · errore — ${detail.code||'unhandled'}
+        </div>
+        <div class="err-banner-msg"><strong>${detail.title||'Errore'}</strong>: ${detail.message||'—'}</div>
+        ${hintHtml}
+        <div class="err-banner-actions">
+          <button class="primary" onclick="applyConfig()">↻ Riprova (rimonta componente)</button>
+          ${switchButtons}
+        </div>
+      `;
+      srcEl.replaceWith(banner);
+    }
   });
+
+  // Helper per i bottoni di switch dentro il banner (richiamati via
+  // onclick inline — devono essere globali).
+  window.__switchTo = function(compKey) {
+    const card = document.querySelector(`.comp-card[data-comp="${compKey}"]`);
+    if (card) card.click();
+  };
 
   function postRedir(url, data) {
     const f = document.createElement('form'); f.method='POST'; f.action=url;
@@ -2015,40 +1407,10 @@
     document.body.appendChild(f); f.submit();
   }
 
-  function showActionBar(label, showRedir, showSkip) {
-    const act = $('cb-actions');
-    if (!act) return;
-    act.style.display = 'flex';
-    const lbl = $('cb-action-label');
-    if (lbl) lbl.textContent = label;
-    const btnR = $('btn-redir-ok');
-    const btnS = $('btn-redir-skip');
-    if (btnR) btnR.style.display = showRedir ? 'inline-block' : 'none';
-    if (btnS) btnS.style.display = showSkip  ? 'inline-block' : 'none';
-  }
+  let _pendingRedir = null;
+  function doRedirect() { if(!_pendingRedir?.url)return; if(_pendingRedir.method==='POST')postRedir(_pendingRedir.url,_pendingRedir.data); else window.location.href=_pendingRedir.url; }
+  function dismissAction() { const act=$('cb-actions'); if(act)act.style.display='none'; _pendingRedir=null; }
 
-  function doRedirect() {
-    if (!_pendingRedir?.url) return;
-    LOG.group('Redirect confermato dall\'utente', 'ok');
-    LOG.kv('method', _pendingRedir.method || 'GET');
-    LOG.kv('url',    _pendingRedir.url);
-    if (_pendingRedir.data) LOG.raw('data', _pendingRedir.data);
-    LOG.end();
-    if (_pendingRedir.method === 'POST') postRedir(_pendingRedir.url, _pendingRedir.data);
-    else window.location.href = _pendingRedir.url;
-  }
-
-  function dismissAction() {
-    const act = $('cb-actions');
-    if (act) act.style.display = 'none';
-    LOG.group('Redirect ignorato dall\'utente', 'warn');
-    LOG.line('Il redirect è stato scartato manualmente — sei rimasto sulla demo.');
-    LOG.raw('redirect disponibile (non seguito)', _pendingRedir);
-    LOG.end();
-    _pendingRedir = null;
-  }
-
-  // ─── UI HELPERS ──────────────────────────────────────
   function setView(view, btn) {
     $('viewer').classList.toggle('code-mode', view==='code');
     $('viewer').querySelectorAll('.vt').forEach(b => b.classList.remove('active'));
@@ -2058,84 +1420,50 @@
   function updateCbBadge() {
     const isCombo = COMBOS.has(COMP);
     const on = isCombo ? $('d-cb').checked : $('o-cb').checked;
-    const b  = $('cb-badge');
+    const b = $('cb-badge');
     b.textContent = on ? 'callback ON' : 'callback OFF';
     b.className   = 'cbbadge ' + (on ? 'cbon' : 'cboff');
-    // mostra overlay "callback disabilitata" se OFF
-    const overlay = $('cb-off-overlay');
-    const rout    = $('rout');
+    const overlay = $('cb-off-overlay'); const rout = $('rout');
     if (overlay) overlay.style.display = on ? 'none' : '';
     if (rout)    rout.style.display    = on ? '' : 'none';
   }
 
   function showPendingBadge() {
-    const ids = ['o-apply','d-apply'];
-    ids.forEach(id => {
-      const b = $(id); if (!b) return;
-      if (b.dataset.pending) return;
-      b.dataset.pending = '1';
-      b.style.background = 'var(--border2)';
-      b.style.color = 'var(--text2)';
-      b.textContent = 'Applica (opzioni cambiate)';
-    });
-    const note = $('opts-pending-note');
-    if (note) note.style.display = '';
+    ['o-apply','d-apply'].forEach(id => { const b=$(id); if(!b)return; if(b.dataset.pending)return; b.dataset.pending='1'; b.style.background='var(--border2)'; b.style.color='var(--text2)'; b.textContent='Applica (opzioni cambiate)'; });
+    const note=$('opts-pending-note'); if(note)note.style.display='';
   }
 
   function clearPendingBadge() {
-    ['o-apply','d-apply'].forEach(id => {
-      const b = $(id); if (!b) return;
-      delete b.dataset.pending;
-      b.style.background = '';
-      b.style.color = '';
-      b.textContent = 'Applica';
-    });
-    const note = $('opts-pending-note');
-    if (note) note.style.display = 'none';
+    ['o-apply','d-apply'].forEach(id => { const b=$(id); if(!b)return; delete b.dataset.pending; b.style.background=''; b.style.color=''; b.textContent='Applica'; });
+    const note=$('opts-pending-note'); if(note)note.style.display='none';
   }
 
   function flashBtn(id, msg, ok=false) {
-    const b = $(id); if(!b) return;
-    b.textContent = msg;
-    b.style.background = ok ? 'var(--green)' : 'var(--red)';
-    setTimeout(() => { b.textContent = 'Applica'; b.style.background = ''; }, 2000);
+    const b=$(id); if(!b)return;
+    b.textContent=msg; b.style.background=ok?'var(--green)':'var(--red)';
+    setTimeout(()=>{ b.textContent='Applica'; b.style.background=''; }, 2000);
   }
 
   function doCopy(preId, btn) {
-    const pre = $(preId); if(!pre) return;
-    navigator.clipboard.writeText(pre.innerText||pre.textContent).then(() => {
-      btn.textContent='copied ✓'; btn.classList.add('ok');
-      setTimeout(() => { btn.textContent='copy'; btn.classList.remove('ok'); }, 2000);
-    });
+    const pre=$(preId); if(!pre)return;
+    navigator.clipboard.writeText(pre.innerText||pre.textContent).then(()=>{ btn.textContent='copied ✓'; btn.classList.add('ok'); setTimeout(()=>{ btn.textContent='copy'; btn.classList.remove('ok'); },2000); });
   }
 
   function syncAllPills() {
     document.querySelectorAll('.opts-bar').forEach(bar => {
-      bar.querySelectorAll('.op label').forEach(lbl => {
-        const inp = lbl.querySelector('input[type=radio]');
-        lbl.classList.toggle('active', !!(inp && inp.checked));
-      });
+      bar.querySelectorAll('.op label').forEach(lbl => { const inp=lbl.querySelector('input[type=radio]'); lbl.classList.toggle('active',!!(inp&&inp.checked)); });
     });
   }
 
-  // ─── TOGGLE SWITCH LABELS ────────────────────────────
   ['o-cb','d-cb'].forEach(id => {
-    const el = $(id); if(!el) return;
-    el.addEventListener('change', () => {
-      const lblId = id==='o-cb' ? 'o-cb-lbl' : 'd-cb-lbl';
-      $(lblId).textContent = el.checked ? 'ON' : 'OFF';
-      updateCbBadge();  // aggiorna badge + overlay in tempo reale al toggle
-    });
+    const el=$(id); if(!el)return;
+    el.addEventListener('change', () => { const lblId=id==='o-cb'?'o-cb-lbl':'d-cb-lbl'; $(lblId).textContent=el.checked?'ON':'OFF'; updateCbBadge(); });
   });
 
-  // ─── INIT ────────────────────────────────────────────
   window.addEventListener('DOMContentLoaded', () => {
     $('snip').innerHTML = buildSnip();
     syncAllPills();
-    // init: nasconde tutto tranne opts-card
-    ['apay','gpay','full','card-apay','card-gpay','gpay-apay'].forEach(c => {
-      const e = $('opts-'+c); if(e) e.style.display='none';
-    });
+    ['apay','gpay','full','card-apay','card-gpay','gpay-apay'].forEach(c => { const e=$('opts-'+c); if(e)e.style.display='none'; });
   });
 </script>
 </body>
