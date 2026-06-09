@@ -436,6 +436,74 @@
     .status-EXPIRED .status-text { color: var(--orange); }
     .status-ERROR .status-dot { background: var(--red); }
     .status-ERROR .status-text { color: var(--red); }
+
+    /* ── Return from redirect banner ── */
+    .return-banner {
+      margin: 0 0 24px;
+      padding: 16px 20px;
+      width: 100%;
+      max-width: 640px;
+      background: rgba(99, 102, 241, 0.08);
+      border: 1px solid var(--accent);
+      border-radius: var(--radius);
+      display: none;
+    }
+    .return-banner.visible { display: block; }
+    .return-banner .rb-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--accent-hi);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .return-banner .rb-hint {
+      font-size: 12px;
+      color: var(--text-dim);
+      margin-bottom: 12px;
+      line-height: 1.6;
+    }
+    .return-banner pre {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 12px;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--text);
+      overflow-x: auto;
+      max-height: 200px;
+      line-height: 1.5;
+    }
+    .return-banner .rb-actions {
+      margin-top: 12px;
+      display: flex;
+      gap: 8px;
+    }
+    .return-banner .rb-actions button {
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text);
+      transition: all 0.15s;
+    }
+    .return-banner .rb-actions button:hover {
+      border-color: var(--accent);
+      background: rgba(99, 102, 241, 0.08);
+    }
+    .return-banner .rb-actions .btn-remount {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+    .return-banner .rb-actions .btn-remount:hover {
+      background: var(--accent-hi);
+    }
   </style>
 </head>
 <body>
@@ -497,7 +565,11 @@
         </div>
         <p style="font-size: 11px; color: var(--text-dim); margin-top: 8px;">
           Se disattiva, <code>callBackObj</code> non viene passato a <code>window['fbk-elements']</code>.
-          Il componente funzionerà ma l'esito non verrà intercettato.
+        </p>
+        <p style="font-size: 11px; color: var(--orange); margin-top: 6px;">
+          ⚠ La callback funziona solo per flussi in-page (frictionless 3DS, wallet).
+          Se il circuito carta richiede un 3DS Challenge, Fabrick esegue un full-page redirect
+          e la callback non verrà mai invocata.
         </p>
       </div>
 
@@ -556,6 +628,22 @@
     <main class="panel-main">
 
       <div class="render-area">
+
+        <!-- Banner ritorno da 3DS/redirect -->
+        <div class="return-banner" id="returnBanner">
+          <div class="rb-title">↩ Ritorno da redirect rilevato</div>
+          <div class="rb-hint">
+            La pagina è stata ricaricata — probabilmente un ritorno dal challenge 3DS.
+            La callback <strong>non può</strong> scattare dopo un full-page redirect: l'esito va verificato
+            chiamando <code>GET /payment/detail</code> con il paymentID della sessione precedente.
+          </div>
+          <pre id="returnParams"></pre>
+          <div class="rb-actions">
+            <button class="btn-remount" id="btnRemount">Rimonta con sessione salvata</button>
+            <button id="btnDismissReturn">Chiudi</button>
+          </div>
+        </div>
+
         <div id="componentHost">
           <div class="placeholder" id="placeholder">
             <div class="icon">⬡</div>
@@ -619,6 +707,138 @@
       const $cbHeader     = document.getElementById('cbHeader');
       const $cbStatusText = document.getElementById('cbStatusText');
       const $cbPayload    = document.getElementById('cbPayload');
+      const $returnBanner = document.getElementById('returnBanner');
+      const $returnParams = document.getElementById('returnParams');
+
+      const SESSION_KEY = 'fbk_test_session';
+
+      /* ─────────────────── Session persistence ─────────────────── */
+
+      /**
+       * Salva la configurazione corrente in sessionStorage.
+       * Viene chiamato al mount così che, al ritorno da un redirect 3DS,
+       * la pagina può ripristinare i campi e mostrare il contesto.
+       */
+      function saveSession() {
+        const session = {
+          shopLogin:    $shopLogin.value.trim(),
+          paymentId:    $paymentId.value.trim(),
+          paymentToken: $paymentToken.value.trim(),
+          env:          currentEnv,
+          component:    getSelectedComponent(),
+          cbActive:     isCallbackActive(),
+          styleAttrs:   getStyleAttrs(),
+          savedAt:      new Date().toISOString()
+        };
+        try {
+          sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
+          log('info', 'Sessione salvata in sessionStorage', { paymentId: session.paymentId, env: session.env });
+        } catch (e) {
+          log('warn', 'Impossibile salvare sessione in sessionStorage', e.message);
+        }
+      }
+
+      /** Recupera la sessione salvata, o null se assente/corrotta */
+      function loadSession() {
+        try {
+          const raw = sessionStorage.getItem(SESSION_KEY);
+          return raw ? JSON.parse(raw) : null;
+        } catch {
+          return null;
+        }
+      }
+
+      /** Ripristina i campi dell'UI dalla sessione salvata */
+      function restoreFieldsFromSession(session) {
+        $shopLogin.value    = session.shopLogin || '';
+        $paymentId.value    = session.paymentId || '';
+        $paymentToken.value = session.paymentToken || '';
+
+        // Ambiente
+        if (session.env) {
+          currentEnv = session.env;
+          $envBadge.textContent = currentEnv;
+          document.querySelectorAll('.env-selector button').forEach(b => {
+            b.classList.toggle('active', b.dataset.env === currentEnv);
+          });
+        }
+
+        // Componente
+        if (session.component) {
+          const radio = document.querySelector(`input[name="comp"][value="${session.component}"]`);
+          if (radio) radio.checked = true;
+        }
+
+        // Callback
+        const cbRadio = document.querySelector(`input[name="cbMode"][value="${session.cbActive ? 'on' : 'off'}"]`);
+        if (cbRadio) cbRadio.checked = true;
+
+        log('info', 'Campi ripristinati dalla sessione salvata', {
+          shopLogin: session.shopLogin,
+          paymentId: session.paymentId,
+          env: session.env,
+          component: session.component
+        });
+      }
+
+      /* ─────────────────── Return-from-redirect detection ─────────────────── */
+
+      /**
+       * Al boot, verifica se ci sono query params o hash E una sessione salvata.
+       * Se sì, è quasi certamente un ritorno da 3DS redirect: mostra il banner
+       * con i params ricevuti e la possibilità di rimontare il componente.
+       */
+      function detectReturnFromRedirect() {
+        const hasUrlData = window.location.search || window.location.hash;
+        const session = loadSession();
+
+        if (hasUrlData) {
+          // Parsa tutti i query params
+          const params = Object.fromEntries(new URLSearchParams(window.location.search));
+          const hashParams = window.location.hash
+            ? Object.fromEntries(new URLSearchParams(window.location.hash.substring(1)))
+            : {};
+          const allParams = { ...params, ...hashParams };
+
+          log('event', '─── RITORNO DA REDIRECT RILEVATO ───');
+          log('event', 'Query parameters ricevuti', allParams);
+          console.group('%c↩ Return from redirect', 'font-size: 14px; font-weight: bold; color: #818cf8;');
+          console.log('URL:', window.location.href);
+          console.log('Search params:', params);
+          console.log('Hash params:', hashParams);
+          console.log('Sessione salvata:', session);
+          console.groupEnd();
+
+          // Mostra banner
+          const displayData = {
+            url: window.location.href,
+            params: allParams,
+            ...(session ? { sessione_salvata: { paymentId: session.paymentId, env: session.env, savedAt: session.savedAt } } : {})
+          };
+          $returnParams.textContent = JSON.stringify(displayData, null, 2);
+          $returnBanner.classList.add('visible');
+
+          // Ripristina campi se c'è una sessione
+          if (session) {
+            restoreFieldsFromSession(session);
+            log('info', 'Il paymentToken potrebbe essere scaduto — per un nuovo tentativo serve un nuovo POST /payment/create');
+          }
+        } else if (session) {
+          // Nessun URL param ma sessione presente — ripristina i campi silenziosamente
+          restoreFieldsFromSession(session);
+        }
+      }
+
+      // Dismiss banner
+      document.getElementById('btnDismissReturn').addEventListener('click', () => {
+        $returnBanner.classList.remove('visible');
+      });
+
+      // Remount con sessione salvata
+      document.getElementById('btnRemount').addEventListener('click', () => {
+        $returnBanner.classList.remove('visible');
+        $btnMount.click(); // trigger il mount con i campi già ripristinati
+      });
 
       /* ─────────────────── Logging ─────────────────── */
 
@@ -838,13 +1058,9 @@
           log('event', 'Pagina ripristinata da bfcache (pageshow.persisted=true)');
         }
       });
-      // Rileva parametri URL al caricamento (potrebbe essere un ritorno da redirect)
-      if (window.location.search || window.location.hash) {
-        log('event', 'Query params rilevati al caricamento — possibile ritorno da redirect', {
-          search: window.location.search,
-          hash: window.location.hash
-        });
-      }
+
+      // Rileva ritorno da redirect e ripristina sessione
+      detectReturnFromRedirect();
 
       /* ─────────────────── Mount ─────────────────── */
       $btnMount.addEventListener('click', async () => {
@@ -944,6 +1160,10 @@
         $host.appendChild(el);
         componentMounted = true;
         log('event', `<${tagName}> montato nel DOM ✓`);
+
+        // Persisti sessione per sopravvivere a full-page redirect (3DS challenge)
+        saveSession();
+
         log('info', '─── MOUNT COMPLETATO ───');
       });
 
@@ -959,7 +1179,8 @@
         $cbCard.classList.remove('visible');
         componentMounted = false;
         delete window['fbk-elements'];
-        log('info', 'window["fbk-elements"] rimosso — stato resettato');
+        sessionStorage.removeItem(SESSION_KEY);
+        log('info', 'window["fbk-elements"] rimosso, sessione cancellata — stato resettato');
       });
 
       /* ─────────────────── Boot log ─────────────────── */
