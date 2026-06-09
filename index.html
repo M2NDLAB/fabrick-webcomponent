@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fabrick Web Components — Test Bench</title>
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0e1117;
+      --surface:   #161b22;
+      --surface-2: #1c2231;
+      --border:    #2a3140;
+      --border-hi: #3d4a5c;
+      --text:      #e2e8f0;
+      --text-dim:  #8b95a5;
+      --accent:    #6366f1;
+      --accent-hi: #818cf8;
+      --green:     #34d399;
+      --red:       #f87171;
+      --amber:     #fbbf24;
+      --orange:    #fb923c;
+      --radius:    8px;
+      --mono:      'SF Mono', 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+      --sans:      'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    /* ── Layout ── */
+    .app-header {
+      padding: 20px 32px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      position: sticky;
+      top: 0;
+      background: var(--bg);
+      z-index: 100;
+    }
+    .app-header h1 {
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+    .app-header .env-badge {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 3px 10px;
+      border-radius: 100px;
+      background: rgba(251, 191, 36, 0.12);
+      color: var(--amber);
+    }
+
+    .app-body {
+      display: grid;
+      grid-template-columns: 420px 1fr;
+      min-height: calc(100vh - 61px);
+    }
+    @media (max-width: 960px) {
+      .app-body { grid-template-columns: 1fr; }
+      .panel-config { position: static !important; max-height: none !important; }
+    }
+
+    /* ── Left Panel (Config) — sticky sidebar ── */
+    .panel-config {
+      border-right: 1px solid var(--border);
+      overflow-y: auto;
+      position: sticky;
+      top: 61px;
+      max-height: calc(100vh - 61px);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      align-self: start;
+    }
+
+    .section-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-dim);
+      margin-bottom: 10px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+    }
+
+    /* ── Inputs ── */
+    .field { margin-bottom: 12px; }
+    .field:last-child { margin-bottom: 0; }
+    .field label {
+      display: block;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-dim);
+      margin-bottom: 4px;
+    }
+    .field input[type="text"] {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 13px;
+      font-family: var(--mono);
+      color: var(--text);
+      transition: border-color 0.15s;
+    }
+    .field input[type="text"]:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+    }
+    .field input[type="text"]::placeholder { color: var(--border-hi); }
+
+    /* ── Environment selector ── */
+    .env-selector {
+      display: flex;
+      gap: 8px;
+    }
+    .env-selector button {
+      flex: 1;
+      padding: 8px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: transparent;
+      color: var(--text-dim);
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .env-selector button.active {
+      background: rgba(99, 102, 241, 0.1);
+      border-color: var(--accent);
+      color: var(--accent-hi);
+    }
+
+    /* ── Component Picker ── */
+    .comp-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .comp-grid label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 500;
+      transition: all 0.15s;
+    }
+    .comp-grid label:hover { border-color: var(--border-hi); }
+    .comp-grid input[type="radio"] { accent-color: var(--accent); }
+    .comp-grid input[type="radio"]:checked + span { color: var(--accent-hi); }
+
+    /* ── Toggle Switch ── */
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 0;
+    }
+    .toggle-row + .toggle-row { border-top: 1px solid var(--border); }
+    .toggle-row .label-text {
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .toggle-row .label-hint {
+      font-size: 11px;
+      color: var(--text-dim);
+      margin-top: 1px;
+    }
+    .switch {
+      position: relative;
+      width: 40px; height: 22px;
+      flex-shrink: 0;
+    }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .switch .slider {
+      position: absolute; inset: 0;
+      background: var(--border);
+      border-radius: 22px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .switch .slider::before {
+      content: '';
+      position: absolute;
+      width: 16px; height: 16px;
+      left: 3px; top: 3px;
+      background: var(--text);
+      border-radius: 50%;
+      transition: transform 0.2s;
+    }
+    .switch input:checked + .slider { background: var(--accent); }
+    .switch input:checked + .slider::before { transform: translateX(18px); }
+
+    /* ── Callback radio ── */
+    .radio-group {
+      display: flex;
+      gap: 12px;
+    }
+    .radio-group label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .radio-group input[type="radio"] { accent-color: var(--accent); }
+
+    /* ── Button ── */
+    .btn-primary {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 6px;
+      background: var(--accent);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn-primary:hover { background: var(--accent-hi); }
+    .btn-primary:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+    .btn-destroy {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: transparent;
+      color: var(--red);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+      margin-top: 8px;
+    }
+    .btn-destroy:hover {
+      background: rgba(248, 113, 113, 0.08);
+      border-color: var(--red);
+    }
+
+    /* ── Right Panel — flows naturally, no clipping ── */
+    .panel-main {
+      display: flex;
+      flex-direction: column;
+      min-height: calc(100vh - 61px);
+    }
+
+    .render-area {
+      flex: 1;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 200px;
+    }
+    .render-area .placeholder {
+      text-align: center;
+      color: var(--text-dim);
+      font-size: 14px;
+      padding-top: 80px;
+    }
+    .render-area .placeholder .icon {
+      font-size: 40px;
+      margin-bottom: 12px;
+      opacity: 0.3;
+    }
+
+    #componentHost {
+      width: 100%;
+      max-width: 640px;
+    }
+
+    /* ── Log Panel — collapsible ── */
+    .log-panel {
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+      display: flex;
+      flex-direction: column;
+    }
+    .log-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+      cursor: pointer;
+      user-select: none;
+    }
+    .log-header .log-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .log-header span {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-dim);
+    }
+    .log-header .chevron {
+      font-size: 14px;
+      color: var(--text-dim);
+      transition: transform 0.2s;
+    }
+    .log-panel.collapsed .chevron { transform: rotate(-90deg); }
+    .log-panel.collapsed .log-body { display: none; }
+    .log-header .log-actions {
+      display: flex;
+      gap: 6px;
+    }
+    .log-header button {
+      font-size: 11px;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 3px 10px;
+      color: var(--text-dim);
+      cursor: pointer;
+    }
+    .log-header button:hover { border-color: var(--border-hi); color: var(--text); }
+
+    .log-body {
+      overflow-y: auto;
+      padding: 8px 16px;
+      max-height: 300px;
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height: 1.7;
+    }
+    .log-entry {
+      padding: 3px 0;
+      border-bottom: 1px solid rgba(42, 49, 64, 0.4);
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .log-entry .ts {
+      color: var(--text-dim);
+      flex-shrink: 0;
+      font-size: 11px;
+      padding-top: 1px;
+    }
+    .log-entry .tag {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 2px 6px;
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+    .tag-info  { background: rgba(99, 102, 241, 0.15); color: var(--accent-hi); }
+    .tag-event { background: rgba(52, 211, 153, 0.15); color: var(--green); }
+    .tag-cb    { background: rgba(251, 191, 36, 0.15); color: var(--amber); }
+    .tag-error { background: rgba(248, 113, 113, 0.15); color: var(--red); }
+    .tag-warn  { background: rgba(251, 146, 60, 0.15); color: var(--orange); }
+
+    .log-entry .msg {
+      color: var(--text);
+      word-break: break-all;
+    }
+
+    /* ── Callback Response Card ── */
+    .cb-response-card {
+      margin: 0 32px 24px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      display: none;
+    }
+    .cb-response-card.visible { display: block; }
+    .cb-response-card .cb-header {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .cb-response-card .cb-header .status-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+    }
+    .cb-response-card .cb-header .status-text {
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .cb-response-card pre {
+      padding: 16px;
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height: 1.6;
+      overflow-x: auto;
+      color: var(--text-dim);
+      max-height: 260px;
+    }
+    .status-COMPLETED .status-dot { background: var(--green); }
+    .status-COMPLETED .status-text { color: var(--green); }
+    .status-FAILED .status-dot { background: var(--red); }
+    .status-FAILED .status-text { color: var(--red); }
+    .status-AUTHENTICATION_PENDING .status-dot { background: var(--amber); }
+    .status-AUTHENTICATION_PENDING .status-text { color: var(--amber); }
+    .status-EXPIRED .status-dot { background: var(--orange); }
+    .status-EXPIRED .status-text { color: var(--orange); }
+    .status-ERROR .status-dot { background: var(--red); }
+    .status-ERROR .status-text { color: var(--red); }
+  </style>
+</head>
+<body>
+
+  <!-- ═══ Header ═══ -->
+  <header class="app-header">
+    <h1>Fabrick WC Test Bench</h1>
+    <span class="env-badge" id="envBadge">sandbox</span>
+  </header>
+
+  <div class="app-body">
+
+    <!-- ═══ Left: Configuration ═══ -->
+    <aside class="panel-config">
+
+      <!-- Environment -->
+      <div class="card">
+        <div class="section-label">Ambiente</div>
+        <div class="env-selector">
+          <button class="active" data-env="sandbox">Sandbox</button>
+          <button data-env="production">Produzione</button>
+        </div>
+      </div>
+
+      <!-- Credenziali -->
+      <div class="card">
+        <div class="section-label">Credenziali &amp; Sessione</div>
+        <div class="field">
+          <label for="shopLogin">shopLogin</label>
+          <input type="text" id="shopLogin" placeholder="GESPAY12345">
+        </div>
+        <div class="field">
+          <label for="paymentId">paymentID</label>
+          <input type="text" id="paymentId" placeholder="12345678910">
+        </div>
+        <div class="field">
+          <label for="paymentToken">paymentToken</label>
+          <input type="text" id="paymentToken" placeholder="1234ea321-aaaa-bbbb-cccc-752ca0b8cb5b">
+        </div>
+      </div>
+
+      <!-- Componente -->
+      <div class="card">
+        <div class="section-label">Componente</div>
+        <div class="comp-grid">
+          <label><input type="radio" name="comp" value="fbk-checkout" checked><span>fbk-checkout</span></label>
+          <label><input type="radio" name="comp" value="fbk-card"><span>fbk-card</span></label>
+          <label><input type="radio" name="comp" value="fbk-apple-pay"><span>fbk-apple-pay</span></label>
+          <label><input type="radio" name="comp" value="fbk-google-pay"><span>fbk-google-pay</span></label>
+        </div>
+      </div>
+
+      <!-- Callback -->
+      <div class="card">
+        <div class="section-label">Callback</div>
+        <div class="radio-group">
+          <label><input type="radio" name="cbMode" value="on" checked> Attiva</label>
+          <label><input type="radio" name="cbMode" value="off"> Disattiva</label>
+        </div>
+        <p style="font-size: 11px; color: var(--text-dim); margin-top: 8px;">
+          Se disattiva, <code>callBackObj</code> non viene passato a <code>window['fbk-elements']</code>.
+          Il componente funzionerà ma l'esito non verrà intercettato.
+        </p>
+      </div>
+
+      <!-- Stile -->
+      <div class="card">
+        <div class="section-label">Configurazione stile</div>
+
+        <div class="toggle-row" data-option="layout" data-attr="layout" data-value="vertical">
+          <div>
+            <div class="label-text">Layout verticale</div>
+            <div class="label-hint">Off = horizontal (default)</div>
+          </div>
+          <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+        </div>
+
+        <div class="toggle-row" data-option="apple-button-style" data-attr="apple-button-style" data-value="white">
+          <div>
+            <div class="label-text">Apple Pay — stile bianco</div>
+            <div class="label-hint">Off = black (default)</div>
+          </div>
+          <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+        </div>
+
+        <div class="toggle-row" data-option="apple-button-type" data-attr="apple-button-type" data-value="buy">
+          <div>
+            <div class="label-text">Apple Pay — label "buy"</div>
+            <div class="label-hint">Off = plain (default)</div>
+          </div>
+          <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+        </div>
+
+        <div class="toggle-row" data-option="google-button-style" data-attr="google-button-style" data-value="white">
+          <div>
+            <div class="label-text">Google Pay — stile bianco</div>
+            <div class="label-hint">Off = black (default)</div>
+          </div>
+          <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+        </div>
+
+        <div class="toggle-row" data-option="google-button-type" data-attr="google-button-type" data-value="buy">
+          <div>
+            <div class="label-text">Google Pay — label "buy"</div>
+            <div class="label-hint">Off = plain (default)</div>
+          </div>
+          <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <button class="btn-primary" id="btnMount">Monta componente</button>
+      <button class="btn-destroy" id="btnDestroy">Smonta e resetta</button>
+
+    </aside>
+
+    <!-- ═══ Right: Render + Log ═══ -->
+    <main class="panel-main">
+
+      <div class="render-area">
+        <div id="componentHost">
+          <div class="placeholder" id="placeholder">
+            <div class="icon">⬡</div>
+            Configura i parametri e premi <strong>Monta componente</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- Callback response -->
+      <div class="cb-response-card" id="cbCard">
+        <div class="cb-header" id="cbHeader">
+          <div class="status-dot"></div>
+          <div class="status-text" id="cbStatusText">—</div>
+        </div>
+        <pre id="cbPayload"></pre>
+      </div>
+
+      <!-- Log -->
+      <div class="log-panel" id="logPanel">
+        <div class="log-header" id="logHeader">
+          <div class="log-title">
+            <span class="chevron">▼</span>
+            <span>Event Log</span>
+          </div>
+          <div class="log-actions">
+            <button id="btnClearLog">Svuota</button>
+          </div>
+        </div>
+        <div class="log-body" id="logBody"></div>
+      </div>
+    </main>
+
+  </div>
+
+  <!-- ═══ Script ═══ -->
+  <script>
+    (() => {
+      'use strict';
+
+      /* ─────────────────── State ─────────────────── */
+      let currentEnv = 'sandbox';
+      let scriptLoaded = false;
+      let componentMounted = false;
+
+      const SCRIPT_URLS = {
+        sandbox:    'https://sandbox-web.axerve.com/orchestra/checkout/assets/elements/fbk-elements.js',
+        production: 'https://web.axerve.com/orchestra/checkout/assets/elements/fbk-elements.js'
+      };
+
+      /* ─────────────────── DOM refs ─────────────────── */
+      const $shopLogin    = document.getElementById('shopLogin');
+      const $paymentId    = document.getElementById('paymentId');
+      const $paymentToken = document.getElementById('paymentToken');
+      const $host         = document.getElementById('componentHost');
+      const $placeholder  = document.getElementById('placeholder');
+      const $btnMount     = document.getElementById('btnMount');
+      const $btnDestroy   = document.getElementById('btnDestroy');
+      const $logBody      = document.getElementById('logBody');
+      const $envBadge     = document.getElementById('envBadge');
+      const $cbCard       = document.getElementById('cbCard');
+      const $cbHeader     = document.getElementById('cbHeader');
+      const $cbStatusText = document.getElementById('cbStatusText');
+      const $cbPayload    = document.getElementById('cbPayload');
+
+      /* ─────────────────── Logging ─────────────────── */
+
+      /**
+       * Appende una riga nel pannello log e duplica in console.
+       * @param {'info'|'event'|'cb'|'error'|'warn'} tag
+       * @param {string} message
+       * @param {*} [data] — oggetto opzionale stampato in console
+       */
+      function log(tag, message, data) {
+        const ts = new Date().toLocaleTimeString('it-IT', { hour12: false, fractionalSecondDigits: 3 });
+
+        // Console mirror con formatting
+        const consoleLabel = `[${tag.toUpperCase()}] ${message}`;
+        switch (tag) {
+          case 'error': console.error(consoleLabel, data ?? ''); break;
+          case 'warn':  console.warn(consoleLabel, data ?? '');  break;
+          case 'cb':    console.log('%c' + consoleLabel, 'color: #fbbf24; font-weight: bold;', data ?? ''); break;
+          case 'event': console.log('%c' + consoleLabel, 'color: #34d399;', data ?? ''); break;
+          default:      console.log(consoleLabel, data ?? '');
+        }
+
+        // Pannello UI
+        const entry = document.createElement('div');
+        entry.className = 'log-entry';
+        entry.innerHTML = `
+          <span class="ts">${ts}</span>
+          <span class="tag tag-${tag}">${tag}</span>
+          <span class="msg">${escapeHtml(message)}${data !== undefined ? ' → ' + escapeHtml(JSON.stringify(data, null, 0)) : ''}</span>
+        `;
+        $logBody.appendChild(entry);
+        $logBody.scrollTop = $logBody.scrollHeight;
+      }
+
+      function escapeHtml(str) {
+        return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      }
+
+      document.getElementById('btnClearLog').addEventListener('click', (e) => {
+        e.stopPropagation();
+        $logBody.innerHTML = '';
+        log('info', 'Log svuotato');
+      });
+
+      /* ─────────────────── Log collapse toggle ─────────────────── */
+      document.getElementById('logHeader').addEventListener('click', (e) => {
+        if (e.target.closest('.log-actions')) return; // non collassare se cliccano su bottoni
+        document.getElementById('logPanel').classList.toggle('collapsed');
+      });
+
+      /* ─────────────────── Environment ─────────────────── */
+      document.querySelectorAll('.env-selector button').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.env-selector button').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          currentEnv = btn.dataset.env;
+          $envBadge.textContent = currentEnv;
+          scriptLoaded = false; // forza ricaricamento
+          log('info', `Ambiente cambiato: ${currentEnv}`);
+        });
+      });
+
+      /* ─────────────────── Helpers ─────────────────── */
+
+      /** Carica dinamicamente lo script fbk-elements se non già presente per l'env corrente */
+      function ensureScript() {
+        return new Promise((resolve, reject) => {
+          // Rimuove script precedente se env diverso
+          const existing = document.getElementById('fbk-script');
+          if (existing) {
+            const loadedUrl = existing.getAttribute('src');
+            if (loadedUrl === SCRIPT_URLS[currentEnv] && scriptLoaded) {
+              log('info', 'Script già caricato, skip');
+              resolve();
+              return;
+            }
+            existing.remove();
+            scriptLoaded = false;
+            log('info', 'Script precedente rimosso (cambio env)');
+          }
+
+          const script = document.createElement('script');
+          script.id = 'fbk-script';
+          script.src = SCRIPT_URLS[currentEnv];
+          script.onload = () => {
+            scriptLoaded = true;
+            log('event', `Script caricato: ${currentEnv}`, { src: script.src });
+            resolve();
+          };
+          script.onerror = (err) => {
+            log('error', 'Errore caricamento script', { src: script.src });
+            reject(err);
+          };
+          document.head.appendChild(script);
+          log('info', `Caricamento script ${currentEnv}...`, { src: script.src });
+        });
+      }
+
+      /** Legge lo stato dei toggle stile e restituisce un oggetto attributo→valore */
+      function getStyleAttrs() {
+        const attrs = {};
+        document.querySelectorAll('.toggle-row').forEach(row => {
+          const checked = row.querySelector('input[type="checkbox"]').checked;
+          if (checked) {
+            attrs[row.dataset.attr] = row.dataset.value;
+          }
+        });
+        return attrs;
+      }
+
+      /** Componente selezionato */
+      function getSelectedComponent() {
+        return document.querySelector('input[name="comp"]:checked').value;
+      }
+
+      /** Callback attiva? */
+      function isCallbackActive() {
+        return document.querySelector('input[name="cbMode"]:checked').value === 'on';
+      }
+
+      /* ─────────────────── Callback handler ─────────────────── */
+
+      /**
+       * Callback master: intercetta la risposta del componente,
+       * logga in console e nell'UI, mostra la card di risposta,
+       * e gestisce redirect se presenti (con conferma utente in test).
+       */
+      function handlePaymentResult(response) {
+        log('cb', 'callBackObj invocata', response);
+        console.group('%c📦 Callback Response (raw)', 'font-size: 14px; font-weight: bold; color: #fbbf24;');
+        console.log('response:', response);
+        console.log('error:', response?.error);
+        console.log('payload:', response?.payload);
+        console.log('flowStatus:', response?.payload?.flowStatus);
+        console.log('redirect:', response?.payload?.redirect);
+        console.groupEnd();
+
+        // Determina stato
+        const flowStatus = response?.payload?.flowStatus || 'ERROR';
+        const hasError = response?.error?.code;
+
+        // Mostra card di risposta
+        $cbCard.classList.add('visible');
+        $cbHeader.className = `cb-header status-${flowStatus}`;
+        $cbStatusText.textContent = hasError
+          ? `${flowStatus} — Errore: ${response.error.code}`
+          : flowStatus;
+        $cbPayload.textContent = JSON.stringify(response, null, 2);
+
+        // Log dettagliato per status
+        switch (flowStatus) {
+          case 'COMPLETED':
+            log('event', 'Pagamento autorizzato — richiamare GET /payment/detail per i dettagli completi');
+            break;
+          case 'FAILED':
+            log('warn', 'Pagamento fallito', response.error);
+            break;
+          case 'AUTHENTICATION_PENDING':
+            log('warn', '3DS authentication in attesa di completamento');
+            break;
+          case 'EXPIRED':
+            log('warn', 'Sessione scaduta (timeout o abbandono)');
+            break;
+          default:
+            log('error', `flowStatus sconosciuto: ${flowStatus}`);
+        }
+
+        // Gestione redirect
+        const redirect = response?.payload?.redirect;
+        if (redirect) {
+          log('cb', `Redirect richiesto: ${redirect.method} → ${redirect.url}`, redirect.data);
+          // In test, chiediamo conferma prima di eseguire il redirect
+          const confirmMsg = `Il componente richiede un redirect:\n\n` +
+            `Metodo: ${redirect.method}\n` +
+            `URL: ${redirect.url}\n` +
+            `Data: ${JSON.stringify(redirect.data || {}, null, 2)}\n\n` +
+            `Eseguire il redirect?`;
+
+          if (confirm(confirmMsg)) {
+            log('info', 'Redirect confermato dall\'utente, esecuzione in corso...');
+            if (redirect.method === 'GET') {
+              window.location.href = redirect.url;
+            } else {
+              const form = document.createElement('form');
+              form.method = 'POST';
+              form.action = redirect.url;
+              Object.entries(redirect.data || {}).forEach(([key, value]) => {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = key;
+                input.value = value;
+                form.appendChild(input);
+              });
+              document.body.appendChild(form);
+              form.submit();
+            }
+          } else {
+            log('warn', 'Redirect bloccato dall\'utente (modalità test)');
+          }
+        }
+      }
+
+      /* ─────────────────── fbk-elements-error listener (sempre attivo) ─────────────────── */
+      window.addEventListener('fbk-elements-error', event => {
+        log('error', 'fbk-elements-error event', event.detail);
+        console.error('🔴 fbk-elements-error:', event.detail);
+      });
+
+      /* ─────────────────── Rileva ritorno sulla pagina (visibilitychange / pageshow) ─────────────────── */
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible' && componentMounted) {
+          log('event', 'Pagina tornata visibile (visibilitychange) — buyer potrebbe essere tornato da 3DS/redirect');
+        }
+      });
+      window.addEventListener('pageshow', (event) => {
+        if (event.persisted) {
+          log('event', 'Pagina ripristinata da bfcache (pageshow.persisted=true)');
+        }
+      });
+      // Rileva parametri URL al caricamento (potrebbe essere un ritorno da redirect)
+      if (window.location.search || window.location.hash) {
+        log('event', 'Query params rilevati al caricamento — possibile ritorno da redirect', {
+          search: window.location.search,
+          hash: window.location.hash
+        });
+      }
+
+      /* ─────────────────── Mount ─────────────────── */
+      $btnMount.addEventListener('click', async () => {
+        const shopLogin    = $shopLogin.value.trim();
+        const paymentId    = $paymentId.value.trim();
+        const paymentToken = $paymentToken.value.trim();
+
+        // Validazione
+        if (!shopLogin || !paymentId || !paymentToken) {
+          log('error', 'Campi mancanti — shopLogin, paymentID e paymentToken sono tutti obbligatori');
+          return;
+        }
+
+        log('info', '─── INIZIO MOUNT ───');
+        log('info', `Componente: ${getSelectedComponent()}`);
+        log('info', `Ambiente: ${currentEnv}`);
+        log('info', `shopLogin: ${shopLogin}`);
+        log('info', `paymentID: ${paymentId}`);
+        log('info', `paymentToken: ${paymentToken.substring(0, 12)}...`);
+
+        // Nascondi card callback precedente
+        $cbCard.classList.remove('visible');
+
+        try {
+          await ensureScript();
+        } catch {
+          log('error', 'Impossibile caricare lo script, mount annullato');
+          return;
+        }
+
+        // Smonta componente precedente se presente
+        const oldComp = $host.querySelector('[payment-id]');
+        if (oldComp) {
+          oldComp.remove();
+          log('info', 'Componente precedente rimosso dal DOM');
+        }
+        $placeholder.style.display = 'none';
+
+        // Configura window['fbk-elements'] PRIMA del mount
+        const cbActive = isCallbackActive();
+        const fbkConfig = { shop: shopLogin };
+        if (cbActive) {
+          fbkConfig.callBackObj = handlePaymentResult;
+          log('info', 'callBackObj registrata in window["fbk-elements"]');
+        } else {
+          log('warn', 'callBackObj NON registrata — la risposta del pagamento non verrà intercettata');
+        }
+        window['fbk-elements'] = fbkConfig;
+        log('info', 'window["fbk-elements"] configurato', { shop: shopLogin, callBackObj: cbActive ? '(function)' : '(assente)' });
+
+        // Crea elemento
+        const tagName = getSelectedComponent();
+        const el = document.createElement(tagName);
+        el.setAttribute('payment-id', paymentId);
+        el.setAttribute('payment-token', paymentToken);
+        log('info', `Elemento <${tagName}> creato con payment-id e payment-token`);
+
+        // Applica attributi stile
+        const styleAttrs = getStyleAttrs();
+        const appliedStyles = {};
+
+        // Quali attributi sono rilevanti per il componente selezionato
+        const relevance = {
+          'fbk-checkout':    ['layout', 'apple-button-style', 'apple-button-type', 'google-button-style', 'google-button-type'],
+          'fbk-card':        ['layout'],
+          'fbk-apple-pay':   ['button-style', 'button-type'],
+          'fbk-google-pay':  ['button-style', 'button-type'],
+        };
+
+        // Mappa per apple/google: i toggle usano apple-button-style, ma fbk-apple-pay usa button-style
+        const attrMap = {
+          'fbk-apple-pay':  { 'apple-button-style': 'button-style', 'apple-button-type': 'button-type' },
+          'fbk-google-pay': { 'google-button-style': 'button-style', 'google-button-type': 'button-type' },
+        };
+
+        Object.entries(styleAttrs).forEach(([attr, value]) => {
+          // Determina il nome attributo effettivo per il componente
+          let effectiveAttr = attr;
+          if (attrMap[tagName] && attrMap[tagName][attr]) {
+            effectiveAttr = attrMap[tagName][attr];
+          }
+
+          const relevant = relevance[tagName] || [];
+          if (relevant.includes(effectiveAttr) || relevant.includes(attr)) {
+            el.setAttribute(effectiveAttr, value);
+            appliedStyles[effectiveAttr] = value;
+          }
+        });
+
+        if (Object.keys(appliedStyles).length > 0) {
+          log('info', 'Attributi stile applicati', appliedStyles);
+        } else {
+          log('info', 'Nessun attributo stile personalizzato — componente con default');
+        }
+
+        // Mount nel DOM
+        $host.appendChild(el);
+        componentMounted = true;
+        log('event', `<${tagName}> montato nel DOM ✓`);
+        log('info', '─── MOUNT COMPLETATO ───');
+      });
+
+      /* ─────────────────── Destroy ─────────────────── */
+      $btnDestroy.addEventListener('click', () => {
+        const comp = $host.querySelector('[payment-id]');
+        if (comp) {
+          const tag = comp.tagName.toLowerCase();
+          comp.remove();
+          log('info', `<${tag}> rimosso dal DOM`);
+        }
+        $placeholder.style.display = '';
+        $cbCard.classList.remove('visible');
+        componentMounted = false;
+        delete window['fbk-elements'];
+        log('info', 'window["fbk-elements"] rimosso — stato resettato');
+      });
+
+      /* ─────────────────── Boot log ─────────────────── */
+      log('info', 'Test Bench inizializzato');
+      log('info', `User-Agent: ${navigator.userAgent}`);
+      log('info', `Timestamp: ${new Date().toISOString()}`);
+
+    })();
+  </script>
+</body>
+</html>
